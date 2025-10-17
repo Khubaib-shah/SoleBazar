@@ -1,4 +1,7 @@
 🧢 SoleBazar – Premium Sneaker E-Commerce Website
+
+![Sole Bazar](https://res.cloudinary.com/dvyhnxnpq/image/upload/v1760709374/sole_bazar_acgocn.png)
+
 👟 Overview
 
 SoleBazar is a modern and stylish e-commerce platform built to showcase premium sneakers from top brands like Nike, Adidas, Jordan, and Puma. Designed for performance and aesthetics, it features an engaging hero section, dynamic product cards, and a seamless shopping experience.

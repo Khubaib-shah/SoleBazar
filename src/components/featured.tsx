@@ -1,47 +1,36 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState, useRef } from "react";
-
-const FEATURED_SHOES = [
-  {
-    id: 1,
-    name: "Nike Air Max 90",
-    brand: "Nike",
-    price: 4500,
-    image: "/nike.png",
-  },
-  {
-    id: 2,
-    name: "Adidas Stan Smith",
-    brand: "Adidas",
-    price: 3200,
-    image: "/addidas.png",
-  },
-  {
-    id: 3,
-    name: "Puma RS-X",
-    brand: "Puma",
-    price: 3800,
-    image: "/puma.png",
-  },
-  {
-    id: 4,
-    name: "Nike Jordan 1",
-    brand: "Nike",
-    price: 5500,
-    image: "/nike.png",
-  },
-];
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import ProductCard from "./product-card";
 
 export default function Featured() {
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
+  useEffect(() => {
+    const fetchTopPicks = async () => {
+      try {
+        const res = await fetch("/api/products/top-picks");
+        if (res.ok) {
+          const data = await res.json();
+          setProducts(data);
+        }
+      } catch (err) {
+        console.error("Error fetching top picks:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTopPicks();
+  }, []);
+
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const scrollAmount = 320;
+      const scrollAmount = 350;
       scrollRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -51,73 +40,69 @@ export default function Featured() {
 
   const handleScroll = () => {
     if (scrollRef.current) {
-      setCanScrollLeft(scrollRef.current.scrollLeft > 0);
+      setCanScrollLeft(scrollRef.current.scrollLeft > 20);
       setCanScrollRight(
         scrollRef.current.scrollLeft <
-          scrollRef.current.scrollWidth - scrollRef.current.clientWidth
+        scrollRef.current.scrollWidth - scrollRef.current.clientWidth - 20
       );
     }
   };
 
+  if (loading) {
+    return (
+      <section className="py-24 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center h-64">
+          <Loader2 className="w-10 h-10 animate-spin text-[#7C8C5C]" />
+          <p className="mt-4 text-[10px] font-black uppercase tracking-widest text-[#999]">Curating Top Picks...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (products.length === 0) return null;
+
   return (
-    <section className="py-20 bg-white">
+    <section id="featured" className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-[#2B2B2B] mb-12 text-center">
-          Top Picks of the Week
-        </h2>
-
-        <div className="relative">
-          {/* Carousel */}
-          <div
-            ref={scrollRef}
-            onScroll={handleScroll}
-            className="flex gap-6 overflow-x-auto scroll-smooth pb-4"
-            style={{ scrollBehavior: "smooth" }}
-          >
-            {FEATURED_SHOES.map((shoe) => (
-              <div
-                key={shoe.id}
-                className="flex-shrink-0 w-72 bg-[#FAFAF7] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all"
-              >
-                <div className="aspect-square overflow-hidden bg-[#F5EBDC]">
-                  <img
-                    src={shoe.image || "/placeholder.svg"}
-                    alt={shoe.name}
-                    className="w-full h-full rotate-y-180 scale-110  object-cover hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-                <div className="p-4">
-                  <p className="text-xs text-[#7C8C5C] font-semibold uppercase mb-1">
-                    {shoe.brand}
-                  </p>
-                  <h3 className="text-lg font-bold text-[#2B2B2B] mb-2">
-                    {shoe.name}
-                  </h3>
-                  <p className="text-xl font-bold text-[#7C8C5C]">
-                    PKR {shoe.price.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            ))}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div>
+            <p className="text-[#7C8C5C] font-black text-[10px] uppercase tracking-[0.3em] mb-4">Curated Collection</p>
+            <h2 className="text-5xl font-black text-[#2B2B2B] leading-tight">
+              Top Picks <span className="text-[#7C8C5C]">of the Week</span>
+            </h2>
           </div>
-
-          {/* Navigation Buttons */}
-          {canScrollLeft && (
+          <div className="flex gap-4">
             <button
               onClick={() => scroll("left")}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-[#7C8C5C] text-white p-2 rounded-full hover:bg-[#6B7A4F] transition-all z-10"
+              disabled={!canScrollLeft}
+              className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${canScrollLeft ? "bg-[#2B2B2B] text-white shadow-xl hover:-translate-x-1" : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                }`}
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
-          )}
-          {canScrollRight && (
             <button
               onClick={() => scroll("right")}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-[#7C8C5C] text-white p-2 rounded-full hover:bg-[#6B7A4F] transition-all z-10"
+              disabled={!canScrollRight}
+              className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${canScrollRight ? "bg-[#2B2B2B] text-white shadow-xl hover:translate-x-1" : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                }`}
             >
               <ChevronRight className="w-6 h-6" />
             </button>
-          )}
+          </div>
+        </div>
+
+        <div className="relative">
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex gap-8 overflow-x-auto no-scrollbar pb-10 px-2 -mx-2"
+          >
+            {products.map((product) => (
+              <div key={product.id} className="flex-shrink-0 w-[320px] md:w-[350px]">
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

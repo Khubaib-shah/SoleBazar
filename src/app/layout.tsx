@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Providers from "@/components/providers";
+import BackToTop from "@/components/back-to-top";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -56,6 +57,7 @@ export default function RootLayout({
       >
         <Providers>
           {children}
+          <BackToTop />
         </Providers>
         <Analytics />
       </body>

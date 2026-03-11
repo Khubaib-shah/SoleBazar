@@ -73,7 +73,7 @@ export default function DashboardPage() {
             {/* Stat Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {statCards.map((stat) => (
-                    <div key={stat.name} className="bg-white p-8 rounded-[40px] shadow-sm border border-[#E8DCC8] hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group">
+                    <div key={stat.name} className="bg-white p-8 rounded-[40px] shadow-sm border border-[#E8DCC8] hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 group">
                         <div className="flex items-start justify-between mb-6">
                             <div className={`w-14 h-14 ${stat.color} bg-opacity-10 rounded-2xl flex items-center justify-center ${stat.text}`}>
                                 <stat.icon className="w-6 h-6" />

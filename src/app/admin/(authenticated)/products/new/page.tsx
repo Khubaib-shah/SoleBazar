@@ -25,6 +25,7 @@ interface FormData {
     colors: string[];
     stock: number;
     featured: boolean;
+    isTopPick: boolean;
     brandId: string;
     categoryId: string;
 }
@@ -49,6 +50,7 @@ export default function NewProductPage() {
         colors: [],
         stock: 1,
         featured: false,
+        isTopPick: false,
         brandId: "",
         categoryId: "",
     });
@@ -376,6 +378,19 @@ export default function NewProductPage() {
                                         onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
                                     />
                                     <div className="w-14 h-8 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#7C8C5C]"></div>
+                                </label>
+                            </div>
+
+                            <div className="flex items-center justify-between p-6 bg-white/5 rounded-[32px] border border-white/10">
+                                <span className="text-xs font-black uppercase tracking-widest">Top Pick Week</span>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only peer"
+                                        checked={formData.isTopPick}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, isTopPick: e.target.checked }))}
+                                    />
+                                    <div className="w-14 h-8 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-orange-500"></div>
                                 </label>
                             </div>
 

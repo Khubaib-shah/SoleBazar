@@ -19,10 +19,13 @@ const globalForPrisma = globalThis as unknown as {
     prisma: PrismaClient | undefined;
 };
 
-// Pass the URL explicitly to the constructor to bypass any internal env logic
-// In Prisma 5.x and 6.x, use datasourceUrl property
+// In Prisma 5.x/6.x, we can use the datasources option for runtime connection string override
 export const prisma = globalForPrisma.prisma ?? new PrismaClient({
-    datasourceUrl: url,
+    datasources: {
+        db: {
+            url: url
+        }
+    }
 });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

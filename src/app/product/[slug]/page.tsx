@@ -12,6 +12,7 @@ import {
     ArrowRight
 } from "lucide-react";
 import ClientCarousel from "@/components/client-carousel";
+import ProductDetailContent from "@/components/product-detail-content";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
@@ -45,11 +46,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     const sizes = JSON.parse(product.sizes || "[]");
     const colors = JSON.parse(product.colors || "[]");
 
-    const whatsappMessage = `Hi! I'm interested in the ${product.name} (${product.brand.name}) - Condition: ${product.condition}. Link: ${process.env.NEXTAUTH_URL}/product/${product.slug}`;
-    const whatsappLink = `https://api.whatsapp.com/send?phone=923162126865&text=${encodeURIComponent(
-        whatsappMessage
-    )}`;
-
     return (
         <div className="min-h-screen bg-[#FAFAF7] pb-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -80,94 +76,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                     </div>
 
                     {/* Right Column: Details */}
-                    <div className="flex flex-col">
-                        <div className="mb-6">
-                            <div className="flex items-center gap-4 mb-4">
-                                <span className="bg-[#7C8C5C] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md">
-                                    {product.brand.name}
-                                </span>
-                                <span className="text-[10px] text-[#555] font-black uppercase tracking-widest bg-white/50 px-4 py-1.5 rounded-full border border-[#E8DCC8]">
-                                    {product.condition}
-                                </span>
-                            </div>
-                            <h1 className="text-4xl md:text-5xl font-black text-[#2B2B2B] mb-4 leading-tight">
-                                {product.name}
-                            </h1>
-                            <div className="flex items-baseline gap-4 mb-4">
-                                <p className="text-4xl font-black text-[#7C8C5C]">
-                                    <span className="text-xl mr-2">PKR</span>
-                                    {product.price.toLocaleString()}
-                                </p>
-                                {product.compareAt && (
-                                    <p className="text-xl text-gray-400 line-through font-bold">
-                                        PKR {product.compareAt.toLocaleString()}
-                                    </p>
-                                )}
-                            </div>
-                            <p className="text-lg text-[#555] leading-relaxed mb-8 max-w-xl">
-                                {product.description || "No description provided for this product. Premium quality footwear curated from top brands."}
-                            </p>
-                        </div>
-
-                        {/* Sizes & Attributes */}
-                        <div className="mb-10 space-y-8">
-                            {sizes.length > 0 && (
-                                <div>
-                                    <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.2em] mb-4">Available Sizes</h3>
-                                    <div className="flex flex-wrap gap-3">
-                                        {sizes.map((size: string) => (
-                                            <button key={size} className="w-14 h-14 bg-white border-2 border-[#E8DCC8] hover:border-[#7C8C5C] rounded-2xl flex items-center justify-center font-black text-[#2B2B2B] transition-all hover:scale-110 shadow-sm active:scale-95">
-                                                {size}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {colors.length > 0 && (
-                                <div>
-                                    <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.2em] mb-4">Colors</h3>
-                                    <div className="flex flex-wrap gap-3">
-                                        {colors.map((color: string) => (
-                                            <span key={color} className="px-5 py-2.5 bg-white border-2 border-[#E8DCC8] rounded-full text-xs font-black text-[#555] uppercase tracking-widest shadow-sm">
-                                                {color}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="mt-auto space-y-4">
-                            <a
-                                href={whatsappLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-4 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white py-6 rounded-[32px] font-black text-sm uppercase tracking-[0.2em] transition-all duration-500 shadow-2xl hover:shadow-[#7C8C5C]/40 group overflow-hidden relative"
-                            >
-                                <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-                                <MessageCircle className="w-5 h-5 relative z-10" />
-                                <span className="relative z-10">Purchase via WhatsApp</span>
-                            </a>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="bg-white p-6 rounded-3xl border border-[#E8DCC8] flex items-center gap-4">
-                                    <ShieldCheck className="w-6 h-6 text-[#7C8C5C]" />
-                                    <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-[#555]">Authenticity</p>
-                                        <p className="text-xs font-bold text-[#2B2B2B]">100% Guaranteed</p>
-                                    </div>
-                                </div>
-                                <div className="bg-white p-6 rounded-3xl border border-[#E8DCC8] flex items-center gap-4">
-                                    <Clock className="w-6 h-6 text-[#7C8C5C]" />
-                                    <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-[#555]">Fast Delivery</p>
-                                        <p className="text-xs font-bold text-[#2B2B2B]">Karachi 24h, PK 2-3d</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div>
+                        <ProductDetailContent product={product as any} />
                     </div>
                 </div>
 

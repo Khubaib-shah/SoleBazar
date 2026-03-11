@@ -48,6 +48,7 @@ model Product {
   colors      String?        // JSON string array e.g. '["White","Black"]'
   stock       Int            @default(1)
   featured    Boolean        @default(false)
+  isTopPick   Boolean        @default(false)
   brandId     String         @db.ObjectId
   categoryId  String         @db.ObjectId
   brand       Brand          @relation(fields: [brandId], references: [id])

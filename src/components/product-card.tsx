@@ -1,100 +1,119 @@
 "use client";
 
-import { useState } from "react";
-import { MessageCircle, ExternalLink, Tag, Ruler } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { ProductWithRelations } from "@/lib/types";
 
-export default function ProductCard({ product }: { product: ProductWithRelations }) {
+interface ProductCardProps {
+  product: ProductWithRelations;
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
+  // Auto-swipe carousel on hover (optional) or just manual interaction
+  const images = product.images?.length > 0
+    ? product.images.map(img => img.url)
+    : ["/placeholder.svg"];
+
   const whatsappMessage = `Hi! I'm interested in the ${product.name} (${product.brand.name}) - Condition: ${product.condition}. Price: PKR ${product.price}`;
-  const whatsappLink = `https://api.whatsapp.com/send?phone=923162126865&text=${encodeURIComponent(
+  const whatsappLink = `https://api.whatsapp.com/send?phone=923149784156&text=${encodeURIComponent(
     whatsappMessage
   )}`;
 
-  const mainImage = product.images?.[0]?.url || "/placeholder.svg";
-
   return (
     <div
-      className="group relative bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-[#E8DCC8]/30"
+      className="group relative bg-white rounded-[32px] p-4 shadow-lg hover:shadow-2xl transition-all duration-500 max-w-[360px] mx-auto flex flex-col h-full border border-gray-100"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Image Container */}
-      <div className="relative aspect-[4/5] overflow-hidden bg-[#F5EBDC]">
-        <img
-          src={mainImage}
-          alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-115"
-        />
+      {/* Product Image Section */}
+      <div className="relative aspect-square overflow-hidden rounded-[24px] bg-[#F5EBDC]">
+        <Link href={`/product/${product.slug}`} className="block w-full h-full">
+          <img
+            src={images[currentImageIndex]}
+            alt={product.name}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            loading="lazy"
+          />
+        </Link>
 
-        {/* Badges */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2">
-          <div className="bg-[#7C8C5C]/90 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
-            {product.condition}
+        {/* Overlays */}
+        {/* Dynamic Smart Badge (Top Left) */}
+        {(product.isTopPick || product.featured || product.condition) && (
+          <div className={`absolute top-3 left-3 backdrop-blur-xl px-4 py-1.5 rounded-full border border-white/20 shadow-xl z-10 transition-colors ${product.isTopPick
+              ? "bg-orange-600/90 text-white"
+              : product.condition === "New"
+                ? "bg-[#7C8C5C]/90 text-white"
+                : "bg-[#2B2B2B]/80 text-white"
+            }`}>
+            <span className="text-[10px] font-black uppercase tracking-[0.15em] drop-shadow-sm">
+              {product.isTopPick ? "Best Seller" : product.condition}
+            </span>
           </div>
-          {product.featured && (
-            <div className="bg-[#2B2B2B]/90 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
-              Featured
-            </div>
+        )}
+
+        {/* Brand Logo (Top Right) */}
+        <div className="absolute top-3 right-3 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100 p-2 overflow-hidden">
+          {product.brand.icon ? (
+            <img src={product.brand.icon} alt={product.brand.name} className="w-full h-full object-contain" />
+          ) : (
+            <span className="text-[10px] font-black text-[#2B2B2B]">{product.brand.name.substring(0, 2)}</span>
           )}
         </div>
 
-        {/* Quick View Overlay */}
-        <div className={`absolute inset-0 bg-black/20 backdrop-blur-[2px] flex items-center justify-center gap-3 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-          <Link
-            href={`/product/${product.slug}`}
-            className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#2B2B2B] hover:bg-[#7C8C5C] hover:text-white transition-all transform hover:scale-110 shadow-xl"
-          >
-            <ExternalLink className="w-5 h-5" />
-          </Link>
-        </div>
+        {/* Carousel Indicators */}
+        {images.length > 1 && (
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 px-4 pointer-events-none">
+            {images.slice(0, 4).map((_, idx) => (
+              <div
+                key={idx}
+                className={`h-1.5 transition-all duration-300 rounded-full ${currentImageIndex === idx ? "w-6 bg-white shadow-md" : "w-1.5 bg-white/50"
+                  }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Content */}
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-3">
-          <Tag className="w-3 h-3 text-[#7C8C5C]" />
-          <p className="text-[10px] text-[#7C8C5C] font-black uppercase tracking-widest">
+      {/* Product Information Section */}
+      <div className="mt-6 flex-1 flex flex-col">
+        <div className="space-y-1">
+          <Link href={`/product/${product.slug}`}>
+            <h3 className="text-xl font-black text-[#2B2B2B] group-hover:text-[#7C8C5C] transition-colors line-clamp-1">
+              {product.name}
+            </h3>
+          </Link>
+          <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
             {product.brand.name}
           </p>
         </div>
 
-        <h3 className="text-xl font-bold text-[#2B2B2B] mb-3 line-clamp-1 group-hover:text-[#7C8C5C] transition-colors">
-          {product.name}
-        </h3>
+        <p className="mt-4 text-sm text-gray-400 font-medium line-clamp-2 leading-relaxed">
+          {product.description || "Premium curated sneaker from our exclusive collection. Authentic and high-quality."}
+        </p>
 
-        <div className="flex justify-between items-end mb-6">
-          <div>
-            <p className="text-[10px] text-[#555] font-bold uppercase tracking-widest mb-1">Price</p>
-            <p className="text-2xl font-black text-[#2B2B2B]">
-              <span className="text-sm font-bold mr-1">PKR</span>
+        {/* Bottom Section (Price + Button) */}
+        <div className="mt-auto pt-8 flex items-center justify-between gap-4">
+          <div className="bg-gray-50 px-5 py-2.5 rounded-full border border-gray-100 shadow-inner">
+            <span className="text-lg font-black text-[#2B2B2B]">
+              <span className="text-[10px] mr-1">PKR</span>
               {product.price.toLocaleString()}
-            </p>
+            </span>
           </div>
 
-          <div className="text-right">
-            <div className="flex items-center gap-1.5 text-[10px] text-[#555] font-bold uppercase tracking-widest">
-              <Ruler className="w-3 h-3" />
-              Sizes available
-            </div>
-            <p className="text-sm font-bold text-[#2B2B2B]">
-              {JSON.parse(product.sizes || "[]").length} Options
-            </p>
-          </div>
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl hover:shadow-[#7C8C5C]/30"
+          >
+            Buy Now
+            <ArrowUpRight className="w-4 h-4" />
+          </a>
         </div>
-
-        {/* Action Button */}
-        <a
-          href={whatsappLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full flex items-center justify-center gap-3 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-[#7C8C5C]/20"
-        >
-          <MessageCircle className="w-4 h-4" />
-          Order via WhatsApp
-        </a>
       </div>
     </div>
   );

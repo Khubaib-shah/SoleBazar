@@ -74,10 +74,11 @@ export async function PUT(
                 price: parseFloat(price),
                 compareAt: compareAt ? parseFloat(compareAt) : null,
                 condition,
-                sizes: JSON.stringify(sizes || []),
-                colors: colors ? JSON.stringify(colors) : null,
+                sizes: sizes && typeof sizes === 'string' ? sizes : JSON.stringify(sizes || []),
+                colors: colors && typeof colors === 'string' ? colors : (colors ? JSON.stringify(colors) : null),
                 stock: parseInt(stock) || 1,
                 featured: featured || false,
+                isTopPick: body.isTopPick || false,
                 brandId,
                 categoryId,
                 images: images

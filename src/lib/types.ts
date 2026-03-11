@@ -10,6 +10,7 @@ export interface ProductWithRelations {
     colors: string | null;
     stock: number;
     featured: boolean;
+    isTopPick: boolean;
     brandId: string;
     categoryId: string;
     brand: { id: string; name: string; slug: string; icon: string | null };

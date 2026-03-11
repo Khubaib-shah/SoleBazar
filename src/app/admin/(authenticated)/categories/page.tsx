@@ -146,6 +146,7 @@ export default function AdminCategoriesPage() {
                                         required
                                         value={newCat.slug}
                                         className="w-full px-6 py-4 bg-white/10 border-2 border-white/10 rounded-2xl outline-none font-bold text-gray-500"
+                                        placeholder="e.g. performance-running"
                                         readOnly
                                     />
                                 </div>

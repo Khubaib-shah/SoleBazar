@@ -103,7 +103,7 @@ export default function AdminProductsPage() {
                                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#555]">Brand / Category</th>
                                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#555]">Price</th>
                                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#555]">Stock</th>
-                                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#555]">Featured</th>
+                                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#555]">Featured / Top</th>
                                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#555] text-right">Actions</th>
                             </tr>
                         </thead>
@@ -150,11 +150,24 @@ export default function AdminProductsPage() {
                                             </div>
                                         </td>
                                         <td className="px-8 py-6">
-                                            {product.featured ? (
-                                                <CheckCircle className="w-5 h-5 text-green-500" />
-                                            ) : (
-                                                <XCircle className="w-5 h-5 text-gray-300" />
-                                            )}
+                                            <div className="flex flex-col gap-2">
+                                                <div className="flex items-center gap-2">
+                                                    {product.featured ? (
+                                                        <CheckCircle className="w-4 h-4 text-green-500" />
+                                                    ) : (
+                                                        <XCircle className="w-4 h-4 text-gray-300" />
+                                                    )}
+                                                    <span className="text-[8px] font-black uppercase tracking-widest text-gray-500 line-clamp-1">Featured</span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    {product.isTopPick ? (
+                                                        <CheckCircle className="w-4 h-4 text-orange-500" />
+                                                    ) : (
+                                                        <XCircle className="w-4 h-4 text-gray-300" />
+                                                    )}
+                                                    <span className="text-[8px] font-black uppercase tracking-widest text-gray-500 line-clamp-1">Top Pick</span>
+                                                </div>
+                                            </div>
                                         </td>
                                         <td className="px-8 py-6">
                                             <div className="flex items-center justify-end gap-2 text-right">

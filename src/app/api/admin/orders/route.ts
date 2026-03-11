@@ -3,31 +3,31 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-async function requireAdmin() {
+export async function GET() {
     const session = await getServerSession(authOptions);
     if (!session) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    return null;
-}
-
-// GET /api/admin/orders - List all orders
-export async function GET() {
-    const authError = await requireAdmin();
-    if (authError) return authError;
 
     try {
         const orders = await prisma.order.findMany({
             include: {
                 items: {
-                    include: { product: { include: { images: { take: 1 } } } },
-                },
+                    include: {
+                        product: {
+                            include: {
+                                brand: true
+                            }
+                        }
+                    }
+                }
             },
-            orderBy: { createdAt: "desc" },
+            orderBy: { createdAt: "desc" }
         });
+
         return NextResponse.json(orders);
     } catch (error) {
-        console.error("Failed to fetch orders:", error);
+        console.error("Failed to fetch admin orders:", error);
         return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });
     }
 }

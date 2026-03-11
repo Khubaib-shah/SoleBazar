@@ -20,12 +20,9 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 // Pass the URL explicitly to the constructor to bypass any internal env logic
+// In Prisma 5.x and 6.x, use datasourceUrl property
 export const prisma = globalForPrisma.prisma ?? new PrismaClient({
-    datasources: {
-        db: {
-            url: url
-        }
-    }
+    datasourceUrl: url,
 });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

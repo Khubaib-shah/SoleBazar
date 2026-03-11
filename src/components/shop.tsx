@@ -11,6 +11,8 @@ import {
   Filter,
   ChevronDown
 } from "lucide-react";
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
 import ProductCard from "./product-card";
 import { ProductWithRelations } from "@/lib/types";
 
@@ -18,9 +20,8 @@ const CONDITIONS = ["All", "New", "Pre-loved"];
 const SIZES = ["All", "7", "8", "9", "9.5", "10", "10.5", "11"];
 
 export default function Shop() {
-  const [products, setProducts] = useState<ProductWithRelations[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [brands, setBrands] = useState<any[]>([]);
+  const { data: products = [], error: productsError, isLoading: productsLoading } = useSWR<ProductWithRelations[]>("/api/products", fetcher);
+  const { data: brands = [], error: brandsError, isLoading: brandsLoading } = useSWR<any[]>("/api/brands", fetcher);
 
   const [filters, setFilters] = useState({
     brand: "All",
@@ -30,36 +31,7 @@ export default function Shop() {
 
   const [activeTab, setActiveTab] = useState<"brand" | "condition" | "size">("brand");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [productsRes, brandsRes] = await Promise.all([
-          fetch("/api/products"),
-          fetch("/api/brands")
-        ]);
-        const productsData = await productsRes.json();
-        const brandsData = await brandsRes.json();
-
-        if (Array.isArray(productsData)) {
-          setProducts(productsData);
-        } else {
-          console.error("API returned non-array products:", productsData);
-          setProducts([]);
-        }
-
-        if (Array.isArray(brandsData)) {
-          setBrands(brandsData);
-        } else {
-          setBrands([]);
-        }
-      } catch (error) {
-        console.error("Error fetching shop data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const loading = productsLoading || brandsLoading;
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
@@ -231,7 +203,7 @@ export default function Shop() {
             variants={container}
             initial="hidden"
             animate="visible"
-            className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 no-scrollbar"
+            className="grid sm:grid-cols-2 lg:grid-cols-3  gap-8 no-scrollbar"
           >
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (

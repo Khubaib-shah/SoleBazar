@@ -1,32 +1,16 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
 import ProductCard from "./product-card";
 
 export default function Featured() {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: products = [], error, isLoading: loading } = useSWR<any[]>("/api/products/top-picks", fetcher);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-
-  useEffect(() => {
-    const fetchTopPicks = async () => {
-      try {
-        const res = await fetch("/api/products/top-picks");
-        if (res.ok) {
-          const data = await res.json();
-          setProducts(data);
-        }
-      } catch (err) {
-        console.error("Error fetching top picks:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTopPicks();
-  }, []);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {

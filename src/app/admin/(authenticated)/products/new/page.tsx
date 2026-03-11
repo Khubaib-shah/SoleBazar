@@ -329,7 +329,7 @@ export default function NewProductPage() {
                     </div>
 
                     {/* Sidebar Info Column */}
-                    <div className="space-y-8">
+                    <div className="space-y-8 lg:sticky lg:top-24 self-start">
                         <div className="bg-[#2B2B2B] p-10 rounded-[40px] shadow-2xl text-white space-y-8">
                             <h3 className="text-xl font-black">Publish Options</h3>
 

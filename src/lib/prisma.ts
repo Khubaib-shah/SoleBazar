@@ -20,12 +20,6 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 // In Prisma 5.x/6.x, we can use the datasources option for runtime connection string override
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({
-    datasources: {
-        db: {
-            url: url
-        }
-    }
-});
+export const prisma = globalForPrisma.prisma ?? new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
+import ConfirmationModal from "@/components/confirmation-modal";
 
 export default function EditProductPage() {
     const router = useRouter();
@@ -19,6 +20,7 @@ export default function EditProductPage() {
     const [saving, setSaving] = useState(false);
     const [brands, setBrands] = useState<any[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
     const [formData, setFormData] = useState<any>({
         name: "",
@@ -103,8 +105,7 @@ export default function EditProductPage() {
         setFormData((prev: any) => ({ ...prev, colors: prev.colors.filter((c: string) => c !== color) }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleUpdateProduct = async () => {
         setSaving(true);
         try {
             const res = await fetch(`/api/admin/products/${id}`, {
@@ -126,7 +127,13 @@ export default function EditProductPage() {
             toast.error("Error occurred");
         } finally {
             setSaving(false);
+            setIsConfirmOpen(false);
         }
+    };
+
+    const confirmSave = (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsConfirmOpen(true);
     };
 
     if (loading) {
@@ -138,94 +145,94 @@ export default function EditProductPage() {
     }
 
     return (
-        <div className="max-w-5xl mx-auto space-y-10">
+        <div className="max-w-5xl mx-auto space-y-8">
             <div className="flex items-center justify-between">
-                <Link href="/admin/products" className="flex items-center gap-3 text-sm font-black uppercase tracking-widest text-[#7C8C5C] hover:text-[#5D6B44]">
-                    <ArrowLeft className="w-4 h-4" /> Back to Products
+                <Link href="/admin/products" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#7C8C5C] hover:text-[#5D6B44]">
+                    <ArrowLeft className="w-3.5 h-3.5" /> Back
                 </Link>
-                <h1 className="text-3xl font-black text-[#2B2B2B]">Edit Product</h1>
+                <h1 className="text-2xl font-black text-[#2B2B2B]">Edit Product</h1>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-10">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    <div className="lg:col-span-2 space-y-8">
+            <form onSubmit={confirmSave} className="space-y-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="lg:col-span-2 space-y-6">
                         {/* Basic Info */}
-                        <div className="bg-white p-10 rounded-[40px] shadow-sm border border-[#E8DCC8] space-y-8">
-                            <h3 className="text-xl font-black text-[#2B2B2B]">Product Essence</h3>
+                        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#E8DCC8] space-y-6">
+                            <h3 className="text-lg font-black text-[#2B2B2B]">Product Essence</h3>
                             <div className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Product Name</label>
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] font-black uppercase tracking-widest text-[#555] ml-4">Product Name</label>
                                     <input
                                         type="text"
                                         name="name"
                                         required
                                         value={formData.name}
                                         onChange={handleInputChange}
-                                        className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold transition-all"
+                                        className="w-full px-5 py-3.5 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Full Description</label>
+                                <div className="space-y-1.5">
+                                    <label className="text-[9px] font-black uppercase tracking-widest text-[#555] ml-4">Full Description</label>
                                     <textarea
                                         name="description"
-                                        rows={6}
+                                        rows={5}
                                         value={formData.description}
                                         onChange={handleInputChange}
-                                        className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold transition-all resize-none"
+                                        className="w-full px-5 py-3.5 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all resize-none"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* Variants */}
-                        <div className="bg-white p-10 rounded-[40px] shadow-sm border border-[#E8DCC8] grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <div className="space-y-4">
-                                <h3 className="text-xl font-black text-[#2B2B2B]">Sizes</h3>
-                                <div className="flex gap-2">
+                        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#E8DCC8] grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-3">
+                                <h3 className="text-lg font-black text-[#2B2B2B]">Sizes</h3>
+                                <div className="flex bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-2xl overflow-hidden focus-within:border-[#7C8C5C] transition-all">
                                     <input
                                         type="text"
                                         placeholder="Add size"
                                         value={newSize}
                                         onChange={(e) => setNewSize(e.target.value)}
-                                        className="flex-1 px-6 py-3 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm"
+                                        className="flex-1 px-4 py-3 bg-transparent outline-none font-bold text-sm"
                                     />
                                     <button
                                         type="button"
                                         onClick={handleAddSize}
-                                        className="w-12 h-12 bg-[#2B2B2B] text-white rounded-2xl flex items-center justify-center hover:bg-[#1a1a1a]"
+                                        className="px-4 bg-[#2B2B2B] text-white flex items-center justify-center hover:bg-[#1a1a1a] transition-colors"
                                     >
-                                        <Plus className="w-5 h-5" />
+                                        <Plus className="w-4 h-4" />
                                     </button>
                                 </div>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-1.5">
                                     {formData.sizes.map((s: string) => (
-                                        <span key={s} className="px-4 py-2 bg-[#F5EBDC] text-[#2B2B2B] font-black text-xs rounded-xl flex items-center gap-2">
+                                        <span key={s} className="px-3 py-1.5 bg-[#F5EBDC] text-[#2B2B2B] font-black text-[10px] rounded-lg flex items-center gap-1.5">
                                             {s} <button type="button" onClick={() => handleRemoveSize(s)} className="text-red-500 hover:text-red-700">×</button>
                                         </span>
                                     ))}
                                 </div>
                             </div>
-                            <div className="space-y-4">
-                                <h3 className="text-xl font-black text-[#2B2B2B]">Colors</h3>
-                                <div className="flex gap-2">
+                            <div className="space-y-3">
+                                <h3 className="text-lg font-black text-[#2B2B2B]">Colors</h3>
+                                <div className="flex bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-2xl overflow-hidden focus-within:border-[#7C8C5C] transition-all">
                                     <input
                                         type="text"
                                         placeholder="Add color"
                                         value={newColor}
                                         onChange={(e) => setNewColor(e.target.value)}
-                                        className="flex-1 px-6 py-3 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm"
+                                        className="flex-1 px-4 py-3 bg-transparent outline-none font-bold text-sm"
                                     />
                                     <button
                                         type="button"
                                         onClick={handleAddColor}
-                                        className="w-12 h-12 bg-[#2B2B2B] text-white rounded-2xl flex items-center justify-center hover:bg-[#1a1a1a]"
+                                        className="px-4 bg-[#2B2B2B] text-white flex items-center justify-center hover:bg-[#1a1a1a] transition-colors"
                                     >
-                                        <Plus className="w-5 h-5" />
+                                        <Plus className="w-4 h-4" />
                                     </button>
                                 </div>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-1.5">
                                     {formData.colors.map((c: string) => (
-                                        <span key={c} className="px-4 py-2 bg-[#F5EBDC] text-[#2B2B2B] font-black text-xs rounded-xl flex items-center gap-2">
+                                        <span key={c} className="px-3 py-1.5 bg-[#F5EBDC] text-[#2B2B2B] font-black text-[10px] rounded-lg flex items-center gap-1.5">
                                             {c} <button type="button" onClick={() => handleRemoveColor(c)} className="text-red-500 hover:text-red-700">×</button>
                                         </span>
                                     ))}
@@ -234,8 +241,8 @@ export default function EditProductPage() {
                         </div>
 
                         {/* Gallery */}
-                        <div className="bg-white p-10 rounded-[40px] shadow-sm border border-[#E8DCC8] space-y-8">
-                            <h3 className="text-xl font-black text-[#2B2B2B]">Visual Gallery</h3>
+                        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#E8DCC8] space-y-6">
+                            <h3 className="text-lg font-black text-[#2B2B2B]">Visual Gallery</h3>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                 {images.map((img, idx) => (
                                     <div key={idx} className="relative group aspect-[4/5] rounded-3xl overflow-hidden border-2 border-[#E8DCC8]">
@@ -272,42 +279,42 @@ export default function EditProductPage() {
                         </div>
                     </div>
 
-                    <div className="space-y-8">
+                    <div className="space-y-8 lg:sticky lg:top-24 self-start">
                         {/* Pricing & Status */}
-                        <div className="bg-[#2B2B2B] p-10 rounded-[40px] shadow-3xl text-white space-y-8 sticky top-32">
-                            <h3 className="text-xl font-black">Publish Settings</h3>
+                        <div className="bg-[#2B2B2B] p-8 rounded-[32px] shadow-3xl text-white space-y-6">
+                            <h3 className="text-lg font-black">Publish Settings</h3>
 
                             <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Price (PKR)</label>
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 ml-4">Price (PKR)</label>
                                     <input
                                         type="number"
                                         name="price"
                                         required
                                         value={formData.price}
                                         onChange={handleInputChange}
-                                        className="w-full px-6 py-4 bg-white/10 border-2 border-white/10 rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-black text-2xl transition-all"
+                                        className="w-full px-5 py-3.5 bg-white/10 border-2 border-white/10 rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-black text-xl transition-all"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Compare At (PKR)</label>
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 ml-4">Compare At (PKR)</label>
                                     <input
                                         type="number"
                                         name="compareAt"
                                         value={formData.compareAt}
                                         onChange={handleInputChange}
-                                        className="w-full px-6 py-4 bg-white/10 border-2 border-white/10 rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-black text-2xl transition-all"
+                                        className="w-full px-5 py-3.5 bg-white/10 border-2 border-white/10 rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-black text-xl transition-all"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Stock Quantity</label>
+                                <div className="space-y-1">
+                                    <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 ml-4">Stock Quantity</label>
                                     <input
                                         type="number"
                                         name="stock"
                                         required
                                         value={formData.stock}
                                         onChange={handleInputChange}
-                                        className="w-full px-6 py-4 bg-white/10 border-2 border-white/10 rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold transition-all"
+                                        className="w-full px-5 py-3.5 bg-white/10 border-2 border-white/10 rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all"
                                     />
                                 </div>
                             </div>
@@ -351,17 +358,17 @@ export default function EditProductPage() {
                         </div>
 
                         {/* Classification */}
-                        <div className="bg-white p-10 rounded-[40px] shadow-sm border border-[#E8DCC8] space-y-8">
-                            <h3 className="text-xl font-black text-[#2B2B2B]">Classification</h3>
+                        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#E8DCC8] space-y-6">
+                            <h3 className="text-lg font-black text-[#2B2B2B]">Classification</h3>
 
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Brand</label>
+                            <div className="space-y-1.5">
+                                <label className="text-[9px] font-black uppercase tracking-widest text-[#555] ml-4">Brand</label>
                                 <select
                                     name="brandId"
                                     required
                                     value={formData.brandId}
                                     onChange={handleInputChange}
-                                    className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                                    className="w-full px-5 py-3.5 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
                                 >
                                     <option value="">Select Brand</option>
                                     {brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
@@ -400,6 +407,16 @@ export default function EditProductPage() {
                     </div>
                 </div>
             </form>
+
+            <ConfirmationModal
+                isOpen={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={handleUpdateProduct}
+                title="Commit Changes?"
+                message={`You are about to update the product record for "${formData.name}". This will immediately update the live catalog.`}
+                confirmText="Update Record"
+                loading={saving}
+            />
         </div>
     );
 }

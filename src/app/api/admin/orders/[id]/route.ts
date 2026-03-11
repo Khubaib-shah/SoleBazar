@@ -51,11 +51,17 @@ export async function PUT(
 
     try {
         const { id } = await params;
-        const { status } = await request.json();
+        const body = await request.json();
+        const { status, customerName, phone, address } = body;
 
         const updatedOrder = await prisma.order.update({
             where: { id },
-            data: { status }
+            data: {
+                ...(status && { status }),
+                ...(customerName && { customerName }),
+                ...(phone && { phone }),
+                ...(address && { address }),
+            }
         });
 
         return NextResponse.json(updatedOrder);

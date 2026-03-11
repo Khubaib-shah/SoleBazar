@@ -13,7 +13,6 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Auto-swipe carousel on hover (optional) or just manual interaction
   const images = product.images?.length > 0
     ? product.images.map(img => img.url)
     : ["/placeholder.svg"];
@@ -22,6 +21,18 @@ export default function ProductCard({ product }: ProductCardProps) {
   const whatsappLink = `https://api.whatsapp.com/send?phone=923149784156&text=${encodeURIComponent(
     whatsappMessage
   )}`;
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isHovered && images.length > 1) {
+      interval = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+      }, 1200);
+    } else {
+      setCurrentImageIndex(0);
+    }
+    return () => clearInterval(interval);
+  }, [isHovered, images.length]);
 
   return (
     <div
@@ -44,10 +55,10 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Dynamic Smart Badge (Top Left) */}
         {(product.isTopPick || product.featured || product.condition) && (
           <div className={`absolute top-3 left-3 backdrop-blur-xl px-4 py-1.5 rounded-full border border-white/20 shadow-xl z-10 transition-colors ${product.isTopPick
-              ? "bg-orange-600/90 text-white"
-              : product.condition === "New"
-                ? "bg-[#7C8C5C]/90 text-white"
-                : "bg-[#2B2B2B]/80 text-white"
+            ? "bg-orange-600/90 text-white"
+            : product.condition === "New"
+              ? "bg-[#7C8C5C]/90 text-white"
+              : "bg-[#2B2B2B]/80 text-white"
             }`}>
             <span className="text-[10px] font-black uppercase tracking-[0.15em] drop-shadow-sm">
               {product.isTopPick ? "Best Seller" : product.condition}
@@ -66,11 +77,16 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Carousel Indicators */}
         {images.length > 1 && (
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 px-4 pointer-events-none">
-            {images.slice(0, 4).map((_, idx) => (
-              <div
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 px-4 z-20">
+            {images.slice(0, 5).map((_, idx) => (
+              <button
                 key={idx}
-                className={`h-1.5 transition-all duration-300 rounded-full ${currentImageIndex === idx ? "w-6 bg-white shadow-md" : "w-1.5 bg-white/50"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentImageIndex(idx);
+                }}
+                className={`h-1.5 transition-all duration-300 rounded-full hover:scale-125 ${currentImageIndex === idx ? "w-6 bg-white shadow-md" : "w-1.5 bg-white/50"
                   }`}
               />
             ))}

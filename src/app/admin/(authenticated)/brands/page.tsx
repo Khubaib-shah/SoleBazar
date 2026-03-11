@@ -8,7 +8,8 @@ import {
     Tag,
     Save,
     X,
-    AlertCircle
+    AlertCircle,
+    Image as ImageIcon
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
@@ -62,8 +63,17 @@ export default function AdminBrandsPage() {
 
     const deleteBrand = async (id: string) => {
         if (!confirm("Are you sure? This might affect products linked to this brand.")) return;
-        // Note: Need a DELETE route for brands, but for now we'll just implement the UI
-        toast.error("Delete functionality for brands needs an API route.");
+        try {
+            const res = await fetch(`/api/admin/brands/${id}`, { method: "DELETE" });
+            if (res.ok) {
+                toast.success("Brand deleted");
+                fetchBrands();
+            } else {
+                toast.error("Failed to delete brand");
+            }
+        } catch (err) {
+            toast.error("Error deleting brand");
+        }
     };
 
     return (
@@ -92,7 +102,7 @@ export default function AdminBrandsPage() {
                             <thead className="bg-[#FAFAF7] border-b border-[#E8DCC8]">
                                 <tr>
                                     <th className="px-10 py-6 text-[10px] font-black uppercase tracking-widest text-[#555]">Brand Details</th>
-                                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-widest text-[#555]">Slug</th>
+                                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-widest text-[#555]">Products</th>
                                     <th className="px-10 py-6 text-[10px] font-black uppercase tracking-widest text-[#555] text-right">Actions</th>
                                 </tr>
                             </thead>
@@ -103,14 +113,23 @@ export default function AdminBrandsPage() {
                                     <tr key={brand.id} className="hover:bg-[#FAFAF7] transition-colors group">
                                         <td className="px-10 py-6">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-[#F5EBDC] rounded-xl flex items-center justify-center font-black text-[#7C8C5C] uppercase shadow-sm">
-                                                    {brand.name[0]}
+                                                <div className="w-14 h-14 bg-[#F5EBDC] rounded-2xl flex items-center justify-center overflow-hidden shadow-inner border border-white/40">
+                                                    {brand.icon ? (
+                                                        <img src={brand.icon} alt={brand.name} className="w-full h-full object-contain p-2" />
+                                                    ) : (
+                                                        <span className="font-black text-[#7C8C5C] uppercase">{brand.name[0]}</span>
+                                                    )}
                                                 </div>
-                                                <p className="font-bold text-[#2B2B2B]">{brand.name}</p>
+                                                <div>
+                                                    <p className="font-black text-[#2B2B2B] text-lg">{brand.name}</p>
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{brand.slug}</p>
+                                                </div>
                                             </div>
                                         </td>
                                         <td className="px-10 py-6">
-                                            <span className="text-[10px] font-black text-[#999] uppercase tracking-widest">{brand.slug}</span>
+                                            <div className="inline-flex px-3 py-1 bg-[#FAFAF7] border border-[#E8DCC8] rounded-full">
+                                                <span className="text-[10px] font-black text-[#7C8C5C] uppercase tracking-widest">{brand._count?.products || 0} Items</span>
+                                            </div>
                                         </td>
                                         <td className="px-10 py-6 text-right">
                                             <button onClick={() => deleteBrand(brand.id)} className="p-3 text-red-400 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all">
@@ -127,59 +146,73 @@ export default function AdminBrandsPage() {
                 {/* Add/Edit Sidebar */}
                 <div className="space-y-6">
                     {isAdding ? (
-                        <div className="bg-[#2B2B2B] p-10 rounded-[40px] shadow-2xl text-white space-y-8 sticky top-32">
+                        <div className="bg-[#2B2B2B] p-10 rounded-[40px] shadow-2xl text-white space-y-8 sticky top-32 border border-white/5">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-xl font-black">Add New Brand</h3>
+                                <h3 className="text-xl font-black">Design Brand</h3>
                                 <button onClick={() => setIsAdding(false)} className="text-gray-400 hover:text-white"><X className="w-6 h-6" /></button>
                             </div>
 
                             <form onSubmit={handleAddBrand} className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Brand Name</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Brand Name</label>
                                     <input
                                         type="text"
                                         required
                                         value={newBrand.name}
-                                        onChange={(e) => setNewBrand({ ...newBrand, name: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, "-") })}
-                                        className="w-full px-6 py-4 bg-white/10 border-2 border-white/10 rounded-2xl focus:border-[#7C8C5C] outline-none font-bold"
-                                        placeholder="e.g. Balenciaga"
+                                        onChange={(e) => setNewBrand({ ...newBrand, name: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-") })}
+                                        className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-3xl focus:border-[#7C8C5C] outline-none font-bold transition-all"
+                                        placeholder="e.g. Nike"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Slug</label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={newBrand.slug}
-                                        className="w-full px-6 py-4 bg-white/10 border-2 border-white/10 rounded-2xl outline-none font-bold text-gray-500"
-                                        readOnly
-                                    />
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Icon/Logo URL</label>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            value={newBrand.icon}
+                                            onChange={(e) => setNewBrand({ ...newBrand, icon: e.target.value })}
+                                            className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-3xl focus:border-[#7C8C5C] outline-none font-bold transition-all"
+                                            placeholder="Paste image URL here"
+                                        />
+                                        <ImageIcon className="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                    </div>
+                                    <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest ml-4">PNG preferred (transparent)</p>
                                 </div>
+
+                                {newBrand.icon && (
+                                    <div className="p-6 bg-white/5 rounded-3xl border border-white/10 flex flex-col items-center gap-4">
+                                        <p className="text-[9px] font-black uppercase tracking-widest text-gray-400">Preview</p>
+                                        <div className="w-20 h-20 bg-white rounded-2xl p-4 shadow-2xl">
+                                            <img src={newBrand.icon} alt="Preview" className="w-full h-full object-contain" />
+                                        </div>
+                                    </div>
+                                )}
+
                                 <button
                                     type="submit"
                                     disabled={saving}
-                                    className="w-full bg-[#7C8C5C] hover:bg-[#A3B38A] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
+                                    className="w-full bg-[#7C8C5C] hover:bg-[#A3B38A] text-white py-6 rounded-[32px] font-black text-sm uppercase tracking-[0.2em] transition-all shadow-2xl flex items-center justify-center gap-3 disabled:opacity-50"
                                 >
-                                    {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                                    Save Brand
+                                    {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+                                    Craft Brand
                                 </button>
                             </form>
                         </div>
                     ) : (
                         <div className="bg-white p-10 rounded-[40px] shadow-sm border border-[#E8DCC8] flex flex-col items-center text-center space-y-6">
-                            <div className="w-20 h-20 bg-[#F5EBDC] rounded-full flex items-center justify-center text-[#7C8C5C]">
+                            <div className="w-24 h-24 bg-[#F5EBDC] rounded-full flex items-center justify-center text-[#7C8C5C] shadow-inner">
                                 <Tag className="w-10 h-10" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-black text-[#2B2B2B] mb-2">Manage Labels</h3>
+                                <h3 className="text-xl font-black text-[#2B2B2B] mb-2">Heritage Management</h3>
                                 <p className="text-xs font-bold text-[#555] uppercase tracking-widest leading-relaxed">
-                                    Keep your brand list updated for precise filtering and professional storefront presentation.
+                                    Curate the world's most iconic sneaker brands. Your collection starts with a powerful legacy.
                                 </p>
                             </div>
-                            <div className="p-4 bg-blue-50 rounded-2xl flex items-start gap-4 border border-blue-100 text-left">
-                                <AlertCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                                <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest leading-relaxed">
-                                    Only unique brands are allowed. Existing brand slugs cannot be reused.
+                            <div className="p-6 bg-orange-50 rounded-[32px] flex items-start gap-4 border border-orange-100 text-left">
+                                <AlertCircle className="w-6 h-6 text-orange-400 flex-shrink-0" />
+                                <p className="text-[10px] font-black text-orange-600 uppercase tracking-[0.1em] leading-relaxed">
+                                    Brand logos are used globally across product cards to enhance visual authentication.
                                 </p>
                             </div>
                         </div>

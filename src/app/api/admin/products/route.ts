@@ -54,7 +54,12 @@ export async function POST(request: Request) {
             brandId,
             categoryId,
             images,
+            isTopPick,
         } = body;
+
+        if (!name || !brandId || !categoryId) {
+            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        }
 
         const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -63,19 +68,19 @@ export async function POST(request: Request) {
                 name,
                 slug,
                 description,
-                price: parseFloat(price),
-                compareAt: compareAt ? parseFloat(compareAt) : null,
+                price: Number(price) || 0,
+                compareAt: compareAt ? Number(compareAt) : null,
                 condition: condition || "New",
                 sizes: sizes && typeof sizes === 'string' ? sizes : JSON.stringify(sizes || []),
                 colors: colors && typeof colors === 'string' ? colors : (colors ? JSON.stringify(colors) : null),
-                stock: parseInt(stock) || 1,
+                stock: parseInt(stock.toString()) || 0,
                 featured: featured || false,
-                isTopPick: body.isTopPick || false,
+                isTopPick: isTopPick || false,
                 brandId,
                 categoryId,
-                images: images
+                images: images && Array.isArray(images)
                     ? {
-                        create: images.map((img: { url: string; alt?: string }, i: number) => ({
+                        create: images.filter((img: any) => img.url).map((img: { url: string; alt?: string }, i: number) => ({
                             url: img.url,
                             alt: img.alt || name,
                             order: i,
@@ -87,8 +92,14 @@ export async function POST(request: Request) {
         });
 
         return NextResponse.json(product, { status: 201 });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Admin: Failed to create product:", error);
-        return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
+
+        // Handle unique constraint (slug)
+        if (error.code === 'P2002') {
+            return NextResponse.json({ error: "Product with this name already exists (Slug conflict)" }, { status: 400 });
+        }
+
+        return NextResponse.json({ error: "Failed to create product: " + (error.message || "Unknown error") }, { status: 500 });
     }
 }

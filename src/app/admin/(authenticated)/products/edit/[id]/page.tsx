@@ -8,6 +8,7 @@ import {
     Plus,
     Trash2,
     Loader2,
+    Image as ImageIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
@@ -246,7 +247,13 @@ export default function EditProductPage() {
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                 {images.map((img, idx) => (
                                     <div key={idx} className="relative group aspect-[4/5] rounded-3xl overflow-hidden border-2 border-[#E8DCC8]">
-                                        <img src={img.url} className="w-full h-full object-cover" />
+                                        {img.url ? (
+                                            <img src={img.url} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-[#FAFAF7] text-[#E8DCC8]">
+                                                <ImageIcon className="w-10 h-10" />
+                                            </div>
+                                        )}
                                         <input
                                             type="text"
                                             placeholder="URL"

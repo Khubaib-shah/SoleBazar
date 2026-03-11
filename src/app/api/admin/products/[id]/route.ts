@@ -56,10 +56,15 @@ export async function PUT(
             brandId,
             categoryId,
             images,
+            isTopPick,
         } = body;
 
+        if (!name || !brandId || !categoryId) {
+            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        }
+
         // Delete old images and create new ones
-        if (images) {
+        if (images && Array.isArray(images)) {
             await prisma.productImage.deleteMany({ where: { productId: id } });
         }
 
@@ -71,19 +76,19 @@ export async function PUT(
                 name,
                 slug,
                 description,
-                price: parseFloat(price),
-                compareAt: compareAt ? parseFloat(compareAt) : null,
+                price: Number(price) || 0,
+                compareAt: compareAt ? Number(compareAt) : null,
                 condition,
                 sizes: sizes && typeof sizes === 'string' ? sizes : JSON.stringify(sizes || []),
                 colors: colors && typeof colors === 'string' ? colors : (colors ? JSON.stringify(colors) : null),
-                stock: parseInt(stock) || 1,
+                stock: parseInt(stock.toString()) || 0,
                 featured: featured || false,
-                isTopPick: body.isTopPick || false,
+                isTopPick: isTopPick || false,
                 brandId,
                 categoryId,
-                images: images
+                images: images && Array.isArray(images)
                     ? {
-                        create: images.map((img: { url: string; alt?: string }, i: number) => ({
+                        create: images.filter((img: any) => img.url).map((img: { url: string; alt?: string }, i: number) => ({
                             url: img.url,
                             alt: img.alt || name,
                             order: i,
@@ -95,9 +100,15 @@ export async function PUT(
         });
 
         return NextResponse.json(product);
-    } catch (error) {
+    } catch (error: any) {
         console.error("Admin: Failed to update product:", error);
-        return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
+
+        // Handle unique constraint (slug)
+        if (error.code === 'P2002') {
+            return NextResponse.json({ error: "Product with this name already exists (Slug conflict)" }, { status: 400 });
+        }
+
+        return NextResponse.json({ error: "Failed to update product: " + (error.message || "Unknown error") }, { status: 500 });
     }
 }
 

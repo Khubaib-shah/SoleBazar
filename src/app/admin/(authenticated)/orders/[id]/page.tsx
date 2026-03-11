@@ -4,23 +4,21 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
     ArrowLeft,
-    ShoppingBag,
     User,
     Phone,
     MapPin,
     Clock,
-    Package,
-    CheckCircle2,
-    XCircle,
     Loader2,
     Printer,
-    ChevronRight,
     RefreshCcw,
     ExternalLink,
-    Trash2
+    Edit3,
+    X,
+    Save
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
+import ConfirmationModal from "@/components/confirmation-modal";
 
 export default function OrderDetailPage() {
     const { id } = useParams();
@@ -28,6 +26,14 @@ export default function OrderDetailPage() {
     const [order, setOrder] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editForm, setEditForm] = useState({
+        customerName: "",
+        phone: "",
+        address: ""
+    });
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [pendingStatus, setPendingStatus] = useState<string | null>(null);
 
     const fetchOrder = async () => {
         try {
@@ -36,6 +42,11 @@ export default function OrderDetailPage() {
             if (!res.ok) throw new Error("Not found");
             const data = await res.json();
             setOrder(data);
+            setEditForm({
+                customerName: data.customerName,
+                phone: data.phone,
+                address: data.address || ""
+            });
         } catch (err) {
             toast.error("Order not found");
             router.push("/admin/orders");
@@ -48,25 +59,38 @@ export default function OrderDetailPage() {
         fetchOrder();
     }, [id]);
 
-    const updateStatus = async (newStatus: string) => {
+    const handleUpdateOrder = async (data: any) => {
         setUpdating(true);
         try {
             const res = await fetch(`/api/admin/orders/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: newStatus }),
+                body: JSON.stringify(data),
             });
             if (res.ok) {
-                toast.success(`Order status updated to ${newStatus}`);
+                toast.success("Order updated successfully");
+                setIsEditing(false);
                 fetchOrder();
             } else {
-                toast.error("Failed to update status");
+                toast.error("Failed to update order");
             }
         } catch (err) {
             toast.error("Error occurred");
         } finally {
             setUpdating(false);
+            setIsConfirmOpen(false);
+            setPendingStatus(null);
         }
+    };
+
+    const confirmStatusUpdate = (status: string) => {
+        setPendingStatus(status);
+        setIsConfirmOpen(true);
+    };
+
+    const confirmFormUpdate = (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsConfirmOpen(true);
     };
 
     if (loading) {
@@ -111,8 +135,8 @@ export default function OrderDetailPage() {
                         </div>
                         <div className="flex flex-col items-end">
                             <span className={`px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest border-2 flex items-center gap-2 ${order.status === 'delivered' ? 'bg-green-50 text-green-600 border-green-100' :
-                                    order.status === 'pending' ? 'bg-orange-50 text-orange-600 border-orange-100' :
-                                        'bg-blue-50 text-blue-600 border-blue-100'
+                                order.status === 'pending' ? 'bg-orange-50 text-orange-600 border-orange-100' :
+                                    'bg-blue-50 text-blue-600 border-blue-100'
                                 }`}>
                                 {order.status}
                                 {updating && <Loader2 className="w-3 h-3 animate-spin" />}
@@ -128,7 +152,7 @@ export default function OrderDetailPage() {
                         <div className="divide-y divide-[#E8DCC8]/50">
                             {order.items.map((item: any) => (
                                 <div key={item.id} className="p-10 flex flex-col md:flex-row items-center gap-8 group">
-                                    <div className="w-24 h-32 bg-[#F5EBDC] rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
+                                    <div className="w-24 h-32 bg-[#F5EBDC] rounded-2xl overflow-hidden flex-shrink-0 shadow-sm border border-[#E8DCC8]">
                                         <img
                                             src={item.product.images?.[0]?.url || "/placeholder.svg"}
                                             alt={item.product.name}
@@ -163,7 +187,7 @@ export default function OrderDetailPage() {
 
                 <div className="space-y-10">
                     {/* Status Update Widget */}
-                    <div className="bg-[#2B2B2B] p-10 rounded-[40px] shadow-2xl text-white space-y-8">
+                    <div className="bg-[#2B2B2B] p-10 rounded-[40px] shadow-2xl text-white space-y-8 border border-white/5">
                         <h3 className="text-xl font-black flex items-center gap-3">
                             <RefreshCcw className="w-5 h-5 text-[#7C8C5C]" />
                             Update Status
@@ -172,11 +196,11 @@ export default function OrderDetailPage() {
                             {statusOptions.map((status) => (
                                 <button
                                     key={status}
-                                    onClick={() => updateStatus(status)}
+                                    onClick={() => confirmStatusUpdate(status)}
                                     disabled={updating || order.status === status}
                                     className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${order.status === status
-                                            ? "bg-[#7C8C5C] text-white shadow-lg shadow-[#7C8C5C]/20 border-2 border-[#7C8C5C]"
-                                            : "bg-white/5 border-2 border-white/5 hover:border-white/20 text-gray-400 hover:text-white"
+                                        ? "bg-[#7C8C5C] text-white shadow-lg shadow-[#7C8C5C]/20 border-2 border-[#7C8C5C]"
+                                        : "bg-white/5 border-2 border-white/5 hover:border-white/20 text-gray-400 hover:text-white"
                                         }`}
                                 >
                                     {status}
@@ -185,51 +209,115 @@ export default function OrderDetailPage() {
                         </div>
                     </div>
 
-                    {/* Customer Information */}
+                    {/* Customer Information Edit */}
                     <div className="bg-white p-10 rounded-[40px] shadow-sm border border-[#E8DCC8] space-y-8">
-                        <h3 className="text-xl font-black text-[#2B2B2B]">Customer Details</h3>
-
-                        <div className="space-y-6">
-                            <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 bg-[#F5EBDC] rounded-xl flex items-center justify-center text-[#7C8C5C] flex-shrink-0">
-                                    <User className="w-5 h-5" />
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black text-[#999] uppercase tracking-widest mb-1">Name</p>
-                                    <p className="font-bold text-[#2B2B2B]">{order.customerName}</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 bg-[#F5EBDC] rounded-xl flex items-center justify-center text-[#7C8C5C] flex-shrink-0">
-                                    <Phone className="w-5 h-5" />
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black text-[#999] uppercase tracking-widest mb-1">Phone</p>
-                                    <p className="font-bold text-[#2B2B2B]">{order.phone}</p>
-                                    <a
-                                        href={`https://wa.me/${order.phone.replace(/\D/g, '')}`}
-                                        target="_blank"
-                                        className="text-[10px] font-black text-[#7C8C5C] uppercase tracking-wider flex items-center gap-1 mt-1 hover:underline"
-                                    >
-                                        <ExternalLink className="w-3 h-3" /> Chat on WhatsApp
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-4 border-t border-[#E8DCC8] pt-6">
-                                <div className="w-10 h-10 bg-[#F5EBDC] rounded-xl flex items-center justify-center text-[#7C8C5C] flex-shrink-0">
-                                    <MapPin className="w-5 h-5" />
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black text-[#999] uppercase tracking-widest mb-1">Shipping Address</p>
-                                    <p className="font-bold text-[#2B2B2B] leading-relaxed">{order.address || "No address provided"}</p>
-                                </div>
-                            </div>
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-xl font-black text-[#2B2B2B]">Customer Details</h3>
+                            <button
+                                onClick={() => setIsEditing(!isEditing)}
+                                className="p-2 text-[#7C8C5C] hover:bg-[#7C8C5C]/10 rounded-lg transition-all"
+                            >
+                                {isEditing ? <X className="w-5 h-5" /> : <Edit3 className="w-5 h-5" />}
+                            </button>
                         </div>
+
+                        {isEditing ? (
+                            <form onSubmit={confirmFormUpdate} className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">Name</label>
+                                    <input
+                                        type="text"
+                                        value={editForm.customerName}
+                                        onChange={(e) => setEditForm({ ...editForm, customerName: e.target.value })}
+                                        className="w-full px-5 py-3.5 bg-[#FAFAF7] border border-[#E8DCC8] rounded-2xl outline-none focus:border-[#7C8C5C] font-bold text-sm"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">Phone</label>
+                                    <input
+                                        type="text"
+                                        value={editForm.phone}
+                                        onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                                        className="w-full px-5 py-3.5 bg-[#FAFAF7] border border-[#E8DCC8] rounded-2xl outline-none focus:border-[#7C8C5C] font-bold text-sm"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">Address</label>
+                                    <textarea
+                                        value={editForm.address}
+                                        onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
+                                        className="w-full px-5 py-3.5 bg-[#FAFAF7] border border-[#E8DCC8] rounded-2xl outline-none focus:border-[#7C8C5C] font-bold text-sm min-h-[100px] resize-none"
+                                        required
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="w-full bg-[#7C8C5C] hover:bg-[#5D6B44] text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-[#7C8C5C]/20 flex items-center justify-center gap-2"
+                                >
+                                    <Save className="w-4 h-4" />
+                                    Refine Details
+                                </button>
+                            </form>
+                        ) : (
+                            <div className="space-y-6">
+                                <div className="flex items-start gap-4">
+                                    <div className="w-10 h-10 bg-[#F5EBDC] rounded-xl flex items-center justify-center text-[#7C8C5C] flex-shrink-0">
+                                        <User className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-[#999] uppercase tracking-widest mb-1">Name</p>
+                                        <p className="font-bold text-[#2B2B2B]">{order.customerName}</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-4">
+                                    <div className="w-10 h-10 bg-[#F5EBDC] rounded-xl flex items-center justify-center text-[#7C8C5C] flex-shrink-0">
+                                        <Phone className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-[#999] uppercase tracking-widest mb-1">Phone</p>
+                                        <p className="font-bold text-[#2B2B2B]">{order.phone}</p>
+                                        <a
+                                            href={`https://wa.me/${order.phone.replace(/\D/g, '')}`}
+                                            target="_blank"
+                                            className="text-[10px] font-black text-[#7C8C5C] uppercase tracking-wider flex items-center gap-1 mt-1 hover:underline"
+                                        >
+                                            <ExternalLink className="w-3 h-3" /> Chat on WhatsApp
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-4 border-t border-[#E8DCC8] pt-6">
+                                    <div className="w-10 h-10 bg-[#F5EBDC] rounded-xl flex items-center justify-center text-[#7C8C5C] flex-shrink-0">
+                                        <MapPin className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-[#999] uppercase tracking-widest mb-1">Shipping Address</p>
+                                        <p className="font-bold text-[#2B2B2B] leading-relaxed">{order.address || "No address provided"}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
+
+            <ConfirmationModal
+                isOpen={isConfirmOpen}
+                onClose={() => {
+                    setIsConfirmOpen(false);
+                    setPendingStatus(null);
+                }}
+                onConfirm={() => handleUpdateOrder(pendingStatus ? { status: pendingStatus } : editForm)}
+                title={pendingStatus ? "Transition status?" : "Update Record?"}
+                message={pendingStatus
+                    ? `Are you sure you want to move this order to ${pendingStatus.toUpperCase()}?`
+                    : "You are about to modify the customer details. This record is permanent once updated."}
+                confirmText={pendingStatus ? "Update Status" : "Refine Order"}
+                loading={updating}
+            />
         </div>
     );
 }

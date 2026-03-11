@@ -24,6 +24,8 @@ import {
     AreaChart,
     Area
 } from "recharts";
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
 
 interface Stats {
     productCount: number;
@@ -35,25 +37,9 @@ interface Stats {
 }
 
 export default function DashboardPage() {
-    const [stats, setStats] = useState<Stats | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { data: stats, error, isLoading } = useSWR<Stats>("/api/admin/stats", fetcher);
 
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const res = await fetch("/api/admin/stats");
-                const data = await res.json();
-                setStats(data);
-            } catch (err) {
-                console.error("Failed to fetch dashboard stats:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchStats();
-    }, []);
-
-    if (loading) {
+    if (isLoading && !stats) {
         return (
             <div className="h-96 flex items-center justify-center">
                 <Loader2 className="w-10 h-10 animate-spin text-[#7C8C5C]" />
@@ -69,55 +55,55 @@ export default function DashboardPage() {
     ];
 
     return (
-        <div className="space-y-10">
+        <div className="space-y-6">
             {/* Stat Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statCards.map((stat) => (
-                    <div key={stat.name} className="bg-white p-8 rounded-[40px] shadow-sm border border-[#E8DCC8] hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 group">
-                        <div className="flex items-start justify-between mb-6">
-                            <div className={`w-14 h-14 ${stat.color} bg-opacity-10 rounded-2xl flex items-center justify-center ${stat.text}`}>
-                                <stat.icon className="w-6 h-6" />
+                    <div key={stat.name} className="bg-white p-6 rounded-[32px] shadow-sm border border-[#E8DCC8] hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1 group">
+                        <div className="flex items-start justify-between mb-4">
+                            <div className={`w-12 h-12 ${stat.color} bg-opacity-10 rounded-xl flex items-center justify-center ${stat.text}`}>
+                                <stat.icon className="w-5 h-5" />
                             </div>
-                            <div className="p-2 bg-green-50 text-green-500 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
-                                <TrendingUp className="w-3 h-3" />
+                            <div className="p-1.5 bg-green-50 text-green-500 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1">
+                                <TrendingUp className="w-2.5 h-2.5" />
                                 +12%
                             </div>
                         </div>
-                        <p className="text-[10px] font-black text-[#555] uppercase tracking-widest mb-2">{stat.name}</p>
-                        <h3 className="text-3xl font-black text-[#2B2B2B]">{stat.value}</h3>
+                        <p className="text-[9px] font-black text-[#555] uppercase tracking-widest mb-1.5">{stat.name}</p>
+                        <h3 className="text-2xl font-black text-[#2B2B2B]">{stat.value}</h3>
                     </div>
                 ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Recent Orders */}
-                <div className="bg-white p-10 rounded-[40px] shadow-sm border border-[#E8DCC8]">
-                    <div className="flex items-center justify-between mb-10">
-                        <h3 className="text-xl font-black text-[#2B2B2B]">Recent Orders</h3>
-                        <Link href="/admin/orders" className="text-xs font-black uppercase tracking-widest text-[#7C8C5C] flex items-center gap-2">
+                <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#E8DCC8]">
+                    <div className="flex items-center justify-between mb-8">
+                        <h3 className="text-lg font-black text-[#2B2B2B]">Recent Orders</h3>
+                        <Link href="/admin/orders" className="text-[10px] font-black uppercase tracking-widest text-[#7C8C5C] flex items-center gap-2">
                             View All <ArrowRight className="w-4 h-4" />
                         </Link>
                     </div>
 
                     {stats?.recentOrders && stats.recentOrders.length > 0 ? (
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                             {stats.recentOrders.map((order) => (
-                                <div key={order.id} className="flex items-center justify-between p-4 bg-[#FAFAF7] rounded-3xl border border-[#E8DCC8]/50 hover:border-[#7C8C5C] transition-colors">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center font-black text-[10px] text-[#555] shadow-sm">
+                                <div key={order.id} className="flex items-center justify-between p-3.5 bg-[#FAFAF7] rounded-2xl border border-[#E8DCC8]/50 hover:border-[#7C8C5C] transition-colors">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center font-black text-[9px] text-[#555] shadow-sm">
                                             #{order.id.slice(-4).toUpperCase()}
                                         </div>
                                         <div>
-                                            <p className="font-bold text-[#2B2B2B]">{order.customerName}</p>
-                                            <div className="flex items-center gap-2 text-[10px] text-[#555] font-black uppercase tracking-widest">
+                                            <p className="font-bold text-[#2B2B2B] text-sm">{order.customerName}</p>
+                                            <div className="flex items-center gap-1.5 text-[9px] text-[#555] font-black uppercase tracking-widest">
                                                 <Clock className="w-3 h-3" />
                                                 {new Date(order.createdAt).toLocaleDateString()}
                                             </div>
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <p className="font-black text-[#2B2B2B]">PKR {order.total.toLocaleString()}</p>
-                                        <span className="text-[10px] font-black uppercase tracking-widest bg-orange-100 text-orange-600 px-3 py-1 rounded-full">
+                                        <p className="font-black text-[#2B2B2B] text-sm">PKR {order.total.toLocaleString()}</p>
+                                        <span className="text-[8px] font-black uppercase tracking-widest bg-orange-100 text-orange-600 px-2.5 py-1 rounded-full">
                                             {order.status}
                                         </span>
                                     </div>
@@ -131,10 +117,10 @@ export default function DashboardPage() {
                     )}
                 </div>
 
-                {/* Revenue Overview (Placeholder data for chart) */}
-                <div className="bg-white p-10 rounded-[40px] shadow-sm border border-[#E8DCC8]">
-                    <h3 className="text-xl font-black text-[#2B2B2B] mb-10">Revenue Overview</h3>
-                    <div className="h-80">
+                {/* Revenue Overview */}
+                <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#E8DCC8]">
+                    <h3 className="text-lg font-black text-[#2B2B2B] mb-8">Revenue Overview</h3>
+                    <div className="h-72">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={[
                                 { name: 'Mon', total: 4000 },

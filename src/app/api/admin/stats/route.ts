@@ -10,7 +10,7 @@ export async function GET() {
     }
 
     try {
-        const [productCount, orderCount, brandCount, categoryCount, recentOrders, orders] = await Promise.all([
+        const [productCount, orderCount, brandCount, categoryCount, recentOrders, revenueResult] = await Promise.all([
             prisma.product.count(),
             prisma.order.count(),
             prisma.brand.count(),
@@ -19,12 +19,12 @@ export async function GET() {
                 take: 5,
                 orderBy: { createdAt: "desc" },
             }),
-            prisma.order.findMany({
-                select: { total: true }
+            prisma.order.aggregate({
+                _sum: { total: true }
             })
         ]);
 
-        const totalRevenue = orders.reduce((acc, order) => acc + order.total, 0);
+        const totalRevenue = revenueResult._sum.total || 0;
 
         return NextResponse.json({
             productCount,

@@ -59,7 +59,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
                 <nav className="flex-1 px-4 mt-10 space-y-2">
                     {navItems.map((item) => {
-                        const isActive = pathname === item.href;
+                        const isActive = pathname.startsWith(item.href);
                         return (
                             <Link
                                 key={item.href}
@@ -94,25 +94,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* Main Content */}
             <main className={`flex-1 transition-all duration-500 ${isSidebarOpen ? 'pl-72' : 'pl-20'}`}>
-                <header className="h-24 bg-white border-b border-[#E8DCC8] flex items-center justify-between px-10 sticky top-0 z-40">
+                <header className="h-16 bg-white border-b border-[#E8DCC8] flex items-center justify-between px-8 sticky top-0 z-40">
                     <div className="flex items-center gap-4">
-                        <h2 className="text-xl font-black text-[#2B2B2B] capitalize">
+                        <h2 className="text-lg font-black text-[#2B2B2B] capitalize">
                             {pathname.split('/').pop()?.replace('-', ' ')}
                         </h2>
                     </div>
 
                     <div className="flex items-center gap-6">
                         <div className="text-right hidden sm:block">
-                            <p className="text-sm font-black text-[#2B2B2B]">{session.user?.name}</p>
-                            <p className="text-[10px] font-bold text-[#7C8C5C] uppercase tracking-[0.2em]">Authorized Admin</p>
+                            <p className="text-xs font-black text-[#2B2B2B]">{session.user?.name}</p>
+                            <p className="text-[9px] font-bold text-[#7C8C5C] uppercase tracking-[0.2em]">Authorized Admin</p>
                         </div>
-                        <div className="w-12 h-12 bg-[#F5EBDC] rounded-2xl flex items-center justify-center font-black text-[#7C8C5C] border border-[#E8DCC8]">
+                        <div className="w-10 h-10 bg-[#F5EBDC] rounded-xl flex items-center justify-center font-black text-[#7C8C5C] border border-[#E8DCC8]">
                             {session.user?.name?.[0]}
                         </div>
                     </div>
                 </header>
 
-                <div className="p-10">
+                <div className="p-6">
                     {children}
                 </div>
             </main>

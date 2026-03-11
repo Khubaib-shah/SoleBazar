@@ -1,122 +1,86 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { motion, Variants } from "framer-motion";
+import { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Tag,
+  Box,
+  Ruler,
+  RefreshCcw,
+  Loader2,
+  Filter,
+  ChevronDown
+} from "lucide-react";
 import ProductCard from "./product-card";
+import { ProductWithRelations } from "@/lib/types";
 
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "Dread locks sneakers",
-    brand: "Cat & Sofa",
-    price: 1800,
-    condition: "Pre-loved",
-    size: "8",
-    image: "/Cat_sofa.png",
-  },
-  {
-    id: 2,
-    name: "Adidas Stan Smith",
-    brand: "Adidas",
-    price: 3200,
-    condition: "New",
-    size: "9",
-    image: "/adidas-stan-smith-white-sneaker.jpg",
-  },
-  {
-    id: 3,
-    name: "Puma RS-X",
-    brand: "Puma",
-    price: 3800,
-    condition: "Pre-loved",
-    size: "11",
-    image: "/puma-rs-x-retro-sneaker.jpg",
-  },
-  {
-    id: 4,
-    name: "Nike Jordan 1 Low",
-    brand: "Nike",
-    price: 5500,
-    condition: "New",
-    size: "10",
-    image: "/nike-jordan-1-low-sneaker.jpg",
-  },
-  {
-    id: 5,
-    name: "Adidas Ultraboost",
-    brand: "Adidas",
-    price: 4200,
-    condition: "Pre-loved",
-    size: "9.5",
-    image: "/adidas-ultraboost-black-sneaker.jpg",
-  },
-  {
-    id: 6,
-    name: "Puma Suede Classic",
-    brand: "Puma",
-    price: 2800,
-    condition: "New",
-    size: "8",
-    image: "/puma-suede-classic-vintage-sneaker.jpg",
-  },
-  {
-    id: 7,
-    name: "Nike Blazer Mid",
-    brand: "Nike",
-    price: 4000,
-    condition: "Pre-loved",
-    size: "10",
-    image: "/nike-blazer-mid-classic-sneaker.jpg",
-  },
-  {
-    id: 8,
-    name: "Adidas NMD R1",
-    brand: "Adidas",
-    price: 3900,
-    condition: "New",
-    size: "9",
-    image: "/adidas-nmd-r1-modern-sneaker.jpg",
-  },
-];
-
-const BRANDS = ["All", "Nike", "Adidas", "Puma", "Cat & Sofa"];
 const CONDITIONS = ["All", "New", "Pre-loved"];
-const SIZES = ["All", "8", "9", "9.5", "10", "10.5", "11"];
-
-const container: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
-  },
-};
-
-const item: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: [0.25, 1, 0.5, 1] },
-  },
-};
+const SIZES = ["All", "7", "8", "9", "9.5", "10", "10.5", "11"];
 
 export default function Shop() {
+  const [products, setProducts] = useState<ProductWithRelations[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [brands, setBrands] = useState<any[]>([]);
+
   const [filters, setFilters] = useState({
     brand: "All",
     condition: "All",
     size: "All",
   });
 
-  // ✅ Efficiently compute filtered products
+  const [activeTab, setActiveTab] = useState<"brand" | "condition" | "size">("brand");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [productsRes, brandsRes] = await Promise.all([
+          fetch("/api/products"),
+          fetch("/api/brands")
+        ]);
+        const productsData = await productsRes.json();
+        const brandsData = await brandsRes.json();
+
+        if (Array.isArray(productsData)) {
+          setProducts(productsData);
+        } else {
+          console.error("API returned non-array products:", productsData);
+          setProducts([]);
+        }
+
+        if (Array.isArray(brandsData)) {
+          setBrands(brandsData);
+        } else {
+          setBrands([]);
+        }
+      } catch (error) {
+        console.error("Error fetching shop data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((p) => {
-      const brandMatch = filters.brand === "All" || p.brand === filters.brand;
+    return products.filter((p) => {
+      const brandMatch = filters.brand === "All" || p.brand.name === filters.brand;
       const conditionMatch =
         filters.condition === "All" || p.condition === filters.condition;
-      const sizeMatch = filters.size === "All" || p.size === filters.size;
+
+      // Handle sizes which are stored as JSON string in the DB
+      let sizeMatch = filters.size === "All";
+      if (!sizeMatch && p.sizes) {
+        try {
+          const productSizes = JSON.parse(p.sizes);
+          sizeMatch = productSizes.includes(filters.size);
+        } catch (e) {
+          sizeMatch = p.sizes === filters.size;
+        }
+      }
+
       return brandMatch && conditionMatch && sizeMatch;
     });
-  }, [filters]);
+  }, [filters, products]);
 
   const handleFilterChange = (type: keyof typeof filters, value: string) => {
     setFilters((prev) => ({
@@ -125,104 +89,177 @@ export default function Shop() {
     }));
   };
 
+  const resetFilters = () => {
+    setFilters({
+      brand: "All",
+      condition: "All",
+      size: "All",
+    });
+  };
+
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4 },
+    },
+  };
+
+  if (loading) {
+    return (
+      <div className="py-20 flex justify-center items-center min-h-[400px]">
+        <Loader2 className="w-10 h-10 animate-spin text-[#7C8C5C]" />
+      </div>
+    );
+  }
+
   return (
-    <section id="shop" className="py-20 bg-[#FAFAF7]">
+    <section id="shop" className="py-24 bg-[#FAFAF7]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-[#2B2B2B] mb-12 text-center">
-          Our Collection
-        </h2>
-
-        {/* Filters */}
-        <div className="mb-12 grid md:grid-cols-3 gap-6">
-          {/* Brand Filter */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-[#2B2B2B] mb-3">
-              Brand
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {BRANDS.map((brand) => (
-                <button
-                  key={brand}
-                  onClick={() => handleFilterChange("brand", brand)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-                    filters.brand === brand
-                      ? "bg-[#7C8C5C] text-white"
-                      : "bg-white text-[#2B2B2B] border border-[#E8DCC8] hover:bg-[#f4f2ec]"
-                  }`}
-                >
-                  {brand}
-                </button>
-              ))}
-            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-[#2B2B2B] mb-4">
+              Our Collection
+            </h2>
+            <p className="text-[#555] max-w-md">
+              Discover curated sneakers for your style. High-quality pieces at competitive prices.
+            </p>
           </div>
 
-          {/* Condition Filter */}
-          <div>
-            <label className="block text-sm font-semibold text-[#2B2B2B] mb-3">
-              Condition
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {CONDITIONS.map((condition) => (
-                <button
-                  key={condition}
-                  onClick={() => handleFilterChange("condition", condition)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-                    filters.condition === condition
-                      ? "bg-[#7C8C5C] text-white"
-                      : "bg-white text-[#2B2B2B] border border-[#E8DCC8] hover:bg-[#f4f2ec]"
-                  }`}
-                >
-                  {condition}
-                </button>
-              ))}
-            </div>
-          </div>
+          <button
+            onClick={resetFilters}
+            className="flex items-center gap-2 text-sm font-bold text-[#7C8C5C] hover:text-[#5D6B44] transition-colors"
+          >
+            <RefreshCcw className="w-4 h-4" />
+            Reset All Filters
+          </button>
+        </div>
 
-          {/* Size Filter */}
-          <div>
-            <label className="block text-sm font-semibold text-[#2B2B2B] mb-3">
-              Size
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {SIZES.map((size) => (
+        {/* Improved Filter UI */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E8DCC8] mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Brand Filter */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Tag className="w-4 h-4 text-[#7C8C5C]" />
+                <span className="text-sm font-bold text-[#2B2B2B] uppercase tracking-wider">Brands</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
                 <button
-                  key={size}
-                  onClick={() => handleFilterChange("size", size)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-                    filters.size === size
-                      ? "bg-[#7C8C5C] text-white"
-                      : "bg-white text-[#2B2B2B] border border-[#E8DCC8] hover:bg-[#f4f2ec]"
-                  }`}
+                  onClick={() => handleFilterChange("brand", "All")}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.brand === "All"
+                    ? "bg-[#7C8C5C] text-white shadow-md scale-105"
+                    : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
+                    }`}
                 >
-                  {size}
+                  All
                 </button>
-              ))}
+                {brands.map((brand) => (
+                  <button
+                    key={brand.id}
+                    onClick={() => handleFilterChange("brand", brand.name)}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.brand === brand.name
+                      ? "bg-[#7C8C5C] text-white shadow-md scale-105"
+                      : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
+                      }`}
+                  >
+                    {brand.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Condition Filter */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Box className="w-4 h-4 text-[#7C8C5C]" />
+                <span className="text-sm font-bold text-[#2B2B2B] uppercase tracking-wider">Condition</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {CONDITIONS.map((condition) => (
+                  <button
+                    key={condition}
+                    onClick={() => handleFilterChange("condition", condition)}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.condition === condition
+                      ? "bg-[#7C8C5C] text-white shadow-md scale-105"
+                      : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
+                      }`}
+                  >
+                    {condition}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Size Filter */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Ruler className="w-4 h-4 text-[#7C8C5C]" />
+                <span className="text-sm font-bold text-[#2B2B2B] uppercase tracking-wider">Size</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {SIZES.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => handleFilterChange("size", size)}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.size === size
+                      ? "bg-[#7C8C5C] text-white shadow-md scale-105"
+                      : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
+                      }`}
+                  >
+                    {size === "All" ? "All" : size}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Products Grid */}
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false }}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-        >
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
-              <motion.div key={product.id} variants={item}>
-                <ProductCard product={product} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={JSON.stringify(filters) + products.length}
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 no-scrollbar"
+          >
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
+                <motion.div key={product.id} variants={item}>
+                  <ProductCard product={product} />
+                </motion.div>
+              ))
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="col-span-full py-20 text-center"
+              >
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-[#F5EBDC] rounded-full mb-6">
+                  <Filter className="w-8 h-8 text-[#7C8C5C]" />
+                </div>
+                <h3 className="text-2xl font-bold text-[#2B2B2B] mb-2">No shoes matches</h3>
+                <p className="text-[#555]">Try adjusting your filters to find what you're looking for.</p>
+                <button
+                  onClick={resetFilters}
+                  className="mt-6 px-6 py-2 bg-[#7C8C5C] text-white rounded-lg font-bold hover:bg-[#5D6B44] transition-base"
+                >
+                  Clear all filters
+                </button>
               </motion.div>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-12">
-              <p className="text-lg text-[#555]">
-                No shoes found matching your filters.
-              </p>
-            </div>
-          )}
-        </motion.div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );

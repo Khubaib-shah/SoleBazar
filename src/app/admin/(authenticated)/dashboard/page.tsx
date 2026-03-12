@@ -27,12 +27,20 @@ import {
 import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
 
+interface Order {
+    id: string;
+    customerName: string;
+    total: number;
+    status: string;
+    createdAt: string;
+}
+
 interface Stats {
     productCount: number;
     orderCount: number;
     brandCount: number;
     categoryCount: number;
-    recentOrders: any[];
+    recentOrders: Order[];
     totalRevenue: number;
 }
 

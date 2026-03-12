@@ -3,6 +3,62 @@
 import { motion } from "framer-motion";
 import { ShieldCheck, History, Heart, Globe, Award } from "lucide-react";
 
+const DecorativeTrace = () => (
+  <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+    {/* Large animated ring */}
+    <motion.svg
+      animate={{ rotate: 360 }}
+      transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      className="absolute -bottom-1/2 w-full text-[#7C8C5C]/10"
+      viewBox="0 0 200 200"
+    ><circle
+        cx="100"
+        cy="100"
+        r="90"
+        stroke="#7c8c5c75"
+        stroke-width="3"
+        stroke-dasharray="12 8"
+        fill="none"
+      /></motion.svg>
+
+    {/* Primary Trace Path */}
+    {/* <svg className="absolute top-20 right-20 w-[300px] h-[300px] text-[#7C8C5C]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <motion.path
+        d="M20 180Q80 150 100 100T180 20"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        initial={{ pathLength: 0, opacity: 0 }}
+        whileInView={{ pathLength: 1, opacity: 0.4 }}
+        viewport={{ once: true }}
+        transition={{ duration: 2.5, ease: "easeInOut" }}
+      />
+      <motion.circle
+        cx="180" cy="20" r="4"
+        fill="currentColor"
+        initial={{ scale: 0 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 2.5, duration: 0.5 }}
+      />
+    </svg> */}
+
+    {/* Secondary Bottom Trace */}
+    {/* <svg className="absolute bottom-10 left-10 w-[200px] h-[200px] text-[#E8DCC8]" viewBox="0 0 100 100">
+      <motion.path
+        d="M0 80Q30 70 50 40T100 0"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        initial={{ pathLength: 0, opacity: 0 }}
+        whileInView={{ pathLength: 1, opacity: 0.5 }}
+        viewport={{ once: true }}
+        transition={{ duration: 2, delay: 0.5 }}
+      />
+    </svg> */}
+  </div>
+);
+
 export default function About() {
   const stats = [
     {
@@ -26,7 +82,8 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="py-32 bg-[#FAFAF7] overflow-hidden">
+    <section id="about" className="py-32 bg-[#FAFAF7] overflow-hidden relative">
+      <DecorativeTrace />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
@@ -60,9 +117,23 @@ export default function About() {
               </div>
             </div>
 
-            {/* Decorative blobbies */}
-            <div className="absolute -top-12 -left-12 w-64 h-64 bg-[#7C8C5C] rounded-full opacity-10 blur-3xl -z-10"></div>
-            <div className="absolute -bottom-12 -right-12 w-80 h-80 bg-[#E8DCC8] rounded-full opacity-20 blur-3xl -z-10"></div>
+            {/* Decorative blobbies with floating animation */}
+            <motion.div
+              animate={{
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, 0]
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -top-12 -left-12 w-64 h-64 bg-[#7C8C5C] rounded-full opacity-30 blur-3xl z-0"
+            ></motion.div>
+            <motion.div
+              animate={{
+                scale: [1.1, 1, 1.1],
+                rotate: [0, -5, 0]
+              }}
+              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -bottom-12 -right-12 w-80 h-80 bg-[#E8DCC8] rounded-full opacity-40 blur-3xl z-0"
+            ></motion.div>
           </motion.div>
 
           {/* Content Side */}

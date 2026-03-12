@@ -32,9 +32,10 @@ export default function Header() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-[#2B2B2B] hover:text-[#7C8C5C] transition-colors font-medium"
+                className="group relative inline-block text-[#2B2B2B] hover:text-[#7C8C5C] transition-colors font-medium"
               >
                 {link.label}
+                <span className="absolute -bottom-0.5 left-0 w-full h-[2px] bg-[#7C8C5C] origin-right scale-x-0 group-hover:scale-x-100 group-hover:origin-left transition-transform duration-500"></span>
               </Link>
             ))}
           </nav>

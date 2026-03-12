@@ -9,7 +9,8 @@ import {
   RefreshCcw,
   Loader2,
   Filter,
-  ChevronDown
+  ChevronDown,
+  Plus
 } from "lucide-react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
@@ -18,6 +19,20 @@ import { ProductWithRelations } from "@/lib/types";
 
 const CONDITIONS = ["All", "New", "Pre-loved"];
 const SIZES = ["All", "7", "8", "9", "9.5", "10", "10.5", "11"];
+
+const FloatingPlus = ({ className, delay = 0 }: { className: string, delay?: number }) => (
+  <motion.div
+    animate={{
+      rotate: [0, 90, 0],
+      scale: [0.8, 1.2, 0.8],
+      opacity: [0.3, 0.6, 0.3]
+    }}
+    transition={{ duration: 4, repeat: Infinity, delay }}
+    className={className}
+  >
+    <Plus className="w-5 h-5" />
+  </motion.div>
+);
 
 export default function Shop() {
   const { data: products = [], error: productsError, isLoading: productsLoading } = useSWR<ProductWithRelations[]>("/api/products", fetcher);
@@ -95,8 +110,35 @@ export default function Shop() {
   }
 
   return (
-    <section id="shop" className="py-24 bg-[#FAFAF7]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="shop" className="py-24 bg-[#FAFAF7] relative overflow-hidden">
+      {/* Large Decorative SVGs */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <FloatingPlus className="absolute top-[10%] left-[5%] text-[#7C8C5C]" delay={0} />
+        <FloatingPlus className="absolute top-[30%] right-[5%] text-[#E8DCC8] scale-150" delay={1} />
+        <FloatingPlus className="absolute bottom-[20%] left-[8%] text-[#2B2B2B] scale-[2]" delay={2} />
+        <FloatingPlus className="absolute bottom-[10%] right-[15%] text-[#7C8C5C] scale-110" delay={1.5} />
+
+        {/* Large Background Circles */}
+        <motion.div
+          animate={{ scale: [1, 1.05, 1], opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className="absolute -top-20 -left-20 w-[600px] h-[600px] border-2 border-[#7C8C5C]/30 rounded-full"
+        />
+
+        {/* Large X-Shape */}
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[50%] right-[-100px] text-[#2B2B2B] opacity-[0.1]"
+        >
+          <svg width="400" height="400" viewBox="0 0 100 100">
+            <line x1="0" y1="0" x2="100" y2="100" stroke="currentColor" strokeWidth="0.5" />
+            <line x1="100" y1="0" x2="0" y2="100" stroke="currentColor" strokeWidth="0.5" />
+          </svg>
+        </motion.div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <h2 className="text-4xl md:text-5xl font-black text-[#2B2B2B] mb-4">

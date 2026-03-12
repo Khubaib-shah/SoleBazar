@@ -119,7 +119,7 @@ export default function Testimonials() {
                     transform: isActive ? 'scale(1.05)' : 'scale(0.9)',
                   }}
                 >
-                  <div className={`bg-white p-10 rounded-[50px] transition-all duration-500 h-full border ${isActive ? 'border-[#7C8C5C]/30 shadow-2xl' : 'border-[#E8DCC8]/30 shadow-sm'} flex flex-col group relative`}>
+                  <div className={`bg-white p-10 rounded-[50px] transition-all duration-500 h-full border ${isActive ? 'border-[#7C8C5C]/30 shadow-xl' : 'border-[#E8DCC8]/30 shadow-sm'} flex flex-col group relative`}>
                     {/* Quote Icon Overlay */}
                     <div className={`absolute top-10 right-10 transition-colors duration-500 ${isActive ? 'text-[#7C8C5C]/20' : 'text-[#F5EBDC]'}`}>
                       <Quote className="w-16 h-16 rotate-180" />

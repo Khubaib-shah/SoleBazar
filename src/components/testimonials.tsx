@@ -137,7 +137,7 @@ export default function Testimonials() {
 
                     {/* Quote */}
                     <p className={`text-xl font-black text-[#2B2B2B] mb-12 leading-relaxed flex-1 transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-60'}`}>
-                      "{testimonial.quote}"
+                      &quot;{testimonial.quote}&quot;
                     </p>
 
                     {/* Author Card */}

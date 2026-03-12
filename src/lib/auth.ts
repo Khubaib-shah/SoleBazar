@@ -14,14 +14,14 @@ export const authOptions: NextAuthOptions = {
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) return null;
 
-                console.log("🔐 Login attempt for:", credentials.email);
+                console.log("Login attempt for:", credentials.email);
 
                 const admin = await prisma.admin.findUnique({
                     where: { email: credentials.email },
                 });
 
                 if (!admin) {
-                    console.log("❌ Admin not found in database");
+                    console.log("Admin not found in database");
                     return null;
                 }
 
@@ -31,11 +31,11 @@ export const authOptions: NextAuthOptions = {
                 );
 
                 if (!isValid) {
-                    console.log("❌ Password mismatch");
+                    console.log("Password mismatch");
                     return null;
                 }
 
-                console.log("✅ Login successful for:", credentials.email);
+                console.log("Login successful for:", credentials.email);
                 return {
                     id: admin.id,
                     email: admin.email,

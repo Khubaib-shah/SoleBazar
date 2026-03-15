@@ -60,6 +60,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     icons: {
       icon: "/metaimage.png",
+      apple: "/apple-icon.png",
     },
     verification: {
         google: "google-site-verification-placeholder",

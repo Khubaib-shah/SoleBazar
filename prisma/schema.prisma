@@ -128,3 +128,15 @@ model Message {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model AnalyticsEvent {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  eventType String   // page_view, product_view, product_click, add_to_cart, checkout_visit, purchase
+  userId    String?  @db.ObjectId
+  sessionId String
+  productId String?  @db.ObjectId
+  page      String
+  userAgent String?
+  referrer  String?
+  timestamp DateTime @default(now())
+}

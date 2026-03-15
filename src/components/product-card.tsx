@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { ProductWithRelations } from "@/lib/types";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 interface ProductCardProps {
   product: ProductWithRelations;
@@ -35,6 +36,15 @@ export default function ProductCard({ product }: ProductCardProps) {
     return () => clearInterval(interval);
   }, [isHovered, images.length]);
 
+  const { trackEvent } = useAnalytics();
+
+  const handleTrackClick = () => {
+    trackEvent({
+      eventType: "product_click",
+      productId: product.id
+    });
+  };
+
   return (
     <div
       className="group relative bg-white rounded-[32px] p-4 shadow-lg hover:shadow-2xl transition-all duration-500 max-w-[360px] mx-auto flex flex-col h-full border border-gray-100"
@@ -43,7 +53,11 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       {/* Product Image Section */}
       <div className="relative aspect-square overflow-hidden rounded-[24px] bg-[#F5EBDC]">
-        <Link href={`/product/${product.slug}`} className="block w-full h-full">
+        <Link 
+          href={`/product/${product.slug}`} 
+          className="block w-full h-full"
+          onClick={handleTrackClick}
+        >
           <img
             src={images[currentImageIndex]}
             alt={product.name}
@@ -110,7 +124,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Product Information Section */}
       <div className="mt-6 flex-1 flex flex-col">
         <div className="space-y-1">
-          <Link href={`/product/${product.slug}`}>
+          <Link href={`/product/${product.slug}`} onClick={handleTrackClick}>
             <h3 className="text-xl font-black text-[#2B2B2B] group-hover:text-[#7C8C5C] transition-colors line-clamp-1">
               {product.name}
             </h3>
@@ -136,6 +150,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           <Link
             href={`/product/${product.slug}`}
+            onClick={handleTrackClick}
             className="flex items-center gap-2 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl hover:shadow-[#7C8C5C]/30"
           >
             Buy Now

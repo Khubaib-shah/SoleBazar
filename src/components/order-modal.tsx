@@ -10,6 +10,8 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { useAnalytics } from "@/hooks/use-analytics";
+import { useEffect } from "react";
 
 interface Product {
   id: string;
@@ -36,6 +38,7 @@ export default function OrderModal({
     phone: "",
     address: "",
   });
+  const { trackEvent } = useAnalytics();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,6 +68,13 @@ export default function OrderModal({
 
       if (res.ok) {
         const order = await res.json();
+        
+        // Track purchase
+        trackEvent({
+          eventType: "purchase",
+          productId: product.id
+        });
+
         toast.success("Order recorded! Redirecting to WhatsApp...");
 
         // Construct WhatsApp Message
@@ -98,7 +108,13 @@ export default function OrderModal({
   return (
     <>
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          trackEvent({
+            eventType: "checkout_visit",
+            productId: product.id
+          });
+        }}
         className="flex items-center justify-center gap-4 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white py-6 rounded-[32px] font-black text-sm uppercase tracking-[0.2em] transition-all duration-500 shadow-2xl hover:shadow-[#7C8C5C]/40 active:scale-95 w-full"
       >
         <MessageCircle className="w-5 h-5" />

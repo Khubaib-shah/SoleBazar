@@ -51,6 +51,8 @@ export default function Shop() {
     size: "All",
   });
 
+  const [activeFilterTab, setActiveFilterTab] = useState<string | null>(null);
+
   useEffect(() => {
     const genderParam = searchParams.get("gender");
     if (genderParam && GENDERS.includes(genderParam)) {
@@ -176,136 +178,60 @@ export default function Shop() {
           </button>
         </div>
 
-        {/* Improved Filter UI */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E8DCC8] mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
-            {/* Brand Filter */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Tag className="w-4 h-4 text-[#7C8C5C]" />
-                <span className="text-sm font-bold text-[#2B2B2B] uppercase tracking-wider">Brands</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
+        {/* Premium Filter UI */}
+        <div className="flex flex-col gap-8 mb-16 relative z-50">
+          {/* Filters Bar */}
+          <div className="bg-white/50 backdrop-blur-md p-2 rounded-[2rem] border border-[#E8DCC8] flex flex-wrap items-center justify-center gap-2 relative">
+            {[
+              { id: 'category', label: 'Collection', icon: Box, value: filters.category, options: categories.map((c: any) => c.name) },
+              { id: 'brand', label: 'Brand', icon: Tag, value: filters.brand, options: brands.map(b => b.name) },
+              { id: 'gender', label: 'Gender', icon: Users, value: filters.gender, options: GENDERS.filter(g => g !== "All") },
+              { id: 'condition', label: 'Condition', icon: Box, value: filters.condition, options: CONDITIONS.filter(c => c !== "All") },
+              { id: 'size', label: 'Size', icon: Ruler, value: filters.size, options: SIZES.filter(s => s !== "All") },
+            ].map((f) => (
+              <div key={f.id} className="relative">
                 <button
-                  onClick={() => handleFilterChange("brand", "All")}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.brand === "All"
-                    ? "bg-[#7C8C5C] text-white shadow-md scale-105"
-                    : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
+                  onClick={() => setActiveFilterTab(activeFilterTab === f.id ? null : f.id)}
+                  className={`flex items-center gap-3 px-6 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${activeFilterTab === f.id || f.value !== "All"
+                    ? "bg-[#7C8C5C] text-white shadow-lg"
+                    : "hover:bg-[#E8DCC8]/30 text-[#555]"
                     }`}
                 >
-                  All
+                  <f.icon className="w-3.5 h-3.5" />
+                  <span>{f.label}: {f.value}</span>
+                  <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${activeFilterTab === f.id ? "rotate-180" : ""}`} />
                 </button>
-                {brands.map((brand) => (
-                  <button
-                    key={brand.id}
-                    onClick={() => handleFilterChange("brand", brand.name)}
-                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.brand === brand.name
-                      ? "bg-[#7C8C5C] text-white shadow-md scale-105"
-                      : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
-                      }`}
-                  >
-                    {brand.name}
-                  </button>
-                ))}
-              </div>
-            </div>
 
-            {/* Category Filter */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Box className="w-4 h-4 text-[#7C8C5C]" />
-                <span className="text-sm font-bold text-[#2B2B2B] uppercase tracking-wider">Categories</span>
+                <AnimatePresence>
+                  {activeFilterTab === f.id && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute top-full left-0 mt-3 z-50 min-w-[200px] bg-white rounded-2xl shadow-2xl border border-[#E8DCC8] p-3 overflow-hidden"
+                    >
+                      <div className="flex flex-col gap-1">
+                        <button
+                          onClick={() => { handleFilterChange(f.id as any, "All"); setActiveFilterTab(null); }}
+                          className={`w-full text-left px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-colors ${f.value === "All" ? "bg-[#7C8C5C]/10 text-[#7C8C5C]" : "hover:bg-gray-50 text-[#555]"}`}
+                        >
+                          All {f.label}s
+                        </button>
+                        {f.options.map((opt: string) => (
+                          <button
+                            key={opt}
+                            onClick={() => { handleFilterChange(f.id as any, opt); setActiveFilterTab(null); }}
+                            className={`w-full text-left px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-colors ${f.value === opt ? "bg-[#7C8C5C]/10 text-[#7C8C5C]" : "hover:bg-gray-50 text-[#555]"}`}
+                          >
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => handleFilterChange("category", "All")}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.category === "All"
-                    ? "bg-[#7C8C5C] text-white shadow-md scale-105"
-                    : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
-                    }`}
-                >
-                  All
-                </button>
-                {categories.map((category) => (
-                  <button
-                    key={category.id}
-                    onClick={() => handleFilterChange("category", category.name)}
-                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.category === category.name
-                      ? "bg-[#7C8C5C] text-white shadow-md scale-105"
-                      : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
-                      }`}
-                  >
-                    {category.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Gender Filter */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Users className="w-4 h-4 text-[#7C8C5C]" />
-                <span className="text-sm font-bold text-[#2B2B2B] uppercase tracking-wider">Gender</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {GENDERS.map((gender) => (
-                  <button
-                    key={gender}
-                    onClick={() => handleFilterChange("gender", gender)}
-                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.gender === gender
-                      ? "bg-[#7C8C5C] text-white shadow-md scale-105"
-                      : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
-                      }`}
-                  >
-                    {gender}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Condition Filter */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Box className="w-4 h-4 text-[#7C8C5C]" />
-                <span className="text-sm font-bold text-[#2B2B2B] uppercase tracking-wider">Condition</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {CONDITIONS.map((condition) => (
-                  <button
-                    key={condition}
-                    onClick={() => handleFilterChange("condition", condition)}
-                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.condition === condition
-                      ? "bg-[#7C8C5C] text-white shadow-md scale-105"
-                      : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
-                      }`}
-                  >
-                    {condition}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Size Filter */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Ruler className="w-4 h-4 text-[#7C8C5C]" />
-                <span className="text-sm font-bold text-[#2B2B2B] uppercase tracking-wider">Size</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {SIZES.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => handleFilterChange("size", size)}
-                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.size === size
-                      ? "bg-[#7C8C5C] text-white shadow-md scale-105"
-                      : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
-                      }`}
-                  >
-                    {size === "All" ? "All" : size}
-                  </button>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 

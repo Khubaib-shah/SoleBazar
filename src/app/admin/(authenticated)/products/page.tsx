@@ -83,6 +83,7 @@ export default function AdminProductsPage() {
                             <tr className="border-b border-[#E8DCC8] bg-[#FAFAF7]">
                                 <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Product Info</th>
                                 <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Brand / Category</th>
+                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Gender</th>
                                 <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Price</th>
                                 <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Stock</th>
                                 <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Featured / Top</th>
@@ -121,6 +122,11 @@ export default function AdminProductsPage() {
                                                 </span>
                                                 <p className="text-[9px] font-bold text-[#555] uppercase tracking-widest px-1">{product.category.name}</p>
                                             </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="bg-[#7C8C5C]/10 px-2.5 py-1 rounded-full text-[9px] font-black text-[#7C8C5C] uppercase tracking-widest">
+                                                {product.gender}
+                                            </span>
                                         </td>
                                         <td className="px-6 py-4">
                                             <p className="font-black text-[#2B2B2B] text-sm">PKR {product.price.toLocaleString()}</p>

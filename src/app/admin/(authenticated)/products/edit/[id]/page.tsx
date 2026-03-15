@@ -37,6 +37,7 @@ export default function EditProductPage() {
         isTopPick: false,
         brandId: "",
         categoryId: "",
+        gender: "Unisex",
     });
 
     const [images, setImages] = useState<any[]>([]);
@@ -393,6 +394,21 @@ export default function EditProductPage() {
                                 >
                                     <option value="">Select Category</option>
                                     {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                </select>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Gender</label>
+                                <select
+                                    name="gender"
+                                    required
+                                    value={formData.gender}
+                                    onChange={handleInputChange}
+                                    className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                                >
+                                    <option value="Men">Men</option>
+                                    <option value="Women">Women</option>
+                                    <option value="Unisex">Unisex</option>
                                 </select>
                             </div>
 

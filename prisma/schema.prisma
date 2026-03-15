@@ -49,6 +49,7 @@ model Product {
   stock       Int            @default(1)
   featured    Boolean        @default(false)
   isTopPick   Boolean        @default(false)
+  gender      String         @default("Unisex")
   brandId     String         @db.ObjectId
   categoryId  String         @db.ObjectId
   brand       Brand          @relation(fields: [brandId], references: [id])

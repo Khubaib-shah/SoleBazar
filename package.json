@@ -69,6 +69,7 @@
     "react-dropzone": "^15.0.0",
     "react-hook-form": "^7.71.2",
     "react-hot-toast": "^2.6.0",
+    "react-intersection-observer": "^10.0.3",
     "react-resizable-panels": "^2.1.7",
     "recharts": "^2.15.4",
     "sonner": "^1.7.4",

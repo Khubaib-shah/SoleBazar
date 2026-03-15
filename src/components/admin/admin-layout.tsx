@@ -14,6 +14,7 @@ import {
     LogOut,
     ChevronRight,
     Menu,
+    MessageSquare,
     X
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -50,6 +51,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: "Brands", href: "/admin/brands", icon: Tag },
         { name: "Categories", href: "/admin/categories", icon: FolderTree },
         { name: "Reports", href: "/admin/reports", icon: BarChart2 },
+        { name: "Messages", href: "/admin/messages", icon: MessageSquare },
         { name: "Settings", href: "/admin/settings", icon: Settings },
     ];
 

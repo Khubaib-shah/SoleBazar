@@ -17,7 +17,11 @@ export default function Home() {
       </Suspense>
       <Hero />
       <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading Shop...</div>}>
-        <Shop />
+        <Shop 
+          featuredOnly={true} 
+          title="Featured Collection"
+          subtitle="Hand-picked premium sneakers from our latest inventory. Selected for quality and style."
+        />
       </Suspense>
       <Featured />
       <Testimonials />

@@ -12,6 +12,9 @@ export async function GET(request: Request) {
         const gender = searchParams.get("gender");
         const featured = searchParams.get("featured");
         const search = searchParams.get("search");
+        const page = parseInt(searchParams.get("page") || "1");
+        const pageSize = parseInt(searchParams.get("pageSize") || "9");
+        const skip = (page - 1) * pageSize;
 
         const where: Record<string, unknown> = {};
 
@@ -40,17 +43,31 @@ export async function GET(request: Request) {
             ];
         }
 
-        const products = await prisma.product.findMany({
-            where,
-            include: {
-                brand: true,
-                category: true,
-                images: { orderBy: { order: "asc" } },
-            },
-            orderBy: { createdAt: "desc" },
-        });
+        const [total, products] = await Promise.all([
+            prisma.product.count({ where }),
+            prisma.product.findMany({
+                where,
+                include: {
+                    brand: true,
+                    category: true,
+                    images: { orderBy: { order: "asc" } },
+                },
+                orderBy: { createdAt: "desc" },
+                skip,
+                take: pageSize,
+            })
+        ]);
 
-        return NextResponse.json(products);
+        return NextResponse.json({
+            products,
+            metadata: {
+                total,
+                page,
+                pageSize,
+                totalPages: Math.ceil(total / pageSize),
+                hasMore: page < Math.ceil(total / pageSize)
+            }
+        });
     } catch (error) {
         console.error("Failed to fetch products:", error);
         return NextResponse.json(

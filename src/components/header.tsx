@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LayoutDashboard, LogIn } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 
 export default function Header() {
   const { data: session, status } = useSession();
@@ -13,6 +13,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   useEffect(() => {
     let ticking = false;
@@ -63,20 +64,22 @@ export default function Header() {
 
   const isActive = (label: string) => {
     const gender = searchParams.get("gender");
-    if (label === "Home") return activeSection === "home";
-    if (label === "Men") return activeSection === "shop" && gender === "Men";
-    if (label === "Women") return activeSection === "shop" && gender === "Women";
-    if (label === "Shop") return activeSection === "shop" && !gender;
-    if (label === "About") return activeSection === "about";
-    if (label === "Contact") return activeSection === "contact";
+    const isProductsPage = pathname === "/products";
+
+    if (label === "Home") return !isProductsPage && activeSection === "home";
+    if (label === "Men") return (isProductsPage || activeSection === "shop") && gender === "Men";
+    if (label === "Women") return (isProductsPage || activeSection === "shop") && gender === "Women";
+    if (label === "Shop") return isProductsPage || (activeSection === "shop" && !gender);
+    if (label === "About") return !isProductsPage && activeSection === "about";
+    if (label === "Contact") return !isProductsPage && activeSection === "contact";
     return false;
   };
 
   const navLinks = [
     { label: "Home", href: "/#home" },
-    { label: "Men", href: "/?gender=Men#shop" },
-    { label: "Women", href: "/?gender=Women#shop" },
-    { label: "Shop", href: "/#shop" },
+    { label: "Men", href: "/products?gender=Men" },
+    { label: "Women", href: "/products?gender=Women" },
+    { label: "Shop", href: "/products" },
     { label: "About", href: "/#about" },
     { label: "Contact", href: "/#contact" },
   ];

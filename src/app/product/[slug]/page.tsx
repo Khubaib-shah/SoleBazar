@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight, ArrowRight, Home, ShoppingBag } from "lucide-react";
+import { Suspense } from "react";
 import ClientCarousel from "@/components/client-carousel";
 import ProductDetailContent from "@/components/product-detail-content";
 import Header from "@/components/header";
@@ -43,7 +44,9 @@ export default async function ProductPage({
 
   return (
     <main className="min-h-screen bg-[#FAFAF7]">
-      <Header />
+      <Suspense fallback={<div className="h-20 bg-transparent" />}>
+        <Header />
+      </Suspense>
 
       {/* Product Hero / Breadcrumb Section */}
       <div className="bg-[#F5EBDC] py-8 border-b border-[#E8DCC8]">

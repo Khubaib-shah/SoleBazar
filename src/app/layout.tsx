@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Providers from "@/components/providers";
 import BackToTop from "@/components/back-to-top";
+import Preloader from "@/components/preloader";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -56,6 +57,14 @@ export default function RootLayout({
         cz-shortcut-listen="true"
       >
         <Providers>
+          <div id="immediate-preloader" className="static-preloader-wrapper">
+            <div className="loader-logo-box">SB</div>
+            <h1 className="loader-brand-title">SoleBazar</h1>
+            <div className="loader-progress-track">
+              <div className="loader-progress-inner"></div>
+            </div>
+          </div>
+          <Preloader />
           {children}
           <BackToTop />
         </Providers>

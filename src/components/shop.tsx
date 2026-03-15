@@ -18,6 +18,7 @@ import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
 import ProductCard from "./product-card";
 import { ProductWithRelations } from "@/lib/types";
+import SizeGuide from "./size-guide";
 
 const CONDITIONS = ["All", "New", "Pre-loved"];
 const SIZES = ["All", "7", "8", "9", "9.5", "10", "10.5", "11"];
@@ -232,8 +233,11 @@ export default function Shop() {
                     </motion.div>
                   )}
                 </AnimatePresence>
+
               </div>
             ))}
+
+            <SizeGuide />
           </div>
         </div>
 

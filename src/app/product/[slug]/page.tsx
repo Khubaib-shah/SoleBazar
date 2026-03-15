@@ -9,6 +9,45 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
 import ProductViewTracker from "@/components/product-view-tracker";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    include: { brand: true, images: { orderBy: { order: "asc" } } },
+  });
+
+  if (!product) return {};
+
+  const title = `${product.name} - ${product.brand.name} | Buy Thrift Shoes Pakistan`;
+  const description = `${product.name} by ${product.brand.name} in ${product.condition} condition. High-quality branded thrift shoes at affordable prices in Pakistan. Buy now at SoleBazar.`;
+
+  return {
+    title,
+    description,
+    keywords: [
+      product.name,
+      product.brand.name,
+      "branded thrift shoes",
+      "original shoes pakistan",
+      "second hand original sneakers",
+      "solebazar shoes",
+    ],
+    openGraph: {
+      title,
+      description,
+      images: product.images.length > 0 ? [product.images[0].url] : [],
+    },
+    alternates: {
+        canonical: `/product/${slug}`
+    }
+  };
+}
 
 export default async function ProductPage({
   params,
@@ -43,8 +82,32 @@ export default async function ProductPage({
     take: 4,
   });
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "image": product.images.map(img => img.url),
+    "description": product.description || `Buy ${product.name} - Authentic branded thrift shoes in Pakistan at SoleBazar.`,
+    "brand": {
+      "@type": "Brand",
+      "name": product.brand.name
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": `https://sole-bazar.vercel.app/product/${product.slug}`,
+      "priceCurrency": "PKR",
+      "price": product.price,
+      "itemCondition": product.condition === "New" ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
+      "availability": "https://schema.org/InStock"
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[#FAFAF7]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Suspense fallback={<div className="h-20 bg-transparent" />}>
         <Header />
       </Suspense>

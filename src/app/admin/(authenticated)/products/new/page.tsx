@@ -248,7 +248,7 @@ export default function NewProductPage() {
             <div className="bg-white p-10 rounded-[40px] shadow-sm border border-[#E8DCC8] space-y-8">
               <h3 className="text-xl font-black text-[#2B2B2B]">Attributes</h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                 <div className="space-y-4">
                   <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">
                     Available Sizes
@@ -333,65 +333,56 @@ export default function NewProductPage() {
             </div>
 
             {/* Images Column */}
-            <div className="bg-white p-10 rounded-[40px] shadow-sm border border-[#E8DCC8] space-y-8">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl font-black text-[#2B2B2B]">
-                  Product Gallery
-                </h3>
-                <button
-                  type="button"
-                  onClick={handleAddImage}
-                  className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#7C8C5C] hover:text-[#5D6B44]"
-                >
-                  <Plus className="w-4 h-4" /> Add Image
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#E8DCC8] space-y-6">
+              <h3 className="text-lg font-black text-[#2B2B2B]">Visual Gallery</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {images.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="p-6 bg-[#FAFAF7] rounded-3xl border border-[#E8DCC8]/50 space-y-4 relative group"
+                  <div 
+                    key={idx} 
+                    className="relative group aspect-[4/5] rounded-3xl overflow-hidden border-2 border-[#E8DCC8] bg-[#FAFAF7]"
                   >
-                    <button
-                      type="button"
-                      onClick={() => removeImage(idx)}
-                      className="absolute top-4 right-4 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black text-[#999] uppercase tracking-widest">
-                        Image URL {idx + 1}
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={img.url}
-                        onChange={(e) =>
-                          updateImage(idx, "url", e.target.value)
-                        }
-                        className="w-full px-4 py-2 bg-white border border-[#E8DCC8] rounded-xl text-xs font-bold"
-                        placeholder="https://imgur.com/..."
+                    {img.url ? (
+                      <img 
+                        className="w-full h-full object-cover" 
+                        src={img.url} 
+                        alt={`Product ${idx + 1}`} 
                       />
-                    </div>
-                    {img.url && (
-                      <div className="w-full aspect-[4/5] rounded-2xl overflow-hidden border border-[#E8DCC8]">
-                        <img
-                          src={img.url}
-                          alt="Preview"
-                          className="w-full h-full object-cover"
-                        />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[#E8DCC8]">
+                        <ImageIcon className="w-10 h-10" />
                       </div>
                     )}
+                    <input 
+                      placeholder="URL" 
+                      className="absolute bottom-2 left-2 right-2 px-3 py-2 bg-white/90 rounded-xl text-[10px] font-bold border focus:outline-none focus:border-[#7C8C5C] transition-all" 
+                      type="text" 
+                      value={img.url}
+                      onChange={(e) => updateImage(idx, "url", e.target.value)}
+                    />
+                    <button 
+                      type="button" 
+                      onClick={() => removeImage(idx)}
+                      className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-all shadow-lg active:scale-90"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 ))}
+
+                <button 
+                  type="button" 
+                  onClick={handleAddImage}
+                  className="aspect-[4/5] rounded-[32px] border-4 border-dashed border-[#E8DCC8] flex flex-col items-center justify-center text-[#E8DCC8] hover:text-[#7C8C5C] hover:border-[#7C8C5C] transition-all gap-4 group"
+                >
+                  <Plus className="w-12 h-12 group-hover:scale-110 transition-transform" />
+                  <span className="text-xs font-black uppercase tracking-widest">Add Image</span>
+                </button>
               </div>
+              
               <div className="p-4 bg-orange-50 rounded-2xl flex items-start gap-4 border border-orange-100">
                 <AlertCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
                 <p className="text-[10px] font-bold text-orange-600 leading-relaxed uppercase tracking-widest">
-                  Upload images to a CDN (Cloudinary, Imgur, Vercel Blob) and
-                  paste the direct URLs here. 1200x1500 (4:5) recommended.
+                  Upload images to a CDN (Cloudinary, Imgur, Vercel Blob) and paste direct URLs here. 1200x1500 (4:5) recommended.
                 </p>
               </div>
             </div>

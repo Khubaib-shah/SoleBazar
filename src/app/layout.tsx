@@ -52,15 +52,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const settings = await prisma.setting.findFirst();
-  const siteName = settings?.siteName || "SoleBazar";
-  const initials = getInitials(siteName);
-
   return (
     <html lang="en">
       <body
@@ -68,9 +64,21 @@ export default async function RootLayout({
         cz-shortcut-listen="true"
       >
         <Providers>
-          {/* Simplified static preloader as a background cover */}
-          <div id="immediate-preloader" className="static-preloader-wrapper bg-white dark:bg-gray-900 fixed inset-0 z-[9999]">
+          {/* Immediate static preloader - shows during initial HTML parse before JS hydration */}
+          <div id="immediate-preloader" className="static-preloader-wrapper">
+            <div className="loader-logo-box">SB</div>
+            <h1 className="loader-brand-title">SoleBazar</h1>
+            <div className="loader-progress-track">
+              <div className="loader-progress-inner"></div>
+            </div>
+
+            <p
+              className="mt-4 text-[10px] font-black uppercase tracking-[0.4em] text-[#7C8C5C]/60"
+            >
+              Excellence in every step
+            </p>
           </div>
+
           <Preloader />
           {children}
           <BackToTop />

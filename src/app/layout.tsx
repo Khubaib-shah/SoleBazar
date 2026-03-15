@@ -20,11 +20,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SoleBazar | Premium Thrift Sneakers Pakistan",
     description: "Discover authentic branded shoes at thrift prices. Hand-curated collection from global brands.",
-    url: "https://solebazar.com",
+    url: "https://sole-bazar.vercel.app",
     siteName: "SoleBazar",
     images: [
       {
-        url: "/hero.png",
+        url: "/metaimage.png",
         width: 1200,
         height: 630,
         alt: "SoleBazar Collection",
@@ -37,10 +37,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "SoleBazar | Premium Thrift Sneakers Pakistan",
     description: "Authentic branded shoes at thrift prices.",
-    images: ["/hero.png"],
+    images: ["/metaimage.png"],
   },
   icons: {
-    icon: "/placeholder-logo.png",
+    icon: "/metaimage.png",
   }
 };
 

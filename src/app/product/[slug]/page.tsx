@@ -8,6 +8,7 @@ import ProductDetailContent from "@/components/product-detail-content";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
+import ProductViewTracker from "@/components/product-view-tracker";
 
 export default async function ProductPage({
   params,
@@ -47,6 +48,7 @@ export default async function ProductPage({
       <Suspense fallback={<div className="h-20 bg-transparent" />}>
         <Header />
       </Suspense>
+      <ProductViewTracker productId={product.id} />
 
       {/* Product Hero / Breadcrumb Section */}
       <div className="bg-[#F5EBDC] py-8 border-b border-[#E8DCC8]">

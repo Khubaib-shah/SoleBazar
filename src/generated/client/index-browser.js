@@ -223,6 +223,18 @@ exports.Prisma.MessageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AnalyticsEventScalarFieldEnum = {
+  id: 'id',
+  eventType: 'eventType',
+  userId: 'userId',
+  sessionId: 'sessionId',
+  productId: 'productId',
+  page: 'page',
+  userAgent: 'userAgent',
+  referrer: 'referrer',
+  timestamp: 'timestamp'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -243,7 +255,8 @@ exports.Prisma.ModelName = {
   Order: 'Order',
   OrderItem: 'OrderItem',
   Setting: 'Setting',
-  Message: 'Message'
+  Message: 'Message',
+  AnalyticsEvent: 'AnalyticsEvent'
 };
 
 /**

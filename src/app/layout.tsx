@@ -80,6 +80,9 @@ export default function RootLayout({
           </div>
 
           <Preloader />
+          <Suspense fallback={null}>
+            <AnalyticsTracker />
+          </Suspense>
           {children}
           <BackToTop />
         </Providers>
@@ -88,3 +91,6 @@ export default function RootLayout({
     </html>
   );
 }
+
+import AnalyticsTracker from "@/components/analytics-tracker";
+import { Suspense } from "react";

@@ -7,7 +7,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LayoutDashboard, LogIn } from "lucide-react";
 import { useSearchParams, usePathname } from "next/navigation";
 
+import { useSettings } from "@/hooks/use-settings";
+import { fetcher } from "@/lib/fetcher";
+import { getInitials } from "@/lib/utils";
+
 export default function Header() {
+  const { settings } = useSettings();
+  const initials = getInitials(settings?.siteName || "SoleBazar");
   const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -102,10 +108,10 @@ export default function Header() {
               whileHover={{ rotate: 12, scale: 1.1 }}
               className="w-10 h-10 bg-[#7C8C5C] rounded-xl flex items-center justify-center shadow-lg transition-all"
             >
-              <span className="text-white font-black text-lg uppercase">SB</span>
+              <span className="text-white font-black text-lg uppercase">{initials}</span>
             </motion.div>
             <span className="font-black text-2xl text-[#2B2B2B] tracking-tight group-hover:text-[#7C8C5C] transition-colors">
-              SoleBazar
+              {settings?.siteName || "SoleBazar"}
             </span>
           </Link>
 

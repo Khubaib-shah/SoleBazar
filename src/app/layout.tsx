@@ -6,6 +6,8 @@ import "./globals.css";
 import Providers from "@/components/providers";
 import BackToTop from "@/components/back-to-top";
 import Preloader from "@/components/preloader";
+import { prisma } from "@/lib/prisma";
+import { getInitials } from "@/lib/utils";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -13,43 +15,52 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-export const metadata: Metadata = {
-  title: "SoleBazar | Thrift Shoes Pakistan | Branded Shoes Karachi",
-  description:
-    "Branded soles, thrift prices. Discover high-quality, affordable branded shoes from Nike, Adidas, Puma and more in Pakistan.",
-  keywords: ["shoes", "sneakers", "thrift", "pakistan", "branded", "nike", "adidas", "puma", "karachi"],
-  openGraph: {
-    title: "SoleBazar | Premium Thrift Sneakers Pakistan",
-    description: "Discover authentic branded shoes at thrift prices. Hand-curated collection from global brands.",
-    url: "https://sole-bazar.vercel.app",
-    siteName: "SoleBazar",
-    images: [
-      {
-        url: "/metaimage.png",
-        width: 1200,
-        height: 630,
-        alt: "SoleBazar Collection",
-      },
-    ],
-    locale: "en_PK",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "SoleBazar | Premium Thrift Sneakers Pakistan",
-    description: "Authentic branded shoes at thrift prices.",
-    images: ["/metaimage.png"],
-  },
-  icons: {
-    icon: "/metaimage.png",
-  }
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await prisma.setting.findFirst();
+  const siteName = settings?.siteName || "SoleBazar";
+  const siteDescription = settings?.siteDescription || "Branded soles, thrift prices. Discover high-quality, affordable branded shoes from Nike, Adidas, Puma and more in Pakistan.";
 
-export default function RootLayout({
+  return {
+    title: `${siteName} | Premium Thrift Shoes Pakistan`,
+    description: siteDescription,
+    keywords: ["shoes", "sneakers", "thrift", "pakistan", "branded", "nike", "adidas", "puma", "karachi"],
+    openGraph: {
+      title: `${siteName} | Premium Thrift Sneakers Pakistan`,
+      description: siteDescription,
+      url: "https://sole-bazar.vercel.app",
+      siteName: siteName,
+      images: [
+        {
+          url: "/metaimage.png",
+          width: 1200,
+          height: 630,
+          alt: `${siteName} Collection`,
+        },
+      ],
+      locale: "en_PK",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${siteName} | Premium Thrift Sneakers Pakistan`,
+      description: siteDescription,
+      images: ["/metaimage.png"],
+    },
+    icons: {
+      icon: "/metaimage.png",
+    }
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await prisma.setting.findFirst();
+  const siteName = settings?.siteName || "SoleBazar";
+  const initials = getInitials(siteName);
+
   return (
     <html lang="en">
       <body
@@ -57,12 +68,8 @@ export default function RootLayout({
         cz-shortcut-listen="true"
       >
         <Providers>
-          <div id="immediate-preloader" className="static-preloader-wrapper">
-            <div className="loader-logo-box">SB</div>
-            <h1 className="loader-brand-title">SoleBazar</h1>
-            <div className="loader-progress-track">
-              <div className="loader-progress-inner"></div>
-            </div>
+          {/* Simplified static preloader as a background cover */}
+          <div id="immediate-preloader" className="static-preloader-wrapper bg-white dark:bg-gray-900 fixed inset-0 z-[9999]">
           </div>
           <Preloader />
           {children}

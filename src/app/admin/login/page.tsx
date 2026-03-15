@@ -4,8 +4,11 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Loader2, Lock } from "lucide-react";
+import { useSettings } from "@/hooks/use-settings";
 
 export default function AdminLoginPage() {
+    const { settings } = useSettings();
+    const siteName = settings?.siteName || "SoleBazar";
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -92,7 +95,7 @@ export default function AdminLoginPage() {
                 </form>
 
                 <p className="mt-10 text-center text-[#999] text-[10px] font-bold uppercase tracking-widest">
-                    © 2025 SoleBazar System v1.0
+                    © {new Date().getFullYear()} {siteName} System v1.0
                 </p>
             </div>
         </div>

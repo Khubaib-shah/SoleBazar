@@ -75,14 +75,14 @@ export default function Featured() {
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative overflow-hidden mx-auto">
           <div
             ref={scrollRef}
             onScroll={handleScroll}
             className="flex gap-8 overflow-x-auto no-scrollbar pb-10 px-2 -mx-2"
           >
             {products.map((product) => (
-              <div key={product.id} className="flex-shrink-0 w-[320px] md:w-[350px]">
+              <div key={product.id} className="flex-shrink-0 w-[320px] md:w-[360px]">
                 <ProductCard product={product} />
               </div>
             ))}

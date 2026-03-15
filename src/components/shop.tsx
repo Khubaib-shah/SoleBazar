@@ -19,6 +19,14 @@ import { fetcher } from "@/lib/fetcher";
 import ProductCard from "./product-card";
 import { ProductWithRelations } from "@/lib/types";
 import SizeGuide from "./size-guide";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+
+interface ShopProps {
+  featuredOnly?: boolean;
+  title?: string;
+  subtitle?: string;
+}
 
 const CONDITIONS = ["All", "New", "Pre-loved"];
 const SIZES = ["All", "7", "8", "9", "9.5", "10", "10.5", "11"];
@@ -38,9 +46,14 @@ const FloatingPlus = ({ className, delay = 0 }: { className: string, delay?: num
   </motion.div>
 );
 
-export default function Shop() {
+export default function Shop({ 
+  featuredOnly = false,
+  title = "Our Collection",
+  subtitle = "Discover curated sneakers for your style. High-quality pieces at competitive prices."
+}: ShopProps) {
   const searchParams = useSearchParams();
-  const { data: products = [], error: productsError, isLoading: productsLoading } = useSWR<ProductWithRelations[]>("/api/products", fetcher);
+  const apiUri = featuredOnly ? "/api/products?featured=true" : "/api/products";
+  const { data: products = [], error: productsError, isLoading: productsLoading } = useSWR<ProductWithRelations[]>(apiUri, fetcher);
   const { data: brands = [], error: brandsError, isLoading: brandsLoading } = useSWR<any[]>("/api/brands", fetcher);
   const { data: categories = [], error: categoriesError, isLoading: categoriesLoading } = useSWR<any[]>("/api/categories", fetcher);
 
@@ -165,10 +178,10 @@ export default function Shop() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <h2 className="text-4xl md:text-5xl font-black text-[#2B2B2B] mb-4">
-              Our Collection
+              {title}
             </h2>
             <p className="text-[#555] max-w-md">
-              Discover curated sneakers for your style. High-quality pieces at competitive prices.
+              {subtitle}
             </p>
           </div>
 
@@ -277,6 +290,18 @@ export default function Shop() {
             )}
           </motion.div>
         </AnimatePresence>
+
+        {featuredOnly && (
+          <div className="mt-16 flex justify-center">
+            <Link
+              href="/products"
+              className="flex items-center gap-3 px-10 py-5 bg-[#2B2B2B] text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-[#7C8C5C] transition-all shadow-xl active:scale-95 group"
+            >
+              View Full Collection
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

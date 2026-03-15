@@ -282,11 +282,11 @@ export default function Shop({
         {/* Products Grid */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={JSON.stringify(filters) + products.length}
+            key={`grid-${JSON.stringify(filters)}`} 
             variants={container}
             initial="hidden"
             animate="visible"
-            className="grid sm:grid-cols-2 lg:grid-cols-3  gap-8 no-scrollbar"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 no-scrollbar"
           >
             {products.length > 0 ? (
               products.map((product) => (

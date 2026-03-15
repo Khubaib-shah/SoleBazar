@@ -21,7 +21,8 @@ export async function GET(
                     include: {
                         product: {
                             include: {
-                                brand: true
+                                brand: true,
+                                images: true
                             }
                         }
                     }

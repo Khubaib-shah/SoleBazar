@@ -41,6 +41,7 @@ export default function OrderDetailPage() {
             const res = await fetch(`/api/admin/orders/${id}`);
             if (!res.ok) throw new Error("Not found");
             const data = await res.json();
+            console.log(data);
             setOrder(data);
             setEditForm({
                 customerName: data.customerName,
@@ -104,7 +105,7 @@ export default function OrderDetailPage() {
     const statusOptions = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
 
     return (
-        <div className="max-w-6xl mx-auto space-y-10">
+        <div className="max-w-7xl mx-auto space-y-10">
             <div className="flex items-center justify-between">
                 <Link
                     href="/admin/orders"

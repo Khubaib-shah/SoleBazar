@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight, ArrowRight, Home, ShoppingBag } from "lucide-react";
 import { Suspense } from "react";
-import ClientCarousel from "@/components/client-carousel";
+import ProductGallery from "@/components/product-gallery";
 import ProductDetailContent from "@/components/product-detail-content";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -77,32 +77,10 @@ export default async function ProductPage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Left Column: Image Gallery */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-[48px] overflow-hidden shadow-2xl aspect-[4/5] relative border border-[#E8DCC8]">
-              <ClientCarousel images={product.images.map((img) => img.url)} />
-              {product.compareAt && (
-                <div className="absolute top-8 left-8 bg-[#7C8C5C] text-white px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-2xl z-10">
-                  Special Offer
-                </div>
-              )}
-            </div>
-
-            {/* Thumbnail Gallery */}
-            <div className="flex gap-3 overflow-x-auto no-scrollbar py-2 px-1">
-              {product.images.map((img) => (
-                <div
-                  key={img.id}
-                  className="relative w-24 aspect-[4/5] rounded-[20px] overflow-hidden border-2 border-[#E8DCC8] flex-shrink-0 cursor-pointer hover:border-[#7C8C5C] transition-all shadow-sm hover:shadow-xl hover:-translate-y-1"
-                >
-                  <img
-                    src={img.url}
-                    alt={img.alt || product.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          <ProductGallery 
+            images={product.images} 
+            showBadge={!!product.compareAt} 
+          />
 
           {/* Right Column: Details */}
           <div className="lg:pt-6">

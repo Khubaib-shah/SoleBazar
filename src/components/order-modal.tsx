@@ -17,6 +17,7 @@ interface Product {
   price: number;
   brand: { name: string };
   slug: string;
+  images?: { url: string }[];
 }
 
 export default function OrderModal({
@@ -111,28 +112,35 @@ export default function OrderModal({
             onClick={() => setIsOpen(false)}
           ></div>
 
-          <div className="bg-white w-full max-w-xl rounded-[40px] shadow-2xl relative z-10 overflow-hidden flex flex-col md:flex-row">
+          <div className="bg-white w-full max-w-2xl rounded-[40px] shadow-2xl relative z-10 overflow-hidden flex flex-col md:flex-row">
             {/* Left Decor / Summary */}
-            <div className="hidden md:flex md:w-48 bg-[#FAFAF7] border-r border-[#E8DCC8] p-8 flex-col justify-between">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg">
-                <ShoppingBag className="w-6 h-6 text-[#7C8C5C]" />
-              </div>
-              <div className="space-y-6">
-                <div className="flex flex-col gap-1">
-                  <p className="text-[10px] font-black uppercase text-[#999] tracking-widest">
-                    Selected Item
-                  </p>
-                  <p className="font-bold text-sm text-[#2B2B2B] leading-tight">
-                    {product.name}
-                  </p>
+            <div className="hidden md:flex md:w-60 bg-[#FAFAF7] border-r border-[#E8DCC8] p-8 flex-col items-center text-center">
+              <div className="w-full flex-1 flex flex-col items-center justify-center">
+                <div className="w-full aspect-[4/5] bg-white rounded-[32px] overflow-hidden shadow-xl border border-[#E8DCC8] group p-1 mb-8">
+                  <img
+                    src={product.images?.[0]?.url || "/placeholder.svg"}
+                    alt={product.name}
+                    className="w-full h-full object-cover rounded-[28px] group-hover:scale-110 transition-transform duration-700"
+                  />
                 </div>
-                <div className="flex flex-col gap-1">
-                  <p className="text-[10px] font-black uppercase text-[#999] tracking-widest">
-                    Price
-                  </p>
-                  <p className="font-black text-[#7C8C5C]">
-                    PKR {product.price.toLocaleString()}
-                  </p>
+
+                <div className="flex flex-col gap-y-4 justify-between items-center w-full h-full">
+                  <div className="flex flex-col gap-1.5">
+                    <p className="text-[10px] font-black uppercase text-[#999] tracking-[0.2em]">
+                      Selected Item
+                    </p>
+                    <p className="font-black text-sm text-[#2B2B2B] leading-tight px-2">
+                      {product.name}
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-1.5 pt-4 border-t border-[#E8DCC8]/50">
+                    <p className="text-[10px] font-black uppercase text-[#999] tracking-[0.2em]">
+                      Total Price
+                    </p>
+                    <p className="font-black text-lg text-[#7C8C5C]">
+                      PKR {product.price.toLocaleString()}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

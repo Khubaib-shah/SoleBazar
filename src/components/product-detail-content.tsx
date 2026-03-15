@@ -16,6 +16,7 @@ interface Product {
     slug: string;
     sizes: string;
     colors?: string | null;
+    images?: { url: string }[];
 }
 
 export default function ProductDetailContent({ product }: { product: Product }) {
@@ -24,6 +25,12 @@ export default function ProductDetailContent({ product }: { product: Product }) 
 
     const [selectedSize, setSelectedSize] = useState<string>(sizes[0] || "");
     const [selectedColor, setSelectedColor] = useState<string>(colors[0] || "");
+    const [isTitleExpanded, setIsTitleExpanded] = useState(false);
+    const titleWords = product.name.split(' ');
+    const isTitleLong = titleWords.length > 5;
+    const displayedTitle = isTitleLong && !isTitleExpanded 
+        ? titleWords.slice(0, 5).join(' ') + '...' 
+        : product.name;
 
     return (
         <div className="flex flex-col h-full">
@@ -36,8 +43,13 @@ export default function ProductDetailContent({ product }: { product: Product }) 
                         {product.condition}
                     </span>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-black text-[#2B2B2B] mb-4 leading-tight">
-                    {product.name}
+                <h1 
+                    onClick={() => isTitleLong && setIsTitleExpanded(!isTitleExpanded)}
+                    className={`text-4xl md:text-5xl font-black text-[#2B2B2B] mb-4 leading-tight ${
+                        isTitleLong ? 'cursor-pointer hover:text-[#7C8C5C] transition-colors' : ''
+                    } ${isTitleLong && isTitleExpanded ? 'max-w-xl' : ''}`}
+                >
+                    {displayedTitle}
                 </h1>
                 <div className="flex items-baseline gap-4 mb-4">
                     <p className="text-4xl font-black text-[#7C8C5C]">

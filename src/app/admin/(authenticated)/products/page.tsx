@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import {
     Plus,
     Search,
-    MoreVertical,
     Pencil,
     Trash2,
     CheckCircle,
@@ -19,16 +18,26 @@ import { ProductWithRelations } from "@/lib/types";
 import { toast } from "react-hot-toast";
 import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
+import ConfirmationModal from "@/components/confirmation-modal";
 
 export default function AdminProductsPage() {
     const { data: products = [], error, isLoading, mutate } = useSWR<ProductWithRelations[]>("/api/admin/products", fetcher);
     const [searchQuery, setSearchQuery] = useState("");
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [productToDelete, setProductToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
-    const handleDelete = async (id: string) => {
-        if (!confirm("Are you sure you want to delete this product?")) return;
+    const handleDelete = (id: string) => {
+        setProductToDelete(id);
+        setIsDeleteModalOpen(true);
+    };
 
+    const handleConfirmDelete = async () => {
+        if (!productToDelete) return;
+
+        setIsDeleting(true);
         try {
-            const res = await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
+            const res = await fetch(`/api/admin/products/${productToDelete}`, { method: "DELETE" });
             if (res.ok) {
                 toast.success("Product deleted successfully");
                 mutate();
@@ -37,6 +46,10 @@ export default function AdminProductsPage() {
             }
         } catch (err) {
             toast.error("An error occurred");
+        } finally {
+            setIsDeleting(false);
+            setIsDeleteModalOpen(false);
+            setProductToDelete(null);
         }
     };
 
@@ -184,7 +197,7 @@ export default function AdminProductsPage() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={6} className="py-20 text-center">
+                                    <td colSpan={7} className="py-20 text-center">
                                         <p className="text-[#555] font-black uppercase tracking-widest">No products found</p>
                                     </td>
                                 </tr>
@@ -208,6 +221,20 @@ export default function AdminProductsPage() {
                     </div>
                 </div>
             </div>
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => {
+                    setIsDeleteModalOpen(false);
+                    setProductToDelete(null);
+                }}
+                onConfirm={handleConfirmDelete}
+                title="Delete Product"
+                message="Are you sure you want to delete this product? This action cannot be undone."
+                confirmText="Delete"
+                confirmVariant="danger"
+                loading={isDeleting}
+            />
         </div>
     );
 }

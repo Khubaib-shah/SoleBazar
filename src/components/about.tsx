@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ShieldCheck, History, Heart, Globe, Award } from "lucide-react";
+import { useSettings } from "@/hooks/use-settings";
 
 const DecorativeTrace = () => (
   <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -60,6 +61,9 @@ const DecorativeTrace = () => (
 );
 
 export default function About() {
+  const { settings } = useSettings();
+  const siteName = settings?.siteName || "SoleBazar";
+
   const stats = [
     {
       icon: <Award className="w-5 h-5" />,
@@ -99,7 +103,7 @@ export default function About() {
             <div className="relative z-10 rounded-[60px] overflow-hidden shadow-2xl border-[12px] border-white aspect-[4/5]">
               <img
                 src="/our_story_sneakers.png"
-                alt="SoleBazar Curated Collection"
+                alt={`${siteName} Curated Collection`}
                 className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110"
               />
 
@@ -152,7 +156,7 @@ export default function About() {
 
               <div className="space-y-4">
                 <p className="text-lg text-[#555] font-medium leading-relaxed">
-                  SoleBazar was born from a passion for finding hidden gems in the
+                  {siteName} was born from a passion for finding hidden gems in the
                   world of thrifted sneakers. Founded by <span className="text-[#2B2B2B] font-black">Khubaib Shah</span> in Karachi, we combine streetwear culture with the thrill of discovery.
                 </p>
                 <div className="h-px w-20 bg-[#E8DCC8]"></div>

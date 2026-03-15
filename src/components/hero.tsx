@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useSettings } from "@/hooks/use-settings";
 
 const FloatingSVG = ({ children, className, duration = 4, delay = 0 }: { children: React.ReactNode, className: string, duration?: number, delay?: number }) => (
   <motion.div
@@ -45,6 +46,9 @@ const Sparkle = ({ className }: { className: string }) => (
 );
 
 export default function Hero() {
+  const { settings } = useSettings();
+  const siteName = settings?.siteName || "SoleBazar";
+
   const scrollToShop = () => {
     const shopSection = document.getElementById("shop");
     shopSection?.scrollIntoView({ behavior: "smooth" });
@@ -153,7 +157,7 @@ export default function Hero() {
               variants={itemVariants}
               className="text-5xl sm:text-6xl lg:text-7xl font-black text-[#2B2B2B] mb-6 text-balance leading-tight"
             >
-              Step Into Style with SoleBazar
+              Step Into Style with {siteName}
             </motion.h1>
 
             <motion.p
@@ -167,7 +171,7 @@ export default function Hero() {
               variants={itemVariants}
               className="text-lg text-[#2B2B2B] mb-10 max-w-xl text-balance leading-relaxed"
             >
-              Pakistan's modern sneaker marketplace — discover new & pre-loved
+              {siteName} is Pakistan's modern sneaker marketplace — discover new & pre-loved
               shoes from Nike, Adidas, Puma, and more. Authentic, curated, and
               affordable.
             </motion.p>

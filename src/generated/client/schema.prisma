@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URL")
+}
+
+model Admin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Brand {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
+  slug      String    @unique
+  icon      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+}
+
+model Category {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
+  slug      String    @unique
+  icon      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+}
+
+model Product {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String         @unique
+  description String?
+  price       Float
+  compareAt   Float?
+  condition   String         @default("New")
+  sizes       String // JSON string array e.g. '["8","9","10"]'
+  colors      String? // JSON string array e.g. '["White","Black"]'
+  stock       Int            @default(1)
+  featured    Boolean        @default(false)
+  isTopPick   Boolean        @default(false)
+  gender      String         @default("Unisex")
+  brandId     String         @db.ObjectId
+  categoryId  String         @db.ObjectId
+  brand       Brand          @relation(fields: [brandId], references: [id])
+  category    Category       @relation(fields: [categoryId], references: [id])
+  images      ProductImage[]
+  orderItems  OrderItem[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model ProductImage {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  url       String
+  alt       String?
+  order     Int     @default(0)
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  customerName String
+  phone        String
+  email        String?
+  address      String?
+  status       String      @default("pending")
+  total        Float
+  items        OrderItem[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  quantity  Int     @default(1)
+  size      String?
+  color     String?
+  price     Float
+  productId String  @db.ObjectId
+  orderId   String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model Setting {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  siteName        String   @default("SOLEBAZAR")
+  siteDescription String?
+  email           String?
+  phone           String?
+  address         String?
+  facebook        String?
+  instagram       String?
+  twitter         String?
+  whatsapp        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

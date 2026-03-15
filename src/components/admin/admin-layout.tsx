@@ -4,6 +4,8 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import {
+    BarChart2,
+    Settings,
     LayoutDashboard,
     Box,
     ShoppingBag,
@@ -15,8 +17,13 @@ import {
     X
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useSettings } from "@/hooks/use-settings";
+import { getInitials } from "@/lib/utils";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+    const { settings } = useSettings();
+    const siteName = settings?.siteName || "SoleBazar";
+    const initials = getInitials(siteName);
     const { data: session, status } = useSession();
     const router = useRouter();
     const pathname = usePathname();
@@ -42,6 +49,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
         { name: "Brands", href: "/admin/brands", icon: Tag },
         { name: "Categories", href: "/admin/categories", icon: FolderTree },
+        { name: "Reports", href: "/admin/reports", icon: BarChart2 },
+        { name: "Settings", href: "/admin/settings", icon: Settings },
     ];
 
     return (
@@ -49,8 +58,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Sidebar */}
             <aside className={`${isSidebarOpen ? 'w-72' : 'w-20'} bg-[#2B2B2B] text-white transition-all duration-500 flex flex-col fixed h-screen z-50`}>
                 <div className="p-6 flex items-center justify-between">
-                    <Link href="/" className={`font-black text-xl transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
-                        SOLE<span className="text-[#7C8C5C]">BAZAR</span>
+                    <Link href="/" className="font-black text-xl transition-all duration-300 flex items-center gap-2">
+                        <span className={`bg-[#7C8C5C] text-white w-8 h-8 rounded-lg flex items-center justify-center text-xs transition-all ${isSidebarOpen ? 'scale-100' : 'scale-110'}`}>
+                            {initials}
+                        </span>
+                        <span className={`transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+                            {siteName}
+                        </span>
                     </Link>
                     <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-gray-400 hover:text-white transition-colors">
                         {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-8 h-8" />}

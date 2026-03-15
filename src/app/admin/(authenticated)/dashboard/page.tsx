@@ -6,11 +6,14 @@ import {
     Box,
     Tag,
     TrendingUp,
-    Users,
     DollarSign,
     ArrowRight,
+    ArrowUpRight,
+    ArrowDownRight,
     Loader2,
-    Clock
+    Clock,
+    Activity,
+    MousePointer2
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -56,10 +59,10 @@ export default function DashboardPage() {
     }
 
     const statCards = [
-        { name: "Total Revenue", value: `PKR ${stats?.totalRevenue.toLocaleString()}`, icon: DollarSign, color: "bg-green-500", text: "text-green-500" },
-        { name: "Orders", value: stats?.orderCount || 0, icon: ShoppingBag, color: "bg-blue-500", text: "text-blue-500" },
-        { name: "Products", value: stats?.productCount || 0, icon: Box, color: "bg-[#7C8C5C]", text: "text-[#7C8C5C]" },
-        { name: "Brands", value: stats?.brandCount || 0, icon: Tag, color: "bg-purple-500", text: "text-purple-500" },
+        { name: "Total Revenue", value: `PKR ${stats?.totalRevenue.toLocaleString()}`, icon: DollarSign, color: "text-emerald-600", bg: "bg-emerald-50", trend: "+12.5%" },
+        { name: "Total Orders", value: stats?.orderCount || 0, icon: ShoppingBag, color: "text-blue-600", bg: "bg-blue-50", trend: "+5.2%" },
+        { name: "Total Products", value: stats?.productCount || 0, icon: Box, color: "text-[#7C8C5C]", bg: "bg-[#7C8C5C]/10", trend: "+2.1%" },
+        { name: "Live Visitors", value: stats ? "24" : "0", icon: Activity, color: "text-rose-600", bg: "bg-rose-50", trend: "Live" },
     ];
 
     return (
@@ -67,17 +70,17 @@ export default function DashboardPage() {
             {/* Stat Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statCards.map((stat) => (
-                    <div key={stat.name} className="bg-white p-6 rounded-[32px] shadow-sm border border-[#E8DCC8] hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1 group">
-                        <div className="flex items-start justify-between mb-4">
-                            <div className={`w-12 h-12 ${stat.color} bg-opacity-10 rounded-xl flex items-center justify-center ${stat.text}`}>
-                                <stat.icon className="w-5 h-5" />
+                    <div key={stat.name} className="bg-white p-8 rounded-[40px] shadow-sm border border-[#E8DCC8]">
+                        <div className="flex items-center justify-between mb-6">
+                            <div className={`w-12 h-12 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center`}>
+                                <stat.icon className="w-6 h-6" />
                             </div>
-                            <div className="p-1.5 bg-green-50 text-green-500 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1">
-                                <TrendingUp className="w-2.5 h-2.5" />
-                                +12%
+                            <div className={`flex items-center gap-1 text-[10px] font-black uppercase tracking-widest ${stat.trend.startsWith('+') ? 'text-green-500' : stat.trend === 'Live' ? 'text-rose-500 animate-pulse' : 'text-rose-500'}`}>
+                                {stat.trend.startsWith('+') ? <ArrowUpRight className="w-3.5 h-3.5" /> : stat.trend === 'Live' ? <Activity className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
+                                {stat.trend}
                             </div>
                         </div>
-                        <p className="text-[9px] font-black text-[#555] uppercase tracking-widest mb-1.5">{stat.name}</p>
+                        <p className="text-[10px] font-black text-[#999] uppercase tracking-[0.2em] mb-1.5">{stat.name}</p>
                         <h3 className="text-2xl font-black text-[#2B2B2B]">{stat.value}</h3>
                     </div>
                 ))}

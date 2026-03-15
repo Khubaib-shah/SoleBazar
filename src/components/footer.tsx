@@ -1,9 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Instagram, MessageCircle, Mail, ArrowUpRight } from "lucide-react";
+import { Instagram, MessageCircle, Mail, ArrowUpRight, Facebook, Twitter } from "lucide-react";
+import { useSettings } from "@/hooks/use-settings";
+import { getInitials } from "@/lib/utils";
 
 export default function Footer() {
+  const { settings } = useSettings();
+  const initials = getInitials(settings?.siteName || "SoleBazar");
   const currentYear = new Date().getFullYear();
 
   const navLinks = [
@@ -14,10 +18,12 @@ export default function Footer() {
   ];
 
   const socialLinks = [
-    { label: "Instagram", href: "https://instagram.com/solebazar.pk", icon: <Instagram className="w-4 h-4" /> },
-    { label: "WhatsApp", href: "https://api.whatsapp.com/send?phone=923149784156", icon: <MessageCircle className="w-4 h-4" /> },
-    { label: "Email", href: "mailto:solebazar21@gmail.com", icon: <Mail className="w-4 h-4" /> },
-  ];
+    { label: "Instagram", href: settings?.instagram || "https://instagram.com/solebazar.pk", icon: <Instagram className="w-4 h-4" /> },
+    { label: "Facebook", href: settings?.facebook || "#", icon: <Facebook className="w-4 h-4" /> },
+    { label: "Twitter", href: settings?.twitter || "#", icon: <Twitter className="w-4 h-4" /> },
+    { label: "WhatsApp", href: settings?.whatsapp || "https://api.whatsapp.com/send?phone=923149784156", icon: <MessageCircle className="w-4 h-4" /> },
+    { label: "Email", href: `mailto:${settings?.email || "solebazar21@gmail.com"}`, icon: <Mail className="w-4 h-4" /> },
+  ].filter(link => link.href && link.href !== "#" && link.href !== "mailto:");
 
   return (
     <footer className="bg-[#2B2B2B] text-white pt-24 pb-12 overflow-hidden border-t border-white/5">
@@ -28,12 +34,12 @@ export default function Footer() {
           <div className="lg:col-span-2 space-y-8">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 bg-[#7C8C5C] rounded-xl flex items-center justify-center transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110">
-                <span className="text-white font-black text-lg">SB</span>
+                <span className="text-white font-black text-lg">{initials}</span>
               </div>
-              <span className="font-black text-2xl tracking-tight text-white">SoleBazar</span>
+              <span className="font-black text-2xl tracking-tight text-white">{settings?.siteName || "SoleBazar"}</span>
             </Link>
             <p className="text-white/50 text-base leading-relaxed max-w-sm">
-              Pakistan's premium sneaker marketplace. Curating authentic branded soles for the modern collector since 2024. Your style, delivered.
+              {settings?.siteDescription || "Pakistan's premium sneaker marketplace. Curating authentic branded soles for the modern collector since 2024. Your style, delivered."}
             </p>
             <div className="flex gap-4">
               {socialLinks.map((social) => (
@@ -90,7 +96,7 @@ export default function Footer() {
         <div className="pt-12 border-t border-white/5">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">
-              © {currentYear} SoleBazar Karachi. All rights reserved.
+              © {currentYear} {settings?.siteName || "SoleBazar"}. All rights reserved.
             </p>
             <div className="flex items-center gap-2">
               <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">Crafted by</span>

@@ -1,10 +1,11 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/client"
 }
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = env("MONGODB_URL")
 }
 
 model Admin {
@@ -92,4 +93,18 @@ model OrderItem {
   orderId   String  @db.ObjectId
   product   Product @relation(fields: [productId], references: [id])
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+model Setting {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  siteName        String   @default("SOLEBAZAR")
+  siteDescription String?
+  email           String?
+  phone           String?
+  address         String?
+  facebook        String?
+  instagram       String?
+  twitter         String?
+  whatsapp        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

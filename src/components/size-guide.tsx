@@ -13,7 +13,7 @@ export default function SizeGuide() {
             {/* Trigger Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#7C8C5C] hover:text-[#2B2B2B] transition-colors group mb-4"
+                className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#2B2B2B] hover:text-[#7C8C5C] transition-colors group"
             >
                 <Ruler className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform" />
                 <span>View Size Guide</span>
@@ -126,7 +126,7 @@ export default function SizeGuide() {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {/* Footer/Close Button for Mobile */}
                             <div className="p-8 border-t border-[#E8DCC8] bg-white flex justify-center">
                                 <button

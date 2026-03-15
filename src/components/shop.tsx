@@ -57,6 +57,8 @@ export default function Shop() {
     const genderParam = searchParams.get("gender");
     if (genderParam && GENDERS.includes(genderParam)) {
       setFilters(prev => ({ ...prev, gender: genderParam }));
+    } else if (!genderParam) {
+      setFilters(prev => ({ ...prev, gender: "All" }));
     }
   }, [searchParams]);
 

@@ -48,7 +48,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="min-h-screen bg-[#FAFAF7] flex">
             {/* Sidebar */}
             <aside className={`${isSidebarOpen ? 'w-72' : 'w-20'} bg-[#2B2B2B] text-white transition-all duration-500 flex flex-col fixed h-screen z-50`}>
-                <div className="p-8 flex items-center justify-between">
+                <div className="p-6 flex items-center justify-between">
                     <Link href="/" className={`font-black text-xl transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
                         SOLE<span className="text-[#7C8C5C]">BAZAR</span>
                     </Link>
@@ -64,7 +64,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`flex items-center gap-4 px-3 py-3 rounded-2xl font-bold text-sm transition-all duration-300 ${isActive
+                                className={`flex items-center gap-4 px-[14px] py-3 rounded-2xl font-bold text-sm transition-all duration-300 ${isActive
                                     ? "bg-[#7C8C5C] text-white shadow-lg"
                                     : "text-gray-400 hover:bg-white/5 hover:text-white"
                                     }`}

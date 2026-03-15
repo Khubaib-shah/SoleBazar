@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { MessageCircle, ShieldCheck, Clock } from "lucide-react";
 import OrderModal from "./order-modal";
+import SizeGuide from "./size-guide";
 
 interface Product {
     id: string;
@@ -59,9 +60,12 @@ export default function ProductDetailContent({ product }: { product: Product }) 
             <div className="mb-10 space-y-8">
                 {sizes.length > 0 && (
                     <div>
-                        <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.2em] mb-4">
-                            Available Sizes
-                        </h3>
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.2em]">
+                                Available Sizes
+                            </h3>
+                            <SizeGuide />
+                        </div>
                         <div className="flex flex-wrap gap-3">
                             {sizes.map((size: string) => (
                                 <button

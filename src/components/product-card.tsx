@@ -5,6 +5,8 @@ import { ArrowUpRight, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { ProductWithRelations } from "@/lib/types";
 import { useAnalytics } from "@/hooks/use-analytics";
+import useEmblaCarousel from "embla-carousel-react";
+import { useCallback } from "react";
 
 interface ProductCardProps {
   product: ProductWithRelations;
@@ -24,17 +26,36 @@ export default function ProductCard({ product }: ProductCardProps) {
     whatsappMessage,
   )}`;
 
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: true, 
+    duration: 35,
+    skipSnaps: false
+  });
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCurrentImageIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (isHovered && images.length > 1) {
+    if (isHovered && images.length > 1 && emblaApi) {
       interval = setInterval(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % images.length);
-      }, 1200);
-    } else {
-      setCurrentImageIndex(0);
+        emblaApi.scrollNext();
+      }, 1500);
     }
     return () => clearInterval(interval);
-  }, [isHovered, images.length]);
+  }, [isHovered, images.length, emblaApi]);
 
   const { trackEvent } = useAnalytics();
 
@@ -53,18 +74,26 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       {/* Product Image Section */}
       <div className="relative aspect-square overflow-hidden rounded-[24px] bg-[#F5EBDC]">
-        <Link 
-          href={`/product/${product.slug}`} 
-          className="block w-full h-full"
-          onClick={handleTrackClick}
-        >
-          <img
-            src={images[currentImageIndex]}
-            alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            loading="lazy"
-          />
-        </Link>
+        <div className="w-full h-full overflow-hidden" ref={emblaRef}>
+          <div className="flex w-full h-full touch-pan-y touch-pinch-zoom">
+            {images.map((img, index) => (
+              <div key={index} className="flex-[0_0_100%] min-w-0 h-full relative">
+                <Link 
+                  href={`/product/${product.slug}`} 
+                  className="block w-full h-full"
+                  onClick={handleTrackClick}
+                >
+                  <img
+                    src={img}
+                    alt={`${product.name} - image ${index + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading={index === 0 ? "eager" : "lazy"}
+                  />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Overlays */}
         {/* Dynamic Smart Badge (Top Left) */}
@@ -108,7 +137,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setCurrentImageIndex(idx);
+                  emblaApi?.scrollTo(idx);
                 }}
                 className={`h-1.5 transition-all duration-300 rounded-full hover:scale-125 ${
                   currentImageIndex === idx

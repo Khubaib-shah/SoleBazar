@@ -5,11 +5,14 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LayoutDashboard, LogIn } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 export default function Header() {
   const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     let ticking = false;
@@ -31,6 +34,43 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [scrolled]);
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -70% 0px",
+      threshold: 0,
+    };
+
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+
+    const sections = ["home", "shop", "about", "contact"];
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const isActive = (label: string) => {
+    const gender = searchParams.get("gender");
+    if (label === "Home") return activeSection === "home";
+    if (label === "Men") return activeSection === "shop" && gender === "Men";
+    if (label === "Women") return activeSection === "shop" && gender === "Women";
+    if (label === "Shop") return activeSection === "shop" && !gender;
+    if (label === "About") return activeSection === "about";
+    if (label === "Contact") return activeSection === "contact";
+    return false;
+  };
 
   const navLinks = [
     { label: "Home", href: "/#home" },
@@ -68,16 +108,21 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-10">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="group relative text-[12px] font-black uppercase tracking-[0.2em] text-[#2B2B2B]/60 hover:text-[#2B2B2B] transition-colors"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-[#7C8C5C] origin-right scale-x-0 group-hover:scale-x-100 group-hover:origin-left transition-transform duration-500"></span>
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const active = isActive(link.label);
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={`group relative text-[12px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${active ? "text-[#7C8C5C]" : "text-[#2B2B2B]/60 hover:text-[#2B2B2B]"
+                    }`}
+                >
+                  {link.label}
+                  <span className={`absolute -bottom-1 left-0 w-full h-[2px] bg-[#7C8C5C] origin-right transition-transform duration-500 ${active ? "scale-x-100 origin-left" : "scale-x-0 group-hover:scale-x-100 group-hover:origin-left"
+                    }`}></span>
+                </Link>
+              );
+            })}
 
             <div className="h-6 w-px bg-[#E8DCC8] mx-2 opacity-50"></div>
 
@@ -144,20 +189,25 @@ export default function Header() {
               className="md:hidden overflow-hidden bg-white mt-4 rounded-3xl border border-[#E8DCC8] shadow-2xl p-6"
             >
               <div className="flex flex-col gap-6">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="text-lg font-black text-[#2B2B2B] flex items-center justify-between group"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {link.label}
-                    <motion.div
-                      whileHover={{ scale: 1.5 }}
-                      className="w-2 h-2 bg-[#E8DCC8] group-hover:bg-[#7C8C5C] rounded-full transition-colors"
-                    ></motion.div>
-                  </Link>
-                ))}
+                {navLinks.map((link) => {
+                  const active = isActive(link.label);
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className={`text-lg font-black flex items-center justify-between group transition-colors duration-300 ${active ? "text-[#7C8C5C]" : "text-[#2B2B2B]"
+                        }`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.label}
+                      <motion.div
+                        animate={{ scale: active ? 1.5 : 1 }}
+                        className={`w-2 h-2 rounded-full transition-colors ${active ? "bg-[#7C8C5C]" : "bg-[#E8DCC8] group-hover:bg-[#7C8C5C]"
+                          }`}
+                      ></motion.div>
+                    </Link>
+                  );
+                })}
 
                 <div className="h-px bg-[#E8DCC8] w-full mt-4 opacity-50"></div>
 

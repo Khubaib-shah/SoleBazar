@@ -13,13 +13,14 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  const images = product.images?.length > 0
-    ? product.images.map(img => img.url)
-    : ["/placeholder.svg"];
+  const images =
+    product.images?.length > 0
+      ? product.images.map((img) => img.url)
+      : ["/placeholder.svg"];
 
   const whatsappMessage = `Hi! I'm interested in the ${product.name} (${product.brand.name}) - Condition: ${product.condition}. Price: PKR ${product.price}`;
   const whatsappLink = `https://api.whatsapp.com/send?phone=923149784156&text=${encodeURIComponent(
-    whatsappMessage
+    whatsappMessage,
   )}`;
 
   useEffect(() => {
@@ -54,12 +55,15 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Overlays */}
         {/* Dynamic Smart Badge (Top Left) */}
         {(product.isTopPick || product.featured || product.condition) && (
-          <div className={`absolute top-3 left-3 backdrop-blur-xl px-4 py-1.5 rounded-full border border-white/20 shadow-xl z-10 transition-colors ${product.isTopPick
-            ? "bg-orange-600/90 text-white"
-            : product.condition === "New"
-              ? "bg-[#7C8C5C]/90 text-white"
-              : "bg-[#2B2B2B]/80 text-white"
-            }`}>
+          <div
+            className={`absolute top-3 left-3 backdrop-blur-xl px-4 py-1.5 rounded-full border border-white/20 shadow-xl z-10 transition-colors ${
+              product.isTopPick
+                ? "bg-orange-600/90 text-white"
+                : product.condition === "New"
+                  ? "bg-[#7C8C5C]/90 text-white"
+                  : "bg-[#2B2B2B]/80 text-white"
+            }`}
+          >
             <span className="text-[10px] font-black uppercase tracking-[0.15em] drop-shadow-sm">
               {product.isTopPick ? "Best Seller" : product.condition}
             </span>
@@ -69,9 +73,15 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Brand Logo (Top Right) */}
         <div className="absolute top-3 right-3 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100 p-2 overflow-hidden">
           {product.brand.icon ? (
-            <img src={product.brand.icon} alt={product.brand.name} className="w-full h-full object-contain" />
+            <img
+              src={product.brand.icon}
+              alt={product.brand.name}
+              className="w-full h-full object-contain"
+            />
           ) : (
-            <span className="text-[10px] font-black text-[#2B2B2B]">{product.brand.name.substring(0, 2)}</span>
+            <span className="text-[10px] font-black text-[#2B2B2B]">
+              {product.brand.name.substring(0, 2)}
+            </span>
           )}
         </div>
 
@@ -86,8 +96,11 @@ export default function ProductCard({ product }: ProductCardProps) {
                   e.stopPropagation();
                   setCurrentImageIndex(idx);
                 }}
-                className={`h-1.5 transition-all duration-300 rounded-full hover:scale-125 ${currentImageIndex === idx ? "w-6 bg-white shadow-md" : "w-1.5 bg-white/50"
-                  }`}
+                className={`h-1.5 transition-all duration-300 rounded-full hover:scale-125 ${
+                  currentImageIndex === idx
+                    ? "w-6 bg-white shadow-md"
+                    : "w-1.5 bg-white/50"
+                }`}
               />
             ))}
           </div>
@@ -108,7 +121,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <p className="mt-4 text-sm text-gray-400 font-medium line-clamp-2 leading-relaxed">
-          {product.description || "Premium curated sneaker from our exclusive collection. Authentic and high-quality."}
+          {product.description ||
+            "Premium curated sneaker from our exclusive collection. Authentic and high-quality."}
         </p>
 
         {/* Bottom Section (Price + Button) */}
@@ -120,15 +134,13 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
 
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={`/product/${product.slug}`}
             className="flex items-center gap-2 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl hover:shadow-[#7C8C5C]/30"
           >
             Buy Now
             <ArrowUpRight className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </div>

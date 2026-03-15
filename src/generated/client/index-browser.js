@@ -202,6 +202,23 @@ exports.Prisma.SettingScalarFieldEnum = {
   instagram: 'instagram',
   twitter: 'twitter',
   whatsapp: 'whatsapp',
+  smtpHost: 'smtpHost',
+  smtpPort: 'smtpPort',
+  smtpUser: 'smtpUser',
+  smtpPass: 'smtpPass',
+  smtpFrom: 'smtpFrom',
+  notificationEmail: 'notificationEmail',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  subject: 'subject',
+  message: 'message',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -225,7 +242,8 @@ exports.Prisma.ModelName = {
   ProductImage: 'ProductImage',
   Order: 'Order',
   OrderItem: 'OrderItem',
-  Setting: 'Setting'
+  Setting: 'Setting',
+  Message: 'Message'
 };
 
 /**

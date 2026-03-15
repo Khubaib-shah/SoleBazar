@@ -96,8 +96,8 @@ model OrderItem {
 }
 
 model Setting {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  siteName        String   @default("SOLEBAZAR")
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  siteName        String  @default("SOLEBAZAR")
   siteDescription String?
   email           String?
   phone           String?
@@ -106,6 +106,26 @@ model Setting {
   instagram       String?
   twitter         String?
   whatsapp        String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+
+  // SMTP Settings
+  smtpHost          String?
+  smtpPort          Int?    @default(587)
+  smtpUser          String?
+  smtpPass          String?
+  smtpFrom          String?
+  notificationEmail String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String?
+  subject   String?
+  message   String
+  status    String   @default("unread") // unread, read
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

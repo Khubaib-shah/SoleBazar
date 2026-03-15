@@ -3,19 +3,37 @@
 import type React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, MessageCircle, Instagram, Send, MapPin, Phone } from "lucide-react";
+import { Mail, MessageCircle, Instagram, Send, MapPin, Phone, Loader2 } from "lucide-react";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", subject: "Buying Inquiries", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setFormData({ name: "", message: "" });
-      setSubmitted(false);
-    }, 3000);
+    setIsSubmitting(true);
+    
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+        setFormData({ name: "", email: "", subject: "Buying Inquiries", message: "" });
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        throw new Error("Failed to send");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactMethods = [
@@ -140,14 +158,30 @@ export default function Contact() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Subject</label>
-                    <select className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none">
-                      <option>Buying Inquiries</option>
-                      <option>Selling Collection</option>
-                      <option>Order Support</option>
-                      <option>General Feedback</option>
-                    </select>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all shadow-inner"
+                      placeholder="ali@example.com"
+                    />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Subject</label>
+                    <select 
+                      value={formData.subject}
+                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                      className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                    >
+                      <option value="Buying Inquiries">Buying Inquiries</option>
+                      <option value="Selling Collection">Selling Collection</option>
+                      <option value="Order Support">Order Support</option>
+                      <option value="General Feedback">General Feedback</option>
+                    </select>
                 </div>
 
                 <div className="space-y-2">
@@ -164,13 +198,15 @@ export default function Contact() {
 
                 <button
                   type="submit"
-                  disabled={submitted}
+                  disabled={isSubmitting || submitted}
                   className={`w-full py-6 rounded-[32px] font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-xl flex items-center justify-center gap-3 active:scale-95 ${submitted
                     ? "bg-green-500 text-white"
                     : "bg-[#7C8C5C] hover:bg-[#6B7A4F] text-white"
                     }`}
                 >
-                  {submitted ? (
+                  {isSubmitting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : submitted ? (
                     <>Message Sent Successfully!</>
                   ) : (
                     <>

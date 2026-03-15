@@ -105,6 +105,26 @@ model Setting {
   instagram       String?
   twitter         String?
   whatsapp        String?
+  
+  // SMTP Settings
+  smtpHost        String?
+  smtpPort        Int?      @default(587)
+  smtpUser        String?
+  smtpPass        String?
+  smtpFrom        String?
+  notificationEmail String?
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String?
+  subject   String?
+  message   String
+  status    String   @default("unread") // unread, read
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

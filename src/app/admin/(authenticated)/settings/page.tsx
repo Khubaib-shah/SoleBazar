@@ -13,7 +13,8 @@ import {
     Save,
     RotateCcw,
     Loader2,
-    MessageCircle
+    MessageCircle,
+    Shield
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import useSWR from "swr";
@@ -59,6 +60,7 @@ export default function SettingsPage() {
         { id: "general", label: "General", icon: Globe },
         { id: "contact", label: "Contact Info", icon: Mail },
         { id: "social", label: "Social Media", icon: Smartphone },
+        { id: "email", label: "Email / Notifications", icon: Shield },
     ];
 
     if (isLoading) {
@@ -252,6 +254,85 @@ export default function SettingsPage() {
                                             onChange={(e) => handleInputChange("whatsapp", e.target.value)}
                                             className="w-full px-8 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#25D366] font-bold text-sm transition-all"
                                             placeholder="https://wa.me/..."
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'email' && (
+                        <div className="bg-white rounded-[48px] shadow-sm border border-[#E8DCC8] overflow-hidden">
+                            <div className="p-10 border-b border-[#E8DCC8]">
+                                <h3 className="text-xl font-black text-[#2B2B2B]">Email Notifications & SMTP</h3>
+                                <p className="text-xs text-[#999] font-bold mt-1">Configure automated alerts and email server settings</p>
+                            </div>
+                            <div className="p-10 space-y-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Notification Recipient Email</label>
+                                        <input 
+                                            type="email" 
+                                            value={formData.notificationEmail || ""}
+                                            onChange={(e) => handleInputChange("notificationEmail", e.target.value)}
+                                            className="w-full px-8 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all"
+                                            placeholder="khubaibsyed820@gmail.com"
+                                        />
+                                        <p className="text-[9px] text-[#999] ml-4 font-bold uppercase tracking-tight">Emails for orders/messages will be sent here</p>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">SMTP From Address</label>
+                                        <input 
+                                            type="text" 
+                                            value={formData.smtpFrom || ""}
+                                            onChange={(e) => handleInputChange("smtpFrom", e.target.value)}
+                                            className="w-full px-8 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all"
+                                            placeholder="SoleBazar <noreply@solebazar.com>"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="h-px bg-[#E8DCC8]/50" />
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">SMTP Host</label>
+                                        <input 
+                                            type="text" 
+                                            value={formData.smtpHost || ""}
+                                            onChange={(e) => handleInputChange("smtpHost", e.target.value)}
+                                            className="w-full px-8 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all"
+                                            placeholder="smtp.gmail.com"
+                                        />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">SMTP Port</label>
+                                        <input 
+                                            type="number" 
+                                            value={formData.smtpPort || 587}
+                                            onChange={(e) => handleInputChange("smtpPort", e.target.value)}
+                                            className="w-full px-8 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all"
+                                            placeholder="587"
+                                        />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">SMTP User</label>
+                                        <input 
+                                            type="text" 
+                                            value={formData.smtpUser || ""}
+                                            onChange={(e) => handleInputChange("smtpUser", e.target.value)}
+                                            className="w-full px-8 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all"
+                                            placeholder="your-email@gmail.com"
+                                        />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">SMTP Password / App Password</label>
+                                        <input 
+                                            type="password" 
+                                            value={formData.smtpPass || ""}
+                                            onChange={(e) => handleInputChange("smtpPass", e.target.value)}
+                                            className="w-full px-8 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all"
+                                            placeholder="••••••••••••••••"
                                         />
                                     </div>
                                 </div>

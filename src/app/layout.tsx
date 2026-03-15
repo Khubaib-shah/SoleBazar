@@ -21,11 +21,23 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteDescription = settings?.siteDescription || "Branded soles, thrift prices. Discover high-quality, affordable branded shoes from Nike, Adidas, Puma and more in Pakistan.";
 
   return {
-    title: `${siteName} | Premium Thrift Shoes Pakistan`,
+    title: {
+        default: `${siteName} | Original Branded Thrift Shoes in Pakistan`,
+        template: `%s | ${siteName} Pakistan`
+    },
     description: siteDescription,
-    keywords: ["shoes", "sneakers", "thrift", "pakistan", "branded", "nike", "adidas", "puma", "karachi"],
+    keywords: [
+        "shoes", "sneakers", "thrift store pakistan", "branded shoes pakistan", 
+        "nike pakistan", "adidas pakistan", "thrift shoes karachi", 
+        "pre-loved sneakers lahore", "original branded shoes price in pakistan",
+        "second hand original shoes", "solebazar", "online shoe store pakistan"
+    ],
+    metadataBase: new URL("https://sole-bazar.vercel.app"),
+    alternates: {
+        canonical: "/",
+    },
     openGraph: {
-      title: `${siteName} | Premium Thrift Sneakers Pakistan`,
+      title: `${siteName} | Premium Branded Thrift Shoes Pakistan`,
       description: siteDescription,
       url: "https://sole-bazar.vercel.app",
       siteName: siteName,
@@ -34,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: "/metaimage.png",
           width: 1200,
           height: 630,
-          alt: `${siteName} Collection`,
+          alt: `${siteName} - Best Thrift Shoes in Pakistan`,
         },
       ],
       locale: "en_PK",
@@ -42,12 +54,16 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${siteName} | Premium Thrift Sneakers Pakistan`,
+      title: `${siteName} | Premium Branded Thrift Shoes Pakistan`,
       description: siteDescription,
       images: ["/metaimage.png"],
     },
     icons: {
       icon: "/metaimage.png",
+    },
+    verification: {
+        google: "google-site-verification-placeholder",
+        yandex: "yandex-verification-placeholder",
     }
   };
 }

@@ -38,6 +38,11 @@ export async function POST(req: Request) {
         // Remove immutable/automatic fields
         const { id, createdAt, updatedAt, ...updateData } = data;
 
+        // Ensure numeric fields are correctly typed
+        if (updateData.smtpPort !== undefined && updateData.smtpPort !== null) {
+            updateData.smtpPort = parseInt(updateData.smtpPort, 10);
+        }
+
         const settings = await prisma.setting.findFirst();
 
         let updatedSettings;

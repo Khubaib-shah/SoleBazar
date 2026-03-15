@@ -23,6 +23,9 @@ export default function MessagesPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedMessage, setSelectedMessage] = useState<any>(null);
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
+    const [replyText, setReplyText] = useState("");
+    const [isSendingReply, setIsSendingReply] = useState(false);
+    const [showReplyForm, setShowReplyForm] = useState(false);
 
     const filteredMessages = messages?.filter((msg: any) => 
         msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -70,6 +73,39 @@ export default function MessagesPage() {
         }
     };
 
+    const handleSendReply = async () => {
+        if (!replyText.trim()) {
+            toast.error("Please enter a message");
+            return;
+        }
+
+        setIsSendingReply(true);
+        try {
+            const res = await fetch("/api/admin/messages/reply", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    to: selectedMessage.email,
+                    subject: selectedMessage.subject || "SoleBazar Inquiry",
+                    message: replyText
+                }),
+            });
+
+            if (res.ok) {
+                toast.success("Reply sent successfully!");
+                setReplyText("");
+                setShowReplyForm(false);
+            } else {
+                const data = await res.json();
+                toast.error(data.error || "Failed to send reply");
+            }
+        } catch (error) {
+            toast.error("An error occurred while sending the reply");
+        } finally {
+            setIsSendingReply(false);
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="h-96 flex items-center justify-center">
@@ -112,6 +148,7 @@ export default function MessagesPage() {
                                 key={msg.id}
                                 onClick={() => {
                                     setSelectedMessage(msg);
+                                    setShowReplyForm(false);
                                     if (msg.status === 'unread') handleMarkAsRead(msg.id);
                                 }}
                                 className={`w-full text-left p-6 rounded-[32px] border transition-all duration-300 relative group ${
@@ -218,23 +255,63 @@ export default function MessagesPage() {
 
                                 <div className="space-y-4">
                                     <p className="text-[10px] font-black uppercase tracking-widest text-[#999]">Message Content</p>
-                                    <div className="bg-[#FAFAF7] p-8 rounded-[32px] border border-[#E8DCC8]/50 min-h-[200px]">
+                                    <div className="bg-[#FAFAF7] p-8 rounded-[32px] border border-[#E8DCC8]/50 min-h-[150px]">
                                         <p className="text-base text-[#2B2B2B] font-medium leading-relaxed whitespace-pre-wrap">
                                             {selectedMessage.message}
                                         </p>
                                     </div>
                                 </div>
+
+                                {showReplyForm && (
+                                    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-[#7C8C5C]">Your Reply</p>
+                                            <button 
+                                                onClick={() => setShowReplyForm(false)}
+                                                className="text-[9px] font-black uppercase tracking-widest text-[#999] hover:text-red-500 transition-colors"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                        <div className="bg-white border-2 border-[#7C8C5C]/30 rounded-[32px] p-2 focus-within:border-[#7C8C5C] transition-all">
+                                            <textarea 
+                                                rows={5}
+                                                value={replyText}
+                                                onChange={(e) => setReplyText(e.target.value)}
+                                                placeholder="Write your email reply here..."
+                                                className="w-full bg-transparent p-6 outline-none text-sm font-medium resize-none"
+                                            />
+                                            <div className="p-2 border-t border-[#E8DCC8]/30 flex justify-end">
+                                                <button 
+                                                    onClick={handleSendReply}
+                                                    disabled={isSendingReply}
+                                                    className="px-8 py-3 bg-[#7C8C5C] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#5D6B44] transition-all flex items-center gap-2 shadow-lg disabled:opacity-50"
+                                                >
+                                                    {isSendingReply ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                                                    Send Email
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Detail Footer */}
-                            {selectedMessage.email && (
-                                <div className="p-8 bg-[#FAFAF7] border-t border-[#E8DCC8]">
+                            {!showReplyForm && selectedMessage.email && (
+                                <div className="p-8 bg-[#FAFAF7] border-t border-[#E8DCC8] flex gap-4">
+                                    <button 
+                                        onClick={() => setShowReplyForm(true)}
+                                        className="flex-1 py-4 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3"
+                                    >
+                                        <Mail className="w-4 h-4" />
+                                        Compose Direct Reply
+                                    </button>
                                     <a 
                                         href={`mailto:${selectedMessage.email}?subject=Re: ${selectedMessage.subject || "SoleBazaar Inquiry"}`}
-                                        className="w-full py-4 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3"
+                                        className="px-6 py-4 bg-white border-2 border-[#E8DCC8] text-[#2B2B2B] rounded-2xl font-black text-[10px] uppercase tracking-widest hover:border-[#7C8C5C] transition-all shadow-sm flex items-center justify-center gap-3"
+                                        title="Open in your email app"
                                     >
                                         <Send className="w-4 h-4" />
-                                        Reply via Email
                                     </a>
                                 </div>
                             )}
@@ -256,5 +333,4 @@ export default function MessagesPage() {
     );
 }
 
-// Reuse Send from lucide if needed elsewhere, but lucide react doesn't export Eye by default in some versions? No, it should.
 import { Send } from "lucide-react";

@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
+import { useInView } from "react-intersection-observer";
 import { fetcher } from "@/lib/fetcher";
 import ProductCard from "./product-card";
 import { ProductWithRelations } from "@/lib/types";
@@ -52,10 +54,9 @@ export default function Shop({
   subtitle = "Discover curated sneakers for your style. High-quality pieces at competitive prices."
 }: ShopProps) {
   const searchParams = useSearchParams();
-  const apiUri = featuredOnly ? "/api/products?featured=true" : "/api/products";
-  const { data: products = [], error: productsError, isLoading: productsLoading } = useSWR<ProductWithRelations[]>(apiUri, fetcher);
-  const { data: brands = [], error: brandsError, isLoading: brandsLoading } = useSWR<any[]>("/api/brands", fetcher);
-  const { data: categories = [], error: categoriesError, isLoading: categoriesLoading } = useSWR<any[]>("/api/categories", fetcher);
+  const { ref, inView } = useInView({
+    rootMargin: "400px",
+  });
 
   const [filters, setFilters] = useState({
     brand: "All",
@@ -71,43 +72,66 @@ export default function Shop({
     const genderParam = searchParams.get("gender");
     if (genderParam && GENDERS.includes(genderParam)) {
       setFilters(prev => ({ ...prev, gender: genderParam }));
+      setSize(1);
     } else if (!genderParam) {
       setFilters(prev => ({ ...prev, gender: "All" }));
+      setSize(1);
     }
   }, [searchParams]);
 
+  const getKey = (pageIndex: number, previousPageData: any) => {
+    if (previousPageData && !previousPageData.metadata.hasMore) return null;
+    
+    const params = new URLSearchParams();
+    params.set("page", (pageIndex + 1).toString());
+    params.set("pageSize", "6");
+    
+    if (featuredOnly) params.set("featured", "true");
+    if (filters.brand !== "All") params.set("brand", filters.brand);
+    if (filters.category !== "All") params.set("category", filters.category);
+    if (filters.gender !== "All") params.set("gender", filters.gender);
+    if (filters.condition !== "All") params.set("condition", filters.condition);
+    if (filters.size !== "All") params.set("size", filters.size);
+
+    return `/api/products?${params.toString()}`;
+  };
+
+  const { 
+    data: infiniteData, 
+    error: productsError, 
+    size, 
+    setSize, 
+    isValidating: productsLoading 
+  } = useSWRInfinite(getKey, fetcher, {
+    revalidateFirstPage: false,
+    persistSize: true
+  });
+
+  const { data: brands = [], error: brandsError, isLoading: brandsLoading } = useSWR<any[]>("/api/brands", fetcher);
+  const { data: categories = [], error: categoriesError, isLoading: categoriesLoading } = useSWR<any[]>("/api/categories", fetcher);
+
+  const products = useMemo(() => {
+    return infiniteData ? infiniteData.flatMap((page) => page.products) : [];
+  }, [infiniteData]);
+
+  const hasMore = infiniteData?.[infiniteData.length - 1]?.metadata.hasMore;
+
+  useEffect(() => {
+    if (inView && hasMore && !productsLoading) {
+      setSize(size + 1);
+    }
+  }, [inView, hasMore, productsLoading, size, setSize]);
+
   const [activeTab, setActiveTab] = useState<"brand" | "category" | "gender" | "condition" | "size">("brand");
 
-  const loading = productsLoading || brandsLoading || categoriesLoading;
-
-  const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
-      const brandMatch = filters.brand === "All" || p.brand.name === filters.brand;
-      const categoryMatch = filters.category === "All" || p.category.name === filters.category;
-      const genderMatch = filters.gender === "All" || p.gender === filters.gender;
-      const conditionMatch =
-        filters.condition === "All" || p.condition === filters.condition;
-
-      // Handle sizes which are stored as JSON string in the DB
-      let sizeMatch = filters.size === "All";
-      if (!sizeMatch && p.sizes) {
-        try {
-          const productSizes = JSON.parse(p.sizes);
-          sizeMatch = productSizes.includes(filters.size);
-        } catch (e) {
-          sizeMatch = p.sizes === filters.size;
-        }
-      }
-
-      return brandMatch && categoryMatch && genderMatch && conditionMatch && sizeMatch;
-    });
-  }, [filters, products]);
+  const loading = (productsLoading && products.length === 0) || brandsLoading || categoriesLoading;
 
   const handleFilterChange = (type: keyof typeof filters, value: string) => {
     setFilters((prev) => ({
       ...prev,
       [type]: value,
     }));
+    setSize(1); // Reset to first page when filtering
   };
 
   const resetFilters = () => {
@@ -118,6 +142,7 @@ export default function Shop({
       condition: "All",
       size: "All",
     });
+    setSize(1);
   };
 
   const container = {
@@ -263,8 +288,8 @@ export default function Shop({
             animate="visible"
             className="grid sm:grid-cols-2 lg:grid-cols-3  gap-8 no-scrollbar"
           >
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
+            {products.length > 0 ? (
+              products.map((product) => (
                 <motion.div key={product.id} variants={item}>
                   <ProductCard product={product} />
                 </motion.div>
@@ -290,6 +315,14 @@ export default function Shop({
             )}
           </motion.div>
         </AnimatePresence>
+
+        {/* Scroll Trigger */}
+        {!featuredOnly && hasMore && (
+          <div ref={ref} className="py-20 flex flex-col items-center justify-center gap-4">
+            <Loader2 className="w-8 h-8 animate-spin text-[#7C8C5C]" />
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#999]">Loading more heat...</p>
+          </div>
+        )}
 
         {featuredOnly && (
           <div className="mt-16 flex justify-center">

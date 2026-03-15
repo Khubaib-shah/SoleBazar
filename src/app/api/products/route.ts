@@ -13,16 +13,26 @@ export async function GET(request: Request) {
         const featured = searchParams.get("featured");
         const search = searchParams.get("search");
         const page = parseInt(searchParams.get("page") || "1");
-        const pageSize = parseInt(searchParams.get("pageSize") || "9");
+        const pageSize = parseInt(searchParams.get("pageSize") || "6");
         const skip = (page - 1) * pageSize;
 
         const where: Record<string, unknown> = {};
 
         if (brand && brand !== "All") {
-            where.brand = { slug: brand };
+            where.brand = { 
+                OR: [
+                    { slug: brand },
+                    { name: brand }
+                ]
+            };
         }
         if (category && category !== "All") {
-            where.category = { slug: category };
+            where.category = { 
+                OR: [
+                    { slug: category },
+                    { name: category }
+                ]
+            };
         }
         if (gender && gender !== "All") {
             where.gender = gender;

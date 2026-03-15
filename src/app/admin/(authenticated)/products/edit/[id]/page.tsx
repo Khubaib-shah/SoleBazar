@@ -247,11 +247,11 @@ export default function EditProductPage() {
                             <h3 className="text-lg font-black text-[#2B2B2B]">Visual Gallery</h3>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                 {images.map((img, idx) => (
-                                    <div key={idx} className="relative group aspect-[4/5] rounded-3xl overflow-hidden border-2 border-[#E8DCC8]">
+                                    <div key={idx} className="relative group aspect-[4/5] rounded-3xl overflow-hidden border-2 border-[#E8DCC8] bg-[#FAFAF7]">
                                         {img.url ? (
-                                            <img src={img.url} className="w-full h-full object-cover" />
+                                            <img src={img.url} className="w-full h-full object-cover" alt={`Product ${idx + 1}`} />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-[#FAFAF7] text-[#E8DCC8]">
+                                            <div className="w-full h-full flex items-center justify-center text-[#E8DCC8]">
                                                 <ImageIcon className="w-10 h-10" />
                                             </div>
                                         )}
@@ -261,15 +261,15 @@ export default function EditProductPage() {
                                             value={img.url}
                                             onChange={(e) => {
                                                 const newImgs = [...images];
-                                                newImgs[idx].url = e.target.value;
+                                                newImgs[idx] = { ...newImgs[idx], url: e.target.value };
                                                 setImages(newImgs);
                                             }}
-                                            className="absolute bottom-2 left-2 right-2 px-3 py-2 bg-white/90 rounded-xl text-[10px] font-bold border focus:outline-none"
+                                            className="absolute bottom-2 left-2 right-2 px-3 py-2 bg-white/90 rounded-xl text-[10px] font-bold border focus:outline-none focus:border-[#7C8C5C] transition-all"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setImages(images.filter((_, i) => i !== idx))}
-                                            className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-all shadow-lg"
+                                            className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-all shadow-lg active:scale-90"
                                         >
                                             <Trash2 className="w-4 h-4" />
                                         </button>
@@ -278,9 +278,9 @@ export default function EditProductPage() {
                                 <button
                                     type="button"
                                     onClick={() => setImages([...images, { url: "", alt: "", order: images.length }])}
-                                    className="aspect-[4/5] rounded-[32px] border-4 border-dashed border-[#E8DCC8] flex flex-col items-center justify-center text-[#E8DCC8] hover:text-[#7C8C5C] hover:border-[#7C8C5C] transition-all gap-4"
+                                    className="aspect-[4/5] rounded-[32px] border-4 border-dashed border-[#E8DCC8] flex flex-col items-center justify-center text-[#E8DCC8] hover:text-[#7C8C5C] hover:border-[#7C8C5C] transition-all gap-4 group"
                                 >
-                                    <Plus className="w-12 h-12" />
+                                    <Plus className="w-12 h-12 group-hover:scale-110 transition-transform" />
                                     <span className="text-xs font-black uppercase tracking-widest">Add Image</span>
                                 </button>
                             </div>

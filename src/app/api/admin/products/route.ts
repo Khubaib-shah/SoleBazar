@@ -55,6 +55,7 @@ export async function POST(request: Request) {
             categoryId,
             images,
             isTopPick,
+            gender,
         } = body;
 
         if (!name || !brandId || !categoryId) {
@@ -76,6 +77,7 @@ export async function POST(request: Request) {
                 stock: parseInt(stock.toString()) || 0,
                 featured: featured || false,
                 isTopPick: isTopPick || false,
+                gender: gender || "Unisex",
                 brandId,
                 categoryId,
                 images: images && Array.isArray(images)

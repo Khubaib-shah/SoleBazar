@@ -11,6 +11,7 @@ export interface ProductWithRelations {
     stock: number;
     featured: boolean;
     isTopPick: boolean;
+    gender: string;
     brandId: string;
     categoryId: string;
     brand: { id: string; name: string; slug: string; icon: string | null };

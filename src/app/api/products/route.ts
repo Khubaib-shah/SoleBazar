@@ -9,6 +9,7 @@ export async function GET(request: Request) {
         const category = searchParams.get("category");
         const condition = searchParams.get("condition");
         const size = searchParams.get("size");
+        const gender = searchParams.get("gender");
         const featured = searchParams.get("featured");
         const search = searchParams.get("search");
 
@@ -19,6 +20,9 @@ export async function GET(request: Request) {
         }
         if (category && category !== "All") {
             where.category = { slug: category };
+        }
+        if (gender && gender !== "All") {
+            where.gender = gender;
         }
         if (condition && condition !== "All") {
             where.condition = condition;

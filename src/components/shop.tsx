@@ -10,8 +10,10 @@ import {
   Loader2,
   Filter,
   ChevronDown,
-  Plus
+  Plus,
+  Users
 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
 import ProductCard from "./product-card";
@@ -19,6 +21,7 @@ import { ProductWithRelations } from "@/lib/types";
 
 const CONDITIONS = ["All", "New", "Pre-loved"];
 const SIZES = ["All", "7", "8", "9", "9.5", "10", "10.5", "11"];
+const GENDERS = ["All", "Men", "Women", "Unisex"];
 
 const FloatingPlus = ({ className, delay = 0 }: { className: string, delay?: number }) => (
   <motion.div
@@ -35,22 +38,35 @@ const FloatingPlus = ({ className, delay = 0 }: { className: string, delay?: num
 );
 
 export default function Shop() {
+  const searchParams = useSearchParams();
   const { data: products = [], error: productsError, isLoading: productsLoading } = useSWR<ProductWithRelations[]>("/api/products", fetcher);
   const { data: brands = [], error: brandsError, isLoading: brandsLoading } = useSWR<any[]>("/api/brands", fetcher);
+  const { data: categories = [], error: categoriesError, isLoading: categoriesLoading } = useSWR<any[]>("/api/categories", fetcher);
 
   const [filters, setFilters] = useState({
     brand: "All",
+    category: "All",
+    gender: "All",
     condition: "All",
     size: "All",
   });
 
-  const [activeTab, setActiveTab] = useState<"brand" | "condition" | "size">("brand");
+  useEffect(() => {
+    const genderParam = searchParams.get("gender");
+    if (genderParam && GENDERS.includes(genderParam)) {
+      setFilters(prev => ({ ...prev, gender: genderParam }));
+    }
+  }, [searchParams]);
 
-  const loading = productsLoading || brandsLoading;
+  const [activeTab, setActiveTab] = useState<"brand" | "category" | "gender" | "condition" | "size">("brand");
+
+  const loading = productsLoading || brandsLoading || categoriesLoading;
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const brandMatch = filters.brand === "All" || p.brand.name === filters.brand;
+      const categoryMatch = filters.category === "All" || p.category.name === filters.category;
+      const genderMatch = filters.gender === "All" || p.gender === filters.gender;
       const conditionMatch =
         filters.condition === "All" || p.condition === filters.condition;
 
@@ -65,7 +81,7 @@ export default function Shop() {
         }
       }
 
-      return brandMatch && conditionMatch && sizeMatch;
+      return brandMatch && categoryMatch && genderMatch && conditionMatch && sizeMatch;
     });
   }, [filters, products]);
 
@@ -79,6 +95,8 @@ export default function Shop() {
   const resetFilters = () => {
     setFilters({
       brand: "All",
+      category: "All",
+      gender: "All",
       condition: "All",
       size: "All",
     });
@@ -160,7 +178,7 @@ export default function Shop() {
 
         {/* Improved Filter UI */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E8DCC8] mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
             {/* Brand Filter */}
             <div>
               <div className="flex items-center gap-2 mb-4">
@@ -187,6 +205,59 @@ export default function Shop() {
                       }`}
                   >
                     {brand.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Category Filter */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Box className="w-4 h-4 text-[#7C8C5C]" />
+                <span className="text-sm font-bold text-[#2B2B2B] uppercase tracking-wider">Categories</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => handleFilterChange("category", "All")}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.category === "All"
+                    ? "bg-[#7C8C5C] text-white shadow-md scale-105"
+                    : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
+                    }`}
+                >
+                  All
+                </button>
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => handleFilterChange("category", category.name)}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.category === category.name
+                      ? "bg-[#7C8C5C] text-white shadow-md scale-105"
+                      : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
+                      }`}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Gender Filter */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Users className="w-4 h-4 text-[#7C8C5C]" />
+                <span className="text-sm font-bold text-[#2B2B2B] uppercase tracking-wider">Gender</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {GENDERS.map((gender) => (
+                  <button
+                    key={gender}
+                    onClick={() => handleFilterChange("gender", gender)}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${filters.gender === gender
+                      ? "bg-[#7C8C5C] text-white shadow-md scale-105"
+                      : "bg-[#FAFAF7] text-[#2B2B2B] hover:bg-[#F5EBDC]"
+                      }`}
+                  >
+                    {gender}
                   </button>
                 ))}
               </div>

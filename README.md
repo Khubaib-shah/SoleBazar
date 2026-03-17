@@ -32,14 +32,10 @@ Database (Planned)	MongoDB
 Hosting	Vercel
 🖼️ UI Preview
 
-(Add screenshots here)
-
-![Hero Section Preview](./preview-hero.png)
-![Top Picks Section](./preview-top-picks.png)
 
 ⚙️ Installation
 # Clone the repository
-git clone https://github.com/yourusername/solebazar.git
+git clone https://github.com/khubaib-shah/solebazar.git
 
 # Navigate to project folder
 cd solebazar

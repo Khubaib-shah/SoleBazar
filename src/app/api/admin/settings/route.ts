@@ -6,21 +6,21 @@ import { authOptions } from "@/lib/auth";
 export async function GET() {
     try {
         let settings = await prisma.setting.findFirst();
-        
+
         if (!settings) {
             settings = await prisma.setting.create({
                 data: {
                     siteName: "SOLEBAZAR",
-                    email: "support@solebazar.com",
+                    email: "khubaibsyed820@gmail.com",
                     phone: "+92 316 2126865",
                 }
             });
         }
-        
+
         return NextResponse.json(settings);
     } catch (error: any) {
         console.error("Failed to fetch settings:", error);
-        return NextResponse.json({ 
+        return NextResponse.json({
             error: "Failed to fetch settings",
             message: error.message
         }, { status: 500 });
@@ -60,8 +60,8 @@ export async function POST(req: Request) {
         return NextResponse.json(updatedSettings);
     } catch (error: any) {
         console.error("Failed to update settings:", error);
-        return NextResponse.json({ 
-            error: "Failed to update settings", 
+        return NextResponse.json({
+            error: "Failed to update settings",
             message: error.message
         }, { status: 500 });
     }

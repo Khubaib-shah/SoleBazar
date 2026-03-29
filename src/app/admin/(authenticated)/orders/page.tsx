@@ -73,12 +73,12 @@ export default function AdminOrdersPage() {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="border-b border-[#E8DCC8] bg-[#FAFAF7]">
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Order ID & Date</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Customer</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Items</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Total Price</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Status</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555] text-right">Action</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Order ID <span className="hidden md:block">& Date</span></th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Customer</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Items</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Total Price</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Status</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555] text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#E8DCC8]/50">
@@ -86,7 +86,7 @@ export default function AdminOrdersPage() {
                                 <tr><td colSpan={6} className="py-20 text-center"><Loader2 className="w-8 h-8 animate-spin text-[#7C8C5C] mx-auto" /></td></tr>
                             ) : filteredOrders.map((order) => (
                                 <tr key={order.id} className="hover:bg-[#FAFAF7] transition-colors group">
-                                    <td className="px-6 py-4">
+                                    <td className="px-2 md:px-6 py-4">
                                         <div>
                                             <p className="font-black text-[#2B2B2B] text-sm">#{order.id.slice(-6).toUpperCase()}</p>
                                             <div className="flex items-center gap-1.5 text-[9px] font-bold text-[#999] uppercase mt-0.5">
@@ -95,13 +95,13 @@ export default function AdminOrdersPage() {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
+                                    <td className="px-2 md:px-6 py-4">
                                         <div>
                                             <p className="font-bold text-[#2B2B2B] text-sm">{order.customerName}</p>
                                             <p className="text-[9px] font-black text-[#7C8C5C] uppercase tracking-widest">{order.phone}</p>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
+                                    <td className="px-2 md:px-6 py-4">
                                         <div className="flex flex-col gap-0.5">
                                             {order.items.map((item: any, idx: number) => (
                                                 <p key={idx} className="text-[9px] font-bold text-[#555] leading-tight line-clamp-1">
@@ -110,15 +110,15 @@ export default function AdminOrdersPage() {
                                             ))}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
+                                    <td className="px-2 md:px-6 py-4">
                                         <p className="font-black text-[#2B2B2B] text-sm">PKR {order.total.toLocaleString()}</p>
                                     </td>
-                                    <td className="px-6 py-4">
+                                    <td className="px-2 md:px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border-2 ${getStatusColor(order.status)}`}>
                                             {order.status}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-right">
+                                    <td className="px-2 md:px-6 py-4 text-right">
                                         <div className="flex items-center justify-end gap-1.5">
                                             <Link
                                                 href={`/admin/orders/${order.id}`}

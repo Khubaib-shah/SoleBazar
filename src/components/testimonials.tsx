@@ -113,13 +113,13 @@ export default function Testimonials() {
               return (
                 <div
                   key={testimonial.id}
-                  className="embla__slide flex-[0_0_85%] sm:flex-[0_0_60%] lg:flex-[0_0_50%] px-4 min-w-0 transition-all duration-500 ease-out"
+                  className="embla__slide flex-[0_0_85%] sm:flex-[0_0_60%] lg:flex-[0_0_50%] px-2 min-w-0 transition-all duration-500 ease-out"
                   style={{
                     opacity: isActive ? 1 : 0.4,
                     transform: isActive ? 'scale(1.05)' : 'scale(0.9)',
                   }}
                 >
-                  <div className={`bg-white p-10 rounded-[50px] transition-all duration-500 h-full border ${isActive ? 'border-[#7C8C5C]/30 shadow-xl' : 'border-[#E8DCC8]/30 shadow-sm'} flex flex-col group relative`}>
+                  <div className={`bg-white p-6 md:p-10 rounded-[50px] transition-all duration-500 h-full border ${isActive ? 'border-[#7C8C5C]/30 shadow-xl' : 'border-[#E8DCC8]/30 shadow-sm'} flex flex-col group relative`}>
                     {/* Quote Icon Overlay */}
                     <div className={`absolute top-10 right-10 transition-colors duration-500 ${isActive ? 'text-[#7C8C5C]/20' : 'text-[#F5EBDC]'}`}>
                       <Quote className="w-16 h-16 rotate-180" />

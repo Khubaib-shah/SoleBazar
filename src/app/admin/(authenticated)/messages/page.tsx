@@ -3,12 +3,12 @@
 import { useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
-import { 
-    Mail, 
-    Trash2, 
-    CheckCircle, 
-    Clock, 
-    User, 
+import {
+    Mail,
+    Trash2,
+    CheckCircle,
+    Clock,
+    User,
     Calendar,
     Search,
     Loader2,
@@ -27,7 +27,7 @@ export default function MessagesPage() {
     const [isSendingReply, setIsSendingReply] = useState(false);
     const [showReplyForm, setShowReplyForm] = useState(false);
 
-    const filteredMessages = messages?.filter((msg: any) => 
+    const filteredMessages = messages?.filter((msg: any) =>
         msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         msg.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         msg.message.toLowerCase().includes(searchTerm.toLowerCase())
@@ -53,7 +53,7 @@ export default function MessagesPage() {
 
     const handleDelete = async (id: string) => {
         if (!confirm("Are you sure you want to delete this message?")) return;
-        
+
         setIsDeleting(id);
         try {
             const res = await fetch(`/api/admin/messages/${id}`, {
@@ -125,8 +125,8 @@ export default function MessagesPage() {
 
                 <div className="relative">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#999]" />
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         placeholder="Search messages..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -151,20 +151,18 @@ export default function MessagesPage() {
                                     setShowReplyForm(false);
                                     if (msg.status === 'unread') handleMarkAsRead(msg.id);
                                 }}
-                                className={`w-full text-left p-6 rounded-[32px] border transition-all duration-300 relative group ${
-                                    selectedMessage?.id === msg.id 
-                                        ? "bg-[#2B2B2B] border-[#2B2B2B] shadow-xl translate-x-2" 
+                                className={`w-full text-left p-6 rounded-[32px] border transition-all duration-300 relative group ${selectedMessage?.id === msg.id
+                                        ? "bg-[#2B2B2B] border-[#2B2B2B] shadow-xl translate-x-2"
                                         : "bg-white border-[#E8DCC8] hover:border-[#7C8C5C] hover:shadow-lg"
-                                }`}
+                                    }`}
                             >
                                 {msg.status === 'unread' && (
                                     <div className="absolute top-6 right-6 w-2 h-2 bg-[#7C8C5C] rounded-full"></div>
                                 )}
-                                
+
                                 <div className="flex items-center gap-4 mb-3">
-                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs ${
-                                        selectedMessage?.id === msg.id ? "bg-[#7C8C5C] text-white" : "bg-[#F5EBDC] text-[#7C8C5C]"
-                                    }`}>
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs ${selectedMessage?.id === msg.id ? "bg-[#7C8C5C] text-white" : "bg-[#F5EBDC] text-[#7C8C5C]"
+                                        }`}>
                                         {msg.name[0].toUpperCase()}
                                     </div>
                                     <div>
@@ -176,7 +174,7 @@ export default function MessagesPage() {
                                         </p>
                                     </div>
                                 </div>
-                                
+
                                 <p className={`text-xs font-bold truncate ${selectedMessage?.id === msg.id ? "text-gray-400" : "text-[#555]"}`}>
                                     {msg.subject || "No Subject"}
                                 </p>
@@ -214,7 +212,7 @@ export default function MessagesPage() {
                                     </div>
                                 </div>
 
-                                <button 
+                                <button
                                     onClick={() => handleDelete(selectedMessage.id)}
                                     disabled={isDeleting === selectedMessage.id}
                                     className="p-4 bg-red-50 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all active:scale-95 disabled:opacity-50"
@@ -266,7 +264,7 @@ export default function MessagesPage() {
                                     <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                                         <div className="flex items-center justify-between">
                                             <p className="text-[10px] font-black uppercase tracking-widest text-[#7C8C5C]">Your Reply</p>
-                                            <button 
+                                            <button
                                                 onClick={() => setShowReplyForm(false)}
                                                 className="text-[9px] font-black uppercase tracking-widest text-[#999] hover:text-red-500 transition-colors"
                                             >
@@ -274,7 +272,7 @@ export default function MessagesPage() {
                                             </button>
                                         </div>
                                         <div className="bg-white border-2 border-[#7C8C5C]/30 rounded-[32px] p-2 focus-within:border-[#7C8C5C] transition-all">
-                                            <textarea 
+                                            <textarea
                                                 rows={5}
                                                 value={replyText}
                                                 onChange={(e) => setReplyText(e.target.value)}
@@ -282,7 +280,7 @@ export default function MessagesPage() {
                                                 className="w-full bg-transparent p-6 outline-none text-sm font-medium resize-none"
                                             />
                                             <div className="p-2 border-t border-[#E8DCC8]/30 flex justify-end">
-                                                <button 
+                                                <button
                                                     onClick={handleSendReply}
                                                     disabled={isSendingReply}
                                                     className="px-8 py-3 bg-[#7C8C5C] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#5D6B44] transition-all flex items-center gap-2 shadow-lg disabled:opacity-50"
@@ -299,16 +297,16 @@ export default function MessagesPage() {
                             {/* Detail Footer */}
                             {!showReplyForm && selectedMessage.email && (
                                 <div className="p-8 bg-[#FAFAF7] border-t border-[#E8DCC8] flex gap-4">
-                                    <button 
+                                    <button
                                         onClick={() => setShowReplyForm(true)}
                                         className="flex-1 py-4 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3"
                                     >
                                         <Mail className="w-4 h-4" />
                                         Compose Direct Reply
                                     </button>
-                                    <a 
+                                    <a
                                         href={`mailto:${selectedMessage.email}?subject=Re: ${selectedMessage.subject || "SoleBazaar Inquiry"}`}
-                                        className="px-6 py-4 bg-white border-2 border-[#E8DCC8] text-[#2B2B2B] rounded-2xl font-black text-[10px] uppercase tracking-widest hover:border-[#7C8C5C] transition-all shadow-sm flex items-center justify-center gap-3"
+                                        className="px-2 md:px-6 py-4 bg-white border-2 border-[#E8DCC8] text-[#2B2B2B] rounded-2xl font-black text-[10px] uppercase tracking-widest hover:border-[#7C8C5C] transition-all shadow-sm flex items-center justify-center gap-3"
                                         title="Open in your email app"
                                     >
                                         <Send className="w-4 h-4" />

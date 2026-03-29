@@ -29,6 +29,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const router = useRouter();
     const pathname = usePathname();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            const mobile = window.innerWidth < 1024;
+            setIsMobile(mobile);
+            if (mobile) {
+                setIsSidebarOpen(false);
+            } else {
+                setIsSidebarOpen(true);
+            }
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -57,20 +74,34 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     return (
         <div className="min-h-screen bg-[#FAFAF7] flex">
+            {/* Sidebar Backdrop for Mobile */}
+            {isMobile && isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+
             {/* Sidebar */}
-            <aside className={`${isSidebarOpen ? 'w-72' : 'w-20'} bg-[#2B2B2B] text-white transition-all duration-500 flex flex-col fixed h-screen z-50`}>
+            <aside className={`
+                ${isSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0 lg:w-20'} 
+                bg-[#2B2B2B] text-white transition-all duration-500 flex flex-col fixed h-screen z-[60]
+            `}>
                 <div className="p-6 flex items-center justify-between">
                     <Link href="/" className="font-black text-xl transition-all duration-300 flex items-center gap-2">
                         <span className={`bg-[#7C8C5C] text-white w-8 h-8 rounded-lg flex items-center justify-center text-xs transition-all ${isSidebarOpen ? 'scale-100' : 'scale-110'}`}>
                             {initials}
                         </span>
-                        <span className={`transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+                        <span className={`transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 lg:hidden'}`}>
                             {siteName}
                         </span>
                     </Link>
-                    <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-gray-400 hover:text-white transition-colors">
-                        {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-8 h-8" />}
-                    </button>
+                    {/* Only show close button inside sidebar if mobile and open */}
+                    {isMobile && isSidebarOpen && (
+                        <button onClick={() => setIsSidebarOpen(false)} className="text-gray-400 hover:text-white transition-colors">
+                            <X className="w-6 h-6" />
+                        </button>
+                    )}
                 </div>
 
                 <nav className="flex-1 px-4 mt-10 space-y-2">
@@ -86,7 +117,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                     }`}
                             >
                                 <item.icon className="w-5 h-5 flex-shrink-0" />
-                                <span className={`transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+                                <span className={`transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 lg:hidden'}`}>
                                     {item.name}
                                 </span>
                                 {isActive && isSidebarOpen && <ChevronRight className="w-4 h-4 ml-auto" />}
@@ -98,10 +129,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <div className="p-4 border-t border-white/10">
                     <button
                         onClick={() => signOut()}
-                        className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-gray-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300 font-bold text-sm"
+                        className="w-full flex items-center gap-4 px-2 md:px-6 py-4 rounded-2xl text-gray-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300 font-bold text-sm"
                     >
                         <LogOut className="w-5 h-5 flex-shrink-0" />
-                        <span className={`transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+                        <span className={`transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 lg:hidden'}`}>
                             Logout
                         </span>
                     </button>
@@ -109,10 +140,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </aside>
 
             {/* Main Content */}
-            <main className={`flex-1 transition-all duration-500 ${isSidebarOpen ? 'pl-72' : 'pl-20'}`}>
-                <header className="h-16 bg-white border-b border-[#E8DCC8] flex items-center justify-between px-8 sticky top-0 z-40">
+            <main className={`flex-1 transition-all duration-500 ${isSidebarOpen ? 'lg:pl-72' : 'lg:pl-20'} min-w-0`}>
+                <header className="h-16 bg-white border-b border-[#E8DCC8] flex items-center justify-between px-4 md:px-8 sticky top-0 z-40">
                     <div className="flex items-center gap-4">
-                        <h2 className="text-lg font-black text-[#2B2B2B] capitalize">
+                        <button
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                            className="p-2 -ml-2 text-gray-500 hover:text-[#7C8C5C] transition-colors"
+                            aria-label="Toggle Sidebar"
+                        >
+                            <Menu className="w-6 h-6" />
+                        </button>
+                        <h2 className="text-sm md:text-lg font-black text-[#2B2B2B] capitalize truncate max-w-[150px] md:max-w-none">
                             {pathname.split('/').pop()?.replace('-', ' ')}
                         </h2>
                     </div>

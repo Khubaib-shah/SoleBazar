@@ -1,25 +1,25 @@
 "use client";
 
-import { 
-    BarChart, 
-    Bar, 
-    XAxis, 
-    YAxis, 
-    CartesianGrid, 
-    Tooltip, 
-    ResponsiveContainer, 
-    AreaChart, 
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+    AreaChart,
     Area,
     PieChart,
     Pie,
     Cell
 } from "recharts";
-import { 
-    TrendingUp, 
-    Users, 
-    MousePointer2, 
-    DollarSign, 
-    ArrowUpRight, 
+import {
+    TrendingUp,
+    Users,
+    MousePointer2,
+    DollarSign,
+    ArrowUpRight,
     ArrowDownRight,
     Calendar,
     Loader2,
@@ -34,7 +34,7 @@ export default function ReportsPage() {
     const { data: summary, isLoading: isSummaryLoading } = useSWR("/api/admin/analytics/summary", fetcher);
     const { data: trafficData, isLoading: isTrafficLoading } = useSWR("/api/admin/analytics/traffic", fetcher);
     const { data: productStats, isLoading: isProductLoading } = useSWR("/api/admin/analytics/products", fetcher);
-    
+
     // Fallback for category/brand sales from old API if needed, but I'll focus on new requirements
     const { data: oldReports } = useSWR("/api/admin/reports", fetcher);
 
@@ -99,7 +99,7 @@ export default function ReportsPage() {
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F0EAE0" />
                                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900 }} stroke="#999" dy={10} />
                                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900 }} stroke="#999" />
-                                <Tooltip cursor={{fill: '#FAFAF7'}} contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 20px 50px rgba(0,0,0,0.1)' }} />
+                                <Tooltip cursor={{ fill: '#FAFAF7' }} contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 20px 50px rgba(0,0,0,0.1)' }} />
                                 <Bar dataKey="visits" fill="#7C8C5C" radius={[6, 6, 0, 0]} barSize={32} />
                                 <Bar dataKey="clicks" fill="#2B2B2B" radius={[6, 6, 0, 0]} barSize={32} />
                             </BarChart>
@@ -179,8 +179,8 @@ export default function ReportsPage() {
                 </div>
 
                 {/* Top Performing Products */}
-                <div className="lg:col-span-2 bg-white p-10 rounded-[48px] shadow-sm border border-[#E8DCC8]">
-                    <h3 className="text-xl font-black text-[#2B2B2B] mb-8">Product Engagement</h3>
+                <div className="lg:col-span-2 bg-white p-4 rounded-[48px] shadow-sm border border-[#E8DCC8]">
+                    <h3 className="text-xl font-black text-[#2B2B2B] mb-8 px-3">Product Engagement</h3>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead>
@@ -188,22 +188,28 @@ export default function ReportsPage() {
                                     <th className="pb-6">Product</th>
                                     <th className="pb-6">Views</th>
                                     <th className="pb-6">Clicks</th>
-                                    <th className="pb-6">In Cart</th>
+                                    <th className="pb-6 w-fit">In Cart</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[#E8DCC8]/50">
                                 {productStats?.length > 0 ? productStats.map((prod: any, i: number) => (
                                     <tr key={i} className="group">
-                                        <td className="py-6 pr-4">
-                                            <p className="font-black text-[#2B2B2B] uppercase italic text-sm group-hover:text-[#7C8C5C] transition-colors">{prod.name}</p>
+                                        <td className="py-3 md:px-6 pr-4">
+                                            <p
+                                                className={`font-black text-[#2B2B2B] uppercase italic text-sm group-hover:text-[#7C8C5C] transition-colors`}
+                                            >
+                                                {prod.name.split(" ").length > 3
+                                                    ? prod.name.split(" ").slice(0, 3).join(" ") + "..."
+                                                    : prod.name}
+                                            </p>
                                         </td>
-                                        <td className="py-6">
+                                        <td className="py-3 md:px-6 px-2">
                                             <span className="text-sm font-black text-[#555]">{prod.views}</span>
                                         </td>
-                                        <td className="py-6">
+                                        <td className="py-3 md:px-6 px-2">
                                             <span className="text-sm font-black text-[#555]">{prod.clicks}</span>
                                         </td>
-                                        <td className="py-6">
+                                        <td className="py-3 md:px-6 px-2">
                                             <span className="text-sm font-black text-[#7C8C5C]">{prod.addToCart}</span>
                                         </td>
                                     </tr>

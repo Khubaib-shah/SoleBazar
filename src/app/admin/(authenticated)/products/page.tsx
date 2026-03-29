@@ -60,14 +60,14 @@ export default function AdminProductsPage() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-black text-[#2B2B2B] mb-1">Product Inventory</h1>
-                    <p className="text-[#555] font-bold uppercase tracking-widest text-[9px]">Manage your sneaker collection</p>
+                    <h1 className="text-xl md:text-2xl font-black text-[#2B2B2B] mb-1">Product Inventory</h1>
+                    <p className="text-[#555] font-bold uppercase tracking-widest text-[8px] md:text-[9px]">Manage your sneaker collection</p>
                 </div>
                 <Link
                     href="/admin/products/new"
-                    className="bg-[#7C8C5C] hover:bg-[#5D6B44] text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 transition-all transform hover:scale-105"
+                    className="bg-[#7C8C5C] hover:bg-[#5D6B44] text-white px-5 md:px-6 py-2.5 md:py-3 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 transition-all transform hover:scale-105 w-full sm:w-auto"
                 >
                     <Plus className="w-4 h-4" />
                     Add Product
@@ -75,15 +75,15 @@ export default function AdminProductsPage() {
             </div>
 
             {/* Global Search & Filters */}
-            <div className="bg-white p-6 rounded-[32px] shadow-sm border border-[#E8DCC8] flex flex-col md:flex-row gap-4 items-center">
+            <div className="bg-white p-4 md:p-6 rounded-[24px] md:rounded-[32px] shadow-sm border border-[#E8DCC8] flex flex-col md:flex-row gap-4 items-center">
                 <div className="relative flex-1 w-full">
-                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Search className="absolute left-5 md:left-6 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
                     <input
                         type="text"
-                        placeholder="Search by name, brand or SKU..."
+                        placeholder="Search products..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-16 pr-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all"
+                        className="w-full pl-12 md:pl-16 pr-4 md:pr-6 py-3 md:py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-xl md:rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-bold text-xs md:text-sm transition-all"
                     />
                 </div>
             </div>
@@ -94,13 +94,13 @@ export default function AdminProductsPage() {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="border-b border-[#E8DCC8] bg-[#FAFAF7]">
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Product Info</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Brand / Category</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Gender</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Price</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Stock</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Featured / Top</th>
-                                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555] text-right">Actions</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Product Info</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Brand / Category</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Gender</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Price</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Stock</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Featured / Top</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555] text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#E8DCC8]/50">
@@ -113,7 +113,7 @@ export default function AdminProductsPage() {
                             ) : filteredProducts.length > 0 ? (
                                 filteredProducts.map((product) => (
                                     <tr key={product.id} className="hover:bg-[#FAFAF7] transition-colors group">
-                                        <td className="px-6 py-4">
+                                        <td className="px-2 md:px-6 py-4">
                                             <div className="flex items-center gap-4">
                                                 <div className="w-14 h-16 bg-[#F5EBDC] rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
                                                     <img
@@ -122,13 +122,17 @@ export default function AdminProductsPage() {
                                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                                     />
                                                 </div>
-                                                <div>
-                                                    <p className="font-black text-[#2B2B2B] text-sm group-hover:text-[#7C8C5C] transition-colors">{product.name}</p>
-                                                    <p className="text-[9px] font-bold text-[#999] uppercase tracking-widest mt-0.5">Slug: {product.slug}</p>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="font-black text-[#2B2B2B] text-[13px] md:text-sm group-hover:text-[#7C8C5C] transition-colors line-clamp-3 md:line-clamp-1">{product.name.split(" ").length > 3
+                                                        ? product.name.split(" ").slice(0, 3).join(" ") + "..."
+                                                        : product.name}</p>
+                                                    <p className="text-[8px] md:text-[9px] font-bold text-[#999] uppercase tracking-widest mt-0.5 truncate">Slug: {product.slug.split("-").length > 3
+                                                        ? product.slug.split("-").slice(0, 3).join(" ") + "..."
+                                                        : product.slug}</p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-2 md:px-6 py-4">
                                             <div className="space-y-1">
                                                 <span className="bg-[#E8DCC8]/30 px-2.5 py-1 rounded-full text-[9px] font-black text-[#7C8C5C] uppercase tracking-widest">
                                                     {product.brand.name}
@@ -136,21 +140,21 @@ export default function AdminProductsPage() {
                                                 <p className="text-[9px] font-bold text-[#555] uppercase tracking-widest px-1">{product.category.name}</p>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-2 md:px-6 py-4">
                                             <span className="bg-[#7C8C5C]/10 px-2.5 py-1 rounded-full text-[9px] font-black text-[#7C8C5C] uppercase tracking-widest">
                                                 {product.gender}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-2 md:px-6 py-4">
                                             <p className="font-black text-[#2B2B2B] text-sm">PKR {product.price.toLocaleString()}</p>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-2 md:px-6 py-4">
                                             <div className="flex items-center gap-2">
                                                 <div className={`w-1.5 h-1.5 rounded-full ${product.stock > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
                                                 <p className="font-bold text-xs text-[#2B2B2B]">{product.stock} Units</p>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-2 md:px-6 py-4">
                                             <div className="flex flex-col gap-1.5">
                                                 <div className="flex items-center gap-1.5">
                                                     {product.featured ? (
@@ -170,7 +174,7 @@ export default function AdminProductsPage() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-2 md:px-6 py-4">
                                             <div className="flex items-center justify-end gap-1.5 text-right">
                                                 <Link
                                                     href={`/product/${product.slug}`}

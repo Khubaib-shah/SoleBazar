@@ -390,7 +390,7 @@ export default function EditProductPage() {
                                     required
                                     value={formData.categoryId}
                                     onChange={handleInputChange}
-                                    className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                                    className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
                                 >
                                     <option value="">Select Category</option>
                                     {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -404,7 +404,7 @@ export default function EditProductPage() {
                                     required
                                     value={formData.gender}
                                     onChange={handleInputChange}
-                                    className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                                    className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
                                 >
                                     <option value="Men">Men</option>
                                     <option value="Women">Women</option>
@@ -419,7 +419,7 @@ export default function EditProductPage() {
                                     required
                                     value={formData.condition}
                                     onChange={handleInputChange}
-                                    className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                                    className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
                                 >
                                     <option value="New">New / Deadstock</option>
                                     <option value="Pre-loved">Pre-loved / Used</option>

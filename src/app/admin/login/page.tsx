@@ -64,7 +64,7 @@ export default function AdminLoginPage() {
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] transition-all font-bold placeholder:text-gray-300"
+                            className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] transition-all font-bold placeholder:text-gray-300"
                             placeholder="admin@solebazar.com"
                         />
                     </div>
@@ -76,7 +76,7 @@ export default function AdminLoginPage() {
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] transition-all font-bold placeholder:text-gray-300"
+                            className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] transition-all font-bold placeholder:text-gray-300"
                             placeholder="••••••••"
                         />
                     </div>

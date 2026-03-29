@@ -73,23 +73,23 @@ export default function SizeGuide() {
                                                 <table className="w-full text-left border-collapse">
                                                     <thead>
                                                         <tr className="bg-[#7C8C5C] text-white">
-                                                            <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">US Men</th>
-                                                            <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">US Women</th>
-                                                            <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">UK</th>
-                                                            <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">EU</th>
-                                                            <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">Length (cm)</th>
-                                                            <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">Length (in)</th>
+                                                            <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">US Men</th>
+                                                            <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">US Women</th>
+                                                            <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">UK</th>
+                                                            <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">EU</th>
+                                                            <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">Length (cm)</th>
+                                                            <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">Length (in)</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody className="divide-y divide-[#E8DCC8]">
                                                         {sizeData.map((row, idx) => (
                                                             <tr key={idx} className="hover:bg-[#FAFAF7] transition-colors">
-                                                                <td className="px-6 py-4 text-xs font-black text-[#2B2B2B]">{row.usMen}</td>
-                                                                <td className="px-6 py-4 text-xs font-bold text-[#555]">{row.usWomen}</td>
-                                                                <td className="px-6 py-4 text-xs font-bold text-[#555]">{row.uk}</td>
-                                                                <td className="px-6 py-4 text-xs font-bold text-[#555]">{row.eu}</td>
-                                                                <td className="px-6 py-4 text-xs font-bold text-[#7C8C5C]">{row.cm}</td>
-                                                                <td className="px-6 py-4 text-xs font-bold text-[#7C8C5C]">{row.inches}"</td>
+                                                                <td className="px-2 md:px-6 py-4 text-xs font-black text-[#2B2B2B]">{row.usMen}</td>
+                                                                <td className="px-2 md:px-6 py-4 text-xs font-bold text-[#555]">{row.usWomen}</td>
+                                                                <td className="px-2 md:px-6 py-4 text-xs font-bold text-[#555]">{row.uk}</td>
+                                                                <td className="px-2 md:px-6 py-4 text-xs font-bold text-[#555]">{row.eu}</td>
+                                                                <td className="px-2 md:px-6 py-4 text-xs font-bold text-[#7C8C5C]">{row.cm}</td>
+                                                                <td className="px-2 md:px-6 py-4 text-xs font-bold text-[#7C8C5C]">{row.inches}"</td>
                                                             </tr>
                                                         ))}
                                                     </tbody>

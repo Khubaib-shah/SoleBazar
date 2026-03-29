@@ -97,13 +97,13 @@ export default function AdminBrandsPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-black text-[#2B2B2B] mb-1">Brand Management</h1>
+                    <h1 className="text-xl md:text-2xl font-black text-[#2B2B2B] mb-1">Brand Management</h1>
                     <p className="text-[#555] font-bold uppercase tracking-widest text-[9px]">Curate your sneaker labels</p>
                 </div>
                 {!isAdding && (
                     <button
                         onClick={() => setIsAdding(true)}
-                        className="bg-[#7C8C5C] hover:bg-[#5D6B44] text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"
+                        className="bg-[#7C8C5C] hover:bg-[#5D6B44] text-white px-3 md:px-6 py-2 md:py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"
                     >
                         <Plus className="w-4 h-4" />
                         New Brand
@@ -118,9 +118,9 @@ export default function AdminBrandsPage() {
                         <table className="w-full text-left">
                             <thead className="bg-[#FAFAF7] border-b border-[#E8DCC8]">
                                 <tr>
-                                    <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555]">Brand Details</th>
-                                    <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555]">Products</th>
-                                    <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555] text-right">Actions</th>
+                                    <th className="px-2 md:px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555]">Brand Details</th>
+                                    <th className="px-2 md:px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555]">Products</th>
+                                    <th className="px-2 md:px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555] text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[#E8DCC8]/50">
@@ -128,7 +128,7 @@ export default function AdminBrandsPage() {
                                     <tr><td colSpan={3} className="py-20 text-center"><Loader2 className="w-8 h-8 animate-spin text-[#7C8C5C] mx-auto" /></td></tr>
                                 ) : brands.map(brand => (
                                     <tr key={brand.id} className="hover:bg-[#FAFAF7] transition-colors group">
-                                        <td className="px-6 py-4">
+                                        <td className="px-2 md:px-6 py-4">
                                             <div className="flex items-center gap-4">
                                                 <div className="w-12 h-12 bg-[#F5EBDC] rounded-xl flex items-center justify-center overflow-hidden shadow-inner border border-white/40 group-hover:bg-white transition-all duration-500">
                                                     {brand.icon ? (
@@ -143,13 +143,13 @@ export default function AdminBrandsPage() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className=" md:px-6 py-4">
                                             <div className="inline-flex px-2.5 py-1 bg-[#FAFAF7] border border-[#E8DCC8] rounded-full">
                                                 <span className="text-[9px] font-black text-[#7C8C5C] uppercase tracking-widest">{brand._count?.products || 0} Items</span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <div className="flex items-center justify-end gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <td className="px-2 md:px-6 py-4 text-right">
+                                            <div className="flex items-center justify-end gap-1.5 ">
                                                 <button
                                                     onClick={() => handleEditClick(brand)}
                                                     className="p-2.5 text-[#7C8C5C] hover:bg-[#7C8C5C]/10 rounded-xl transition-all"

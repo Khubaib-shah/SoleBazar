@@ -210,7 +210,7 @@ export default function NewProductPage() {
                   required
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all shadow-inner"
+                  className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all shadow-inner"
                   placeholder="e.g. Nike Air Max Plus OG"
                 />
               </div>
@@ -225,7 +225,7 @@ export default function NewProductPage() {
                   required
                   value={formData.slug}
                   onChange={handleInputChange}
-                  className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all text-gray-400"
+                  className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all text-gray-400"
                 />
               </div>
 
@@ -238,7 +238,7 @@ export default function NewProductPage() {
                   rows={6}
                   value={formData.description}
                   onChange={handleInputChange}
-                  className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all resize-none shadow-inner"
+                  className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all resize-none shadow-inner"
                   placeholder="Describe the condition, material, and uniqueness..."
                 />
               </div>
@@ -337,30 +337,30 @@ export default function NewProductPage() {
               <h3 className="text-lg font-black text-[#2B2B2B]">Visual Gallery</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {images.map((img, idx) => (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     className="relative group aspect-[4/5] rounded-3xl overflow-hidden border-2 border-[#E8DCC8] bg-[#FAFAF7]"
                   >
                     {img.url ? (
-                      <img 
-                        className="w-full h-full object-cover" 
-                        src={img.url} 
-                        alt={`Product ${idx + 1}`} 
+                      <img
+                        className="w-full h-full object-cover"
+                        src={img.url}
+                        alt={`Product ${idx + 1}`}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-[#E8DCC8]">
                         <ImageIcon className="w-10 h-10" />
                       </div>
                     )}
-                    <input 
-                      placeholder="URL" 
-                      className="absolute bottom-2 left-2 right-2 px-3 py-2 bg-white/90 rounded-xl text-[10px] font-bold border focus:outline-none focus:border-[#7C8C5C] transition-all" 
-                      type="text" 
+                    <input
+                      placeholder="URL"
+                      className="absolute bottom-2 left-2 right-2 px-3 py-2 bg-white/90 rounded-xl text-[10px] font-bold border focus:outline-none focus:border-[#7C8C5C] transition-all"
+                      type="text"
                       value={img.url}
                       onChange={(e) => updateImage(idx, "url", e.target.value)}
                     />
-                    <button 
-                      type="button" 
+                    <button
+                      type="button"
                       onClick={() => removeImage(idx)}
                       className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-all shadow-lg active:scale-90"
                     >
@@ -369,8 +369,8 @@ export default function NewProductPage() {
                   </div>
                 ))}
 
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={handleAddImage}
                   className="aspect-[4/5] rounded-[32px] border-4 border-dashed border-[#E8DCC8] flex flex-col items-center justify-center text-[#E8DCC8] hover:text-[#7C8C5C] hover:border-[#7C8C5C] transition-all gap-4 group"
                 >
@@ -378,7 +378,7 @@ export default function NewProductPage() {
                   <span className="text-xs font-black uppercase tracking-widest">Add Image</span>
                 </button>
               </div>
-              
+
               <div className="p-4 bg-orange-50 rounded-2xl flex items-start gap-4 border border-orange-100">
                 <AlertCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
                 <p className="text-[10px] font-bold text-orange-600 leading-relaxed uppercase tracking-widest">
@@ -404,7 +404,7 @@ export default function NewProductPage() {
                   required
                   value={formData.brandId}
                   onChange={handleInputChange}
-                  className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                  className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
                 >
                   <option value="">Select Brand</option>
                   {brands.map((b) => (
@@ -424,7 +424,7 @@ export default function NewProductPage() {
                   required
                   value={formData.categoryId}
                   onChange={handleInputChange}
-                  className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                  className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
                 >
                   <option value="">Select Category</option>
                   {categories.map((c) => (
@@ -444,7 +444,7 @@ export default function NewProductPage() {
                   required
                   value={formData.gender}
                   onChange={handleInputChange}
-                  className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                  className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
                 >
                   <option value="Men">Men</option>
                   <option value="Women">Women</option>
@@ -461,7 +461,7 @@ export default function NewProductPage() {
                   required
                   value={formData.condition}
                   onChange={handleInputChange}
-                  className="w-full px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                  className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
                 >
                   <option value="New">New / Deadstock</option>
                   <option value="Pre-loved">Pre-loved / Used</option>
@@ -482,7 +482,7 @@ export default function NewProductPage() {
                     required
                     value={formData.price}
                     onChange={handleInputChange}
-                    className="w-full px-6 py-4 bg-white/10 border-2 border-white/10 rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-black text-xl text-white transition-all"
+                    className="w-full px-2 md:px-6 py-4 bg-white/10 border-2 border-white/10 rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-black text-xl text-white transition-all"
                   />
                 </div>
 
@@ -495,7 +495,7 @@ export default function NewProductPage() {
                     name="compareAt"
                     value={formData.compareAt}
                     onChange={handleInputChange}
-                    className="w-full px-6 py-4 bg-white/10 border-2 border-white/10 rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-black text-xl text-white transition-all opacity-50"
+                    className="w-full px-2 md:px-6 py-4 bg-white/10 border-2 border-white/10 rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-black text-xl text-white transition-all opacity-50"
                   />
                 </div>
               </div>
@@ -510,7 +510,7 @@ export default function NewProductPage() {
                   required
                   value={formData.stock}
                   onChange={handleInputChange}
-                  className="w-full px-6 py-4 bg-white/10 border-2 border-white/10 rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-black text-xl text-white transition-all"
+                  className="w-full px-2 md:px-6 py-4 bg-white/10 border-2 border-white/10 rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-black text-xl text-white transition-all"
                 />
               </div>
 

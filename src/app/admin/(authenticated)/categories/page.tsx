@@ -96,16 +96,16 @@ export default function AdminCategoriesPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-black text-[#2B2B2B] mb-1">Category Structure</h1>
+                    <h1 className="text-xl md:text-2xl font-black text-[#2B2B2B] mb-1">Category Structure</h1>
                     <p className="text-[#555] font-bold uppercase tracking-widest text-[9px]">Divide your sneakers into collections</p>
                 </div>
                 {!isAdding && (
                     <button
                         onClick={() => setIsAdding(true)}
-                        className="bg-[#7C8C5C] hover:bg-[#5D6B44] text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"
+                        className="bg-[#7C8C5C] hover:bg-[#5D6B44] text-white px-3 md:px-6 py-2 md:py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg flex items-center gap-2"
                     >
                         <Plus className="w-4 h-4" />
-                        New Category
+                        <span className="hidden md:block">New </span>Category
                     </button>
                 )}
             </div>
@@ -117,9 +117,9 @@ export default function AdminCategoriesPage() {
                         <table className="w-full text-left">
                             <thead className="bg-[#FAFAF7] border-b border-[#E8DCC8]">
                                 <tr>
-                                    <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555]">Category Name</th>
-                                    <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555]">Slug</th>
-                                    <th className="px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555] text-right">Actions</th>
+                                    <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555]">Category Name</th>
+                                    <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555]">Slug</th>
+                                    <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-widest text-[#555] text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[#E8DCC8]/50">
@@ -127,7 +127,7 @@ export default function AdminCategoriesPage() {
                                     <tr><td colSpan={3} className="py-20 text-center"><Loader2 className="w-8 h-8 animate-spin text-[#7C8C5C] mx-auto" /></td></tr>
                                 ) : categories.map(cat => (
                                     <tr key={cat.id} className="hover:bg-[#FAFAF7] transition-colors group">
-                                        <td className="px-6 py-4">
+                                        <td className="px-2 md:px-6 py-4">
                                             <div className="flex items-center gap-4">
                                                 <div className="w-10 h-10 bg-[#F5EBDC] rounded-xl flex items-center justify-center text-[#7C8C5C] shadow-sm group-hover:bg-white transition-colors duration-500">
                                                     <FolderTree className="w-4 h-4" />
@@ -135,11 +135,11 @@ export default function AdminCategoriesPage() {
                                                 <p className="font-bold text-[#2B2B2B] text-sm">{cat.name}</p>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-2 md:px-6 py-4">
                                             <span className="text-[9px] font-black text-[#999] uppercase tracking-widest">{cat.slug}</span>
                                         </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <div className="flex items-center justify-end gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <td className="px-2 md:px-6 py-4 text-right">
+                                            <div className="flex items-center justify-end gap-1.5">
                                                 <button
                                                     onClick={() => handleEditClick(cat)}
                                                     className="p-2.5 text-[#7C8C5C] hover:bg-[#7C8C5C]/10 rounded-xl transition-all"

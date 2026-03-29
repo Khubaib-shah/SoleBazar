@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function BackToTop() {
     const [isVisible, setIsVisible] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         const toggleVisibility = () => {
@@ -26,7 +28,7 @@ export default function BackToTop() {
         });
     };
 
-    if (!isVisible) return null;
+    if (!isVisible || pathname?.startsWith("/admin")) return null;
 
     return (
         <button

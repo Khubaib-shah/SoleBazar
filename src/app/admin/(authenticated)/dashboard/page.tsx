@@ -129,9 +129,9 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Revenue Overview */}
-                <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#E8DCC8]">
+                <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#E8DCC8] flex flex-col">
                     <h3 className="text-lg font-black text-[#2B2B2B] mb-8">Revenue Overview</h3>
-                    <div className="h-72">
+                    <div className="flex-1 min-h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={[
                                 { name: 'Mon', total: 4000 },

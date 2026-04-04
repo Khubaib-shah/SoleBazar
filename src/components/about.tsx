@@ -17,8 +17,8 @@ const DecorativeTrace = () => (
         cy="100"
         r="90"
         stroke="#7c8c5c75"
-        stroke-width="3"
-        stroke-dasharray="12 8"
+        strokeWidth="3"
+        strokeDasharray="12 8"
         fill="none"
       /></motion.svg>
 

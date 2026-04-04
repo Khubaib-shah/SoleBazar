@@ -177,6 +177,8 @@ exports.Prisma.OrderScalarFieldEnum = {
   address: 'address',
   status: 'status',
   total: 'total',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

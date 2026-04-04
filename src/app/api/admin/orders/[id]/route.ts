@@ -53,16 +53,23 @@ export async function PUT(
     try {
         const { id } = await params;
         const body = await request.json();
-        const { status, customerName, phone, address } = body;
+        const { status, customerName, phone, address, isDeleted } = body;
+
+        const dataToUpdate: any = {
+            ...(status && { status }),
+            ...(customerName && { customerName }),
+            ...(phone && { phone }),
+            ...(address && { address }),
+        };
+
+        if (isDeleted !== undefined) {
+             dataToUpdate.isDeleted = isDeleted;
+             dataToUpdate.deletedAt = isDeleted ? new Date() : null;
+        }
 
         const updatedOrder = await prisma.order.update({
             where: { id },
-            data: {
-                ...(status && { status }),
-                ...(customerName && { customerName }),
-                ...(phone && { phone }),
-                ...(address && { address }),
-            }
+            data: dataToUpdate
         });
 
         return NextResponse.json(updatedOrder);

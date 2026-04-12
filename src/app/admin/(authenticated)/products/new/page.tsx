@@ -13,6 +13,22 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
+import CloudinaryUpload from "@/components/admin/cloudinary-upload";
+import SortableImage from "@/components/admin/sortable-image";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
 
 interface FormData {
   name: string;
@@ -36,9 +52,18 @@ export default function NewProductPage() {
   const [loading, setLoading] = useState(false);
   const [brands, setBrands] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
-  const [images, setImages] = useState<
-    { url: string; alt: string; order: number }[]
-  >([{ url: "", alt: "", order: 0 }]);
+  const [images, setImages] = useState<any[]>([]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -127,18 +152,21 @@ export default function NewProductPage() {
     }));
   };
 
-  const handleAddImage = () => {
-    setImages((prev) => [...prev, { url: "", alt: "", order: prev.length }]);
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+
+    if (active && over && active.id !== over.id) {
+      setImages((items) => {
+        const oldIndex = items.findIndex((item) => (item.id || item.url) === active.id);
+        const newIndex = items.findIndex((item) => (item.id || item.url) === over.id);
+
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
   };
 
-  const updateImage = (index: number, field: string, value: string) => {
-    const newImages = [...images];
-    newImages[index] = { ...newImages[index], [field]: value };
-    setImages(newImages);
-  };
-
-  const removeImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+  const handleCloudinaryUpload = (url: string) => {
+    setImages((prev) => [...prev, { id: url, url, alt: formData.name, order: prev.length }]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -335,54 +363,34 @@ export default function NewProductPage() {
             {/* Images Column */}
             <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#E8DCC8] space-y-6">
               <h3 className="text-lg font-black text-[#2B2B2B]">Visual Gallery</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                {images.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="relative group aspect-[4/5] rounded-3xl overflow-hidden border-2 border-[#E8DCC8] bg-[#FAFAF7]"
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  <SortableContext
+                    items={images.map(img => img.id || img.url)}
+                    strategy={rectSortingStrategy}
                   >
-                    {img.url ? (
-                      <img
-                        className="w-full h-full object-cover"
-                        src={img.url}
-                        alt={`Product ${idx + 1}`}
+                    {images.map((img, idx) => (
+                      <SortableImage
+                        key={img.id || img.url || idx}
+                        id={img.id || img.url}
+                        url={img.url}
+                        index={idx}
+                        onRemove={(index) => setImages(images.filter((_, i) => i !== index))}
                       />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-[#E8DCC8]">
-                        <ImageIcon className="w-10 h-10" />
-                      </div>
-                    )}
-                    <input
-                      placeholder="URL"
-                      className="absolute bottom-2 left-2 right-2 px-3 py-2 bg-white/90 rounded-xl text-[10px] font-bold border focus:outline-none focus:border-[#7C8C5C] transition-all"
-                      type="text"
-                      value={img.url}
-                      onChange={(e) => updateImage(idx, "url", e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeImage(idx)}
-                      className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-all shadow-lg active:scale-90"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
+                    ))}
+                  </SortableContext>
+                  <CloudinaryUpload onUpload={handleCloudinaryUpload} />
+                </div>
+              </DndContext>
 
-                <button
-                  type="button"
-                  onClick={handleAddImage}
-                  className="aspect-[4/5] rounded-[32px] border-4 border-dashed border-[#E8DCC8] flex flex-col items-center justify-center text-[#E8DCC8] hover:text-[#7C8C5C] hover:border-[#7C8C5C] transition-all gap-4 group"
-                >
-                  <Plus className="w-12 h-12 group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-black uppercase tracking-widest">Add Image</span>
-                </button>
-              </div>
-
-              <div className="p-4 bg-orange-50 rounded-2xl flex items-start gap-4 border border-orange-100">
+              <div className="p-4 bg-orange-50 rounded-2xl flex items-start gap-4 border border-orange-100 mt-6">
                 <AlertCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
                 <p className="text-[10px] font-bold text-orange-600 leading-relaxed uppercase tracking-widest">
-                  Upload images to a CDN (Cloudinary, Imgur, Vercel Blob) and paste direct URLs here. 1200x1500 (4:5) recommended.
+                  Images are securely uploaded to Cloudinary. Drag to reorder, top-left handle to move.
                 </p>
               </div>
             </div>

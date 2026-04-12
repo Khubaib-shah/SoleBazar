@@ -155,7 +155,7 @@ export default function OrderDetailPage() {
                                 <div key={item.id} className="p-10 flex flex-col md:flex-row items-center gap-8 group">
                                     <div className="w-24 h-32 bg-[#F5EBDC] rounded-2xl overflow-hidden flex-shrink-0 shadow-sm border border-[#E8DCC8]">
                                         <img
-                                            src={item.product.images?.[0]?.url || "/placeholder.svg"}
+                                            src={item.product.images?.[0]?.url || "https://placehold.co/600x600/7C8C5C/FFFFFF?text=SoleBazar"}
                                             alt={item.product.name}
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                         />

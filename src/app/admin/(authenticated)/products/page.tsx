@@ -117,7 +117,7 @@ export default function AdminProductsPage() {
                                             <div className="flex items-center gap-4">
                                                 <div className="w-14 h-16 bg-[#F5EBDC] rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
                                                     <img
-                                                        src={product.images?.[0]?.url || "/placeholder.svg"}
+                                                        src={product.images?.[0]?.url || "https://placehold.co/600x600/7C8C5C/FFFFFF?text=SoleBazar"}
                                                         alt={product.name}
                                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                                     />

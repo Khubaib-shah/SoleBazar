@@ -12,13 +12,6 @@ export default function Preloader() {
   const initials = getInitials(siteName);
 
   useEffect(() => {
-    // Hide static preloader immediately on hydration
-    const staticLoader = document.getElementById("immediate-preloader");
-    if (staticLoader) {
-      staticLoader.classList.add("fade-out");
-      setTimeout(() => staticLoader.remove(), 800);
-    }
-
     const handleLoad = () => {
       // Small delay for smooth transition even on fast networks
       setTimeout(() => {

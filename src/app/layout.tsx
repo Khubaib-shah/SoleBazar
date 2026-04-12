@@ -81,21 +81,6 @@ export default function RootLayout({
         cz-shortcut-listen="true"
       >
         <Providers>
-          {/* Immediate static preloader - shows during initial HTML parse before JS hydration */}
-          <div id="immediate-preloader" className="static-preloader-wrapper">
-            <div className="loader-logo-box">SB</div>
-            <h1 className="loader-brand-title">SoleBazar</h1>
-            <div className="loader-progress-track">
-              <div className="loader-progress-inner"></div>
-            </div>
-
-            <p
-              className="mt-4 text-[10px] font-black uppercase tracking-[0.4em] text-[#7C8C5C]/60"
-            >
-              Excellence in every step
-            </p>
-          </div>
-
           <Preloader />
           <Suspense fallback={null}>
             <AnalyticsTracker />

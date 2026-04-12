@@ -134,7 +134,7 @@ export default function OrderModal({
               <div className="w-full flex-1 flex flex-col items-center justify-center">
                 <div className="w-full aspect-[4/5] bg-white rounded-[32px] overflow-hidden shadow-xl border border-[#E8DCC8] group p-1 mb-8">
                   <img
-                    src={product.images?.[0]?.url || "/placeholder.svg"}
+                    src={product.images?.[0]?.url || "https://placehold.co/600x600/7C8C5C/FFFFFF?text=SoleBazar"}
                     alt={product.name}
                     className="w-full h-full object-cover rounded-[28px] group-hover:scale-110 transition-transform duration-700"
                   />

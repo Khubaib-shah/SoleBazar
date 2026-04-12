@@ -19,7 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const images =
     product.images?.length > 0
       ? product.images.map((img) => img.url)
-      : ["/placeholder.svg"];
+      : ["https://placehold.co/600x600/7C8C5C/FFFFFF?text=SoleBazar"];
 
   const whatsappMessage = `Hi! I'm interested in the ${product.name} (${product.brand.name}) - Condition: ${product.condition}. Price: PKR ${product.price}`;
   const whatsappLink = `https://api.whatsapp.com/send?phone=923149784156&text=${encodeURIComponent(

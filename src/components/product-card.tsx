@@ -26,8 +26,8 @@ export default function ProductCard({ product }: ProductCardProps) {
     whatsappMessage,
   )}`;
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ 
-    loop: true, 
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
     duration: 35,
     skipSnaps: false
   });
@@ -68,7 +68,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div
-      className="group relative bg-white rounded-[32px] p-4 shadow-lg hover:shadow-2xl transition-all duration-500 max-w-[360px] mx-auto flex flex-col h-full border border-gray-100"
+      className="group relative bg-white rounded-[24px] md:rounded-[32px] p-4 shadow md:shadow-lg hover:shadow-2xl transition-all duration-500 max-w-[360px] mx-auto flex flex-col h-full border border-gray-100"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -78,8 +78,8 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="flex w-full h-full touch-pan-y touch-pinch-zoom">
             {images.map((img, index) => (
               <div key={index} className="flex-[0_0_100%] min-w-0 h-full relative">
-                <Link 
-                  href={`/product/${product.slug}`} 
+                <Link
+                  href={`/product/${product.slug}`}
                   className="block w-full h-full"
                   onClick={handleTrackClick}
                 >
@@ -99,13 +99,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Dynamic Smart Badge (Top Left) */}
         {(product.isTopPick || product.featured || product.condition) && (
           <div
-            className={`absolute top-3 left-3 backdrop-blur-xl px-4 py-1.5 rounded-full border border-white/20 shadow-xl z-10 transition-colors ${
-              product.isTopPick
-                ? "bg-orange-600/90 text-white"
-                : product.condition === "New"
-                  ? "bg-[#7C8C5C]/90 text-white"
-                  : "bg-[#2B2B2B]/80 text-white"
-            }`}
+            className={`absolute top-3 left-3 backdrop-blur-xl px-4 py-1.5 rounded-full border border-white/20 shadow-xl z-10 transition-colors ${product.isTopPick
+              ? "bg-orange-600/90 text-white"
+              : product.condition === "New"
+                ? "bg-[#7C8C5C]/90 text-white"
+                : "bg-[#2B2B2B]/80 text-white"
+              }`}
           >
             <span className="text-[10px] font-black uppercase tracking-[0.15em] drop-shadow-sm">
               {product.isTopPick ? "Best Seller" : product.condition}
@@ -139,11 +138,10 @@ export default function ProductCard({ product }: ProductCardProps) {
                   e.stopPropagation();
                   emblaApi?.scrollTo(idx);
                 }}
-                className={`h-1.5 transition-all duration-300 rounded-full hover:scale-125 ${
-                  currentImageIndex === idx
-                    ? "w-6 bg-white shadow-md"
-                    : "w-1.5 bg-white/50"
-                }`}
+                className={`h-1.5 transition-all duration-300 rounded-full hover:scale-125 ${currentImageIndex === idx
+                  ? "w-6 bg-white shadow-md"
+                  : "w-1.5 bg-white/50"
+                  }`}
               />
             ))}
           </div>
@@ -154,25 +152,25 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="mt-6 flex-1 flex flex-col">
         <div className="space-y-1">
           <Link href={`/product/${product.slug}`} onClick={handleTrackClick}>
-            <h3 className="text-xl font-black text-[#2B2B2B] group-hover:text-[#7C8C5C] transition-colors line-clamp-1">
+            <h3 className="text-lg md:text-xl font-black text-[#2B2B2B] group-hover:text-[#7C8C5C] transition-colors line-clamp-1">
               {product.name}
             </h3>
           </Link>
-          <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+          <p className="text-xs md:text-sm font-semibold md:font-bold text-gray-400 uppercase tracking-widest">
             {product.brand.name}
           </p>
         </div>
 
-        <p className="mt-4 text-sm text-gray-400 font-medium line-clamp-2 leading-relaxed">
+        <p className="mt-2 md:mt-4 text-xs md:text-sm text-gray-400 font-medium line-clamp-2 leading-relaxed">
           {product.description ||
             "Premium curated sneaker from our exclusive collection. Authentic and high-quality."}
         </p>
 
         {/* Bottom Section (Price + Button) */}
-        <div className="mt-auto pt-8 flex items-center justify-between gap-4">
+        <div className="mt-auto pt-4 md:pt-8 flex items-center justify-between gap-4">
           <div className="bg-gray-50 px-5 py-2.5 rounded-full border border-gray-100 shadow-inner">
-            <span className="text-lg font-black text-[#2B2B2B]">
-              <span className="text-[10px] mr-1">PKR</span>
+            <span className="text-sm md:text-lg font-black text-[#2B2B2B]">
+              <span className="text-[10px] mr-1">Rs</span>
               {product.price.toLocaleString()}
             </span>
           </div>

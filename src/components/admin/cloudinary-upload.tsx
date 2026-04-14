@@ -44,10 +44,10 @@ export default function CloudinaryUpload({ onUpload }: CloudinaryUploadProps) {
                 <button
                     type="button"
                     onClick={() => open()}
-                    className="aspect-[4/5] rounded-[32px] border-4 border-dashed border-[#E8DCC8] flex flex-col items-center justify-center text-[#E8DCC8] hover:text-[#7C8C5C] hover:border-[#7C8C5C] transition-all gap-4 group bg-white/50"
+                    className="aspect-[4/5] rounded-[16px] md:rounded-[32px] border-2 md:border-4 border-dashed border-[#E8DCC8] flex flex-col items-center justify-center text-[#E8DCC8] hover:text-[#7C8C5C] hover:border-[#7C8C5C] transition-all gap-4 group bg-white/50"
                 >
-                    <Plus className="w-12 h-12 group-hover:scale-110 transition-transform" />
-                    <span className="text-xs font-black uppercase tracking-widest text-[#555]">Upload Images</span>
+                    <Plus className="w-6 h-6 md:w-12 md:h-12 group-hover:scale-110 transition-transform" />
+                    <span className="text-[8px] md:text-sm font-black uppercase tracking-widest text-[#555]">Upload Images</span>
                 </button>
             )}
         </CldUploadWidget>

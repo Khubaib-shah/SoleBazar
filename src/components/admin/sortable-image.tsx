@@ -33,9 +33,8 @@ export default function SortableImage({ id, url, index, onRemove }: SortableImag
         <div
             ref={setNodeRef}
             style={style}
-            className={`relative group aspect-[4/5] rounded-[32px] overflow-hidden border-2 transition-all ${
-                isDragging ? "border-[#7C8C5C] shadow-2xl" : "border-[#E8DCC8] bg-[#FAFAF7] shadow-sm hover:shadow-md"
-            }`}
+            className={`relative group aspect-[4/5] rounded-[16px] md:rounded-[32px] overflow-hidden border-2 transition-all ${isDragging ? "border-[#7C8C5C] shadow-2xl" : "border-[#E8DCC8] bg-[#FAFAF7] shadow-sm hover:shadow-md"
+                }`}
         >
             {url ? (
                 <img src={url} className="w-full h-full object-cover select-none pointer-events-none" alt={`Product ${index + 1}`} />
@@ -44,7 +43,7 @@ export default function SortableImage({ id, url, index, onRemove }: SortableImag
                     <ImageIcon className="w-10 h-10" />
                 </div>
             )}
-            
+
             {/* Drag Handle */}
             <div
                 {...attributes}
@@ -65,12 +64,12 @@ export default function SortableImage({ id, url, index, onRemove }: SortableImag
 
             {/* URL Badge */}
             <div className="absolute bottom-4 left-4 right-4 px-3 py-2 bg-white/80 backdrop-blur-md rounded-2xl text-[8px] font-black truncate text-[#2B2B2B] border border-white/20 select-none text-center">
-                IMAGE_{index + 1}
+                {index === 0 ? "Thumbnail" : `Image ${index + 1}`}
             </div>
-            
+
             {/* Overlay for dragging */}
             {isDragging && (
-                <div className="absolute inset-0 bg-[#7C8C5C]/10 border-4 border-[#7C8C5C] rounded-[32px]" />
+                <div className="absolute inset-0 bg-[#7C8C5C]/10 border-4 border-[#7C8C5C] rounded-[16px] md:rounded-[32px]" />
             )}
         </div>
     );

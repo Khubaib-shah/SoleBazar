@@ -59,7 +59,7 @@ export default function AdminProductsPage() {
     );
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-3 md:space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-xl md:text-2xl font-black text-[#2B2B2B] mb-1">Product Inventory</h1>
@@ -67,7 +67,7 @@ export default function AdminProductsPage() {
                 </div>
                 <Link
                     href="/admin/products/new"
-                    className="bg-[#7C8C5C] hover:bg-[#5D6B44] text-white px-5 md:px-6 py-2.5 md:py-3 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 transition-all transform hover:scale-105 w-full sm:w-auto"
+                    className="bg-[#7C8C5C] hover:bg-[#5D6B44] text-white px-5 md:px-6 py-2.5 md:py-3 rounded-xl md:rounded-2xl  font-black text-[10px] md:text-xs uppercase tracking-widest shadow-lg hidden md:flex items-center justify-center gap-2 transition-all transform hover:scale-105 w-full sm:w-auto"
                 >
                     <Plus className="w-4 h-4" />
                     Add Product
@@ -75,32 +75,40 @@ export default function AdminProductsPage() {
             </div>
 
             {/* Global Search & Filters */}
-            <div className="bg-white p-4 md:p-6 rounded-[24px] md:rounded-[32px] shadow-sm border border-[#E8DCC8] flex flex-col md:flex-row gap-4 items-center">
+            <div className="bg-white p-4 md:p-6 rounded-xl sm:rounded-[24px] md:rounded-[32px] shadow-sm border border-[#E8DCC8] flex gap-2 md:gap-4 items-center">
                 <div className="relative flex-1 w-full">
-                    <Search className="absolute left-5 md:left-6 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+                    <Search className="absolute left-2 sm:left-4 md:left-5 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
                     <input
                         type="text"
                         placeholder="Search products..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 md:pl-16 pr-4 md:pr-6 py-3 md:py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-xl md:rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-bold text-xs md:text-sm transition-all"
+                        className="w-full pl-6 md:pl-16 pr-4 md:pr-6 py-3 md:py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-xl md:rounded-2xl focus:outline-none focus:border-[#7C8C5C] font-bold text-xs md:text-sm transition-all"
                     />
+
                 </div>
+
+                <Link
+                    href="/admin/products/new"
+                    className="bg-[#7C8C5C] hover:bg-[#5D6B44] text-white px-4 md:px-6 py-3 md:py-3 rounded-xl font-black text-[10px] md:text-xs uppercase shadow-lg flex items-center justify-center gap-2 transition-all transform hover:scale-105 md:hidden"
+                >
+                    <Plus className="w-4 h-4" />
+                </Link>
             </div>
 
             {/* Table Section */}
-            <div className="bg-white rounded-[32px] shadow-sm border border-[#E8DCC8] overflow-hidden">
+            <div className="bg-white rounded-xl md:rounded-[32px] shadow-sm border border-[#E8DCC8] overflow-hidden">
                 <div className="overflow-x-auto no-scrollbar">
                     <table className="w-full text-left">
                         <thead>
                             <tr className="border-b border-[#E8DCC8] bg-[#FAFAF7]">
                                 <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Product Info</th>
-                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Brand / Category</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Brand <span className="hidden md:inline">/ Category</span></th>
                                 <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Gender</th>
                                 <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Price</th>
                                 <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Stock</th>
-                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555]">Featured / Top</th>
-                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555] text-right">Actions</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555] text-center">Featured / Top</th>
+                                <th className="px-2 md:px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-[#555] text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#E8DCC8]/50">
@@ -123,11 +131,11 @@ export default function AdminProductsPage() {
                                                     />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
-                                                    <p className="font-black text-[#2B2B2B] text-[13px] md:text-sm group-hover:text-[#7C8C5C] transition-colors line-clamp-3 md:line-clamp-1">{product.name.split(" ").length > 3
-                                                        ? product.name.split(" ").slice(0, 3).join(" ") + "..."
+                                                    <p className="font-black text-[#2B2B2B] text-[13px] md:text-sm group-hover:text-[#7C8C5C] transition-colors line-clamp-3 md:line-clamp-1">{product.name.length > 15
+                                                        ? product.name.slice(0, 15) + "..."
                                                         : product.name}</p>
-                                                    <p className="text-[8px] md:text-[9px] font-bold text-[#999] uppercase tracking-widest mt-0.5 truncate">Slug: {product.slug.split("-").length > 3
-                                                        ? product.slug.split("-").slice(0, 3).join(" ") + "..."
+                                                    <p className="text-[8px] md:text-[9px] font-bold text-[#999] uppercase tracking-widest mt-0.5 truncate">Slug: {product.slug.length > 15
+                                                        ? product.slug.slice(0, 15) + "..."
                                                         : product.slug}</p>
                                                 </div>
                                             </div>
@@ -135,9 +143,11 @@ export default function AdminProductsPage() {
                                         <td className="px-2 md:px-6 py-4">
                                             <div className="space-y-1">
                                                 <span className="bg-[#E8DCC8]/30 px-2.5 py-1 rounded-full text-[9px] font-black text-[#7C8C5C] uppercase tracking-widest">
-                                                    {product.brand.name}
+                                                    {product.brand.name.split(" ").length > 1
+                                                        ? product.brand.name.split(" ").slice(0, 1).join(" ") + "..."
+                                                        : product.brand.name}
                                                 </span>
-                                                <p className="text-[9px] font-bold text-[#555] uppercase tracking-widest px-1">{product.category.name}</p>
+                                                <p className=" hidden md:block text-[8px] md:text-[9px] font-bold text-[#555] uppercase tracking-widest px-1">{product.category.name}</p>
                                             </div>
                                         </td>
                                         <td className="px-2 md:px-6 py-4">
@@ -146,12 +156,12 @@ export default function AdminProductsPage() {
                                             </span>
                                         </td>
                                         <td className="px-2 md:px-6 py-4">
-                                            <p className="font-black text-[#2B2B2B] text-sm">PKR {product.price.toLocaleString()}</p>
+                                            <p className="font-bold md:font-black text-[#2B2B2B] text-[10px] md:text-sm">PKR {product.price.toLocaleString()}</p>
                                         </td>
                                         <td className="px-2 md:px-6 py-4">
                                             <div className="flex items-center gap-2">
                                                 <div className={`w-1.5 h-1.5 rounded-full ${product.stock > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                                                <p className="font-bold text-xs text-[#2B2B2B]">{product.stock} Units</p>
+                                                <p className="font-bold text-[10px] md:text-xs text-[#2B2B2B]">{product.stock} <span className="hidden md:inline">Units</span></p>
                                             </div>
                                         </td>
                                         <td className="px-2 md:px-6 py-4">
@@ -211,15 +221,15 @@ export default function AdminProductsPage() {
                 </div>
 
                 {/* Pagination Placeholder */}
-                <div className="px-8 py-6 border-t border-[#E8DCC8] flex items-center justify-between bg-[#FAFAF7]">
-                    <p className="text-[10px] font-black text-[#999] uppercase tracking-widest">
+                <div className="px-2 md:px-8 py-2 md:py-6 border-t border-[#E8DCC8] flex items-center justify-between bg-[#FAFAF7]">
+                    <p className="text-[10px] font-bold md:font-black text-[#999] uppercase tracking-widest">
                         Showing {filteredProducts.length} Results
                     </p>
                     <div className="flex gap-2">
-                        <button className="p-3 bg-white border border-[#E8DCC8] rounded-xl text-[#999] cursor-not-allowed">
+                        <button className="p-2 md:p-3 bg-white border border-[#E8DCC8] rounded-xl text-[#999] cursor-not-allowed">
                             <ChevronLeft className="w-4 h-4" />
                         </button>
-                        <button className="p-3 bg-white border border-[#E8DCC8] rounded-xl text-[#999] cursor-not-allowed">
+                        <button className="p-2 md:p-3 bg-white border border-[#E8DCC8] rounded-xl text-[#999] cursor-not-allowed">
                             <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>

@@ -28,8 +28,8 @@ export default function ProductDetailContent({ product }: { product: Product }) 
     const [isTitleExpanded, setIsTitleExpanded] = useState(false);
     const titleWords = product.name.split(' ');
     const isTitleLong = titleWords.length > 5;
-    const displayedTitle = isTitleLong && !isTitleExpanded 
-        ? titleWords.slice(0, 5).join(' ') + '...' 
+    const displayedTitle = isTitleLong && !isTitleExpanded
+        ? titleWords.slice(0, 5).join(' ') + '...'
         : product.name;
 
     return (
@@ -43,11 +43,10 @@ export default function ProductDetailContent({ product }: { product: Product }) 
                         {product.condition}
                     </span>
                 </div>
-                <h1 
+                <h1
                     onClick={() => isTitleLong && setIsTitleExpanded(!isTitleExpanded)}
-                    className={`text-4xl md:text-5xl font-black text-[#2B2B2B] mb-4 leading-tight ${
-                        isTitleLong ? 'cursor-pointer hover:text-[#7C8C5C] transition-colors' : ''
-                    } ${isTitleLong && isTitleExpanded ? 'max-w-xl' : ''}`}
+                    className={`text-4xl md:text-5xl font-black text-[#2B2B2B] mb-4 leading-tight ${isTitleLong ? 'cursor-pointer hover:text-[#7C8C5C] transition-colors' : ''
+                        } ${isTitleLong && isTitleExpanded ? 'max-w-xl' : ''}`}
                 >
                     {displayedTitle}
                 </h1>
@@ -69,23 +68,23 @@ export default function ProductDetailContent({ product }: { product: Product }) 
             </div>
 
             {/* Sizes & Attributes */}
-            <div className="mb-10 space-y-8">
+            <div className="mb-4 md:mb-10 space-y-4 md:space-y-8">
                 {sizes.length > 0 && (
                     <div>
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.2em]">
+                            <h3 className="text-xs md:text-sm font-black text-[#2B2B2B] uppercase tracking-[0.2em]">
                                 Available Sizes
                             </h3>
                             <SizeGuide />
                         </div>
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-wrap gap-1 md:gap-3">
                             {sizes.map((size: string) => (
                                 <button
                                     key={size}
                                     onClick={() => setSelectedSize(size)}
-                                    className={`w-14 h-14 border-2 rounded-2xl flex items-center justify-center font-black transition-all hover:scale-110 shadow-sm active:scale-95 ${selectedSize === size
-                                            ? "bg-[#2B2B2B] text-white border-[#2B2B2B]"
-                                            : "bg-white text-[#2B2B2B] border-[#E8DCC8] hover:border-[#7C8C5C]"
+                                    className={`w-10 h-10 md:w-14 md:h-14 border-2 rounded-xl md:rounded-2xl flex items-center justify-center text-xs md:text-sm font-black transition-all hover:scale-110 shadow-sm active:scale-95 ${selectedSize === size
+                                        ? "bg-[#2B2B2B] text-white border-[#2B2B2B]"
+                                        : "bg-white text-[#2B2B2B] border-[#E8DCC8] hover:border-[#7C8C5C]"
                                         }`}
                                 >
                                     {size}
@@ -97,17 +96,17 @@ export default function ProductDetailContent({ product }: { product: Product }) 
 
                 {colors.length > 0 && (
                     <div>
-                        <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.2em] mb-4">
+                        <h3 className="text-xs md:text-sm font-black text-[#2B2B2B] uppercase tracking-[0.2em] mb-4">
                             Colors
                         </h3>
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-wrap gap-1 md:gap-3">
                             {colors.map((color: string) => (
                                 <button
                                     key={color}
                                     onClick={() => setSelectedColor(color)}
-                                    className={`px-5 py-2.5 border-2 rounded-full text-xs font-black uppercase tracking-widest shadow-sm transition-all ${selectedColor === color
-                                            ? "bg-[#2B2B2B] text-white border-[#2B2B2B]"
-                                            : "bg-white text-[#555] border-[#E8DCC8] hover:border-[#7C8C5C]"
+                                    className={`px-5 py-2.5 border-2 rounded-full text-xs md:text-sm font-bold md:font-black uppercase tracking-widest shadow-sm transition-all ${selectedColor === color
+                                        ? "bg-[#2B2B2B] text-white border-[#2B2B2B]"
+                                        : "bg-white text-[#555] border-[#E8DCC8] hover:border-[#7C8C5C]"
                                         }`}
                                 >
                                     {color}

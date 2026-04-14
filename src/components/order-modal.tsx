@@ -115,10 +115,10 @@ export default function OrderModal({
             productId: product.id
           });
         }}
-        className="flex items-center justify-center gap-4 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white py-6 rounded-[32px] font-black text-sm uppercase tracking-[0.2em] transition-all duration-500 shadow-2xl hover:shadow-[#7C8C5C]/40 active:scale-95 w-full"
+        className="flex items-center justify-center gap-2 md:gap-4 bg-[#2B2B2B] hover:bg-[#7C8C5C] text-white py-4 md:py-6 rounded-[16px] md:rounded-[32px] font-bold md:font-black text-sm md:text-base uppercase tracking-[0.2em] transition-all duration-500 shadow-2xl hover:shadow-[#7C8C5C]/40 active:scale-95 w-full"
       >
         <MessageCircle className="w-5 h-5" />
-        Order Now via WhatsApp
+        Order Now <span className="hidden md:block">via WhatsApp</span>
       </button>
 
       {isOpen && (

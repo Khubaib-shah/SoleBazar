@@ -44,7 +44,7 @@ export async function generateMetadata({
       images: product.images.length > 0 ? [product.images[0].url] : [],
     },
     alternates: {
-        canonical: `/product/${slug}`
+      canonical: `/product/${slug}`
     }
   };
 }
@@ -114,7 +114,7 @@ export default async function ProductPage({
       <ProductViewTracker productId={product.id} />
 
       {/* Product Hero / Breadcrumb Section */}
-      <div className="bg-[#F5EBDC] py-8 border-b border-[#E8DCC8]">
+      <div className="bg-[#F5EBDC] pt-6 pb-2 md:pt-8 md:pb-4 border-b border-[#E8DCC8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-[#7C8C5C] mb-3">
             <Link
@@ -131,9 +131,11 @@ export default async function ProductPage({
               <ShoppingBag className="w-2.5 h-2.5" /> Shop
             </Link>
             <ChevronRight className="w-2.5 h-2.5 text-gray-400" />
-            <span className="text-[#2B2B2B]">{product.name}</span>
+            <span className="text-[#2B2B2B] block max-w-[120px] md:max-w-none truncate">
+              {product.name}
+            </span>
           </nav>
-          <h1 className="text-3xl md:text-4xl font-black text-[#2B2B2B]">
+          <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-[#2B2B2B]">
             {product.name}
           </h1>
         </div>
@@ -142,9 +144,9 @@ export default async function ProductPage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Left Column: Image Gallery */}
-          <ProductGallery 
-            images={product.images} 
-            showBadge={!!product.compareAt} 
+          <ProductGallery
+            images={product.images}
+            showBadge={!!product.compareAt}
           />
 
           {/* Right Column: Details */}
@@ -155,7 +157,7 @@ export default async function ProductPage({
 
         {/* Related Products Section */}
         {related.length > 0 && (
-          <div className="mt-24">
+          <div className="mt-12 md:mt-24">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
               <div>
                 <p className="text-[#7C8C5C] font-black text-[9px] uppercase tracking-[0.3em] mb-3">

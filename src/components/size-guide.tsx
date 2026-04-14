@@ -19,7 +19,7 @@ export default function SizeGuide() {
             {/* Trigger Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#2B2B2B] hover:text-[#7C8C5C] transition-colors group"
+                className="flex items-center justify-center gap-2 text-[10px] font-bold md:font-black uppercase tracking-widest text-[#2B2B2B] hover:text-[#7C8C5C] transition-colors group"
             >
                 <Ruler className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform" />
                 <span>View Size Guide</span>
@@ -28,7 +28,7 @@ export default function SizeGuide() {
             {mounted && createPortal(
                 <AnimatePresence>
                     {isOpen && (
-                        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 overflow-hidden">
+                        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-2 md:p-4 overflow-hidden">
                             {/* Backdrop */}
                             <motion.div
                                 initial={{ opacity: 0 }}
@@ -43,10 +43,10 @@ export default function SizeGuide() {
                                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                                className="relative w-full max-w-4xl bg-[#FAFAF7] rounded-[48px] shadow-2xl border border-[#E8DCC8] overflow-hidden max-h-[90vh] flex flex-col z-[10001]"
+                                className="relative w-full max-w-4xl bg-[#FAFAF7] rounded-[20px] md:rounded-[48px] shadow-2xl border border-[#E8DCC8] overflow-hidden max-h-[90vh] flex flex-col z-[10001]"
                             >
                                 {/* Header */}
-                                <div className="p-8 border-b border-[#E8DCC8] flex items-center justify-between bg-white">
+                                <div className="p-4 md:p-8 border-b border-[#E8DCC8] flex items-center justify-between bg-white">
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 bg-[#7C8C5C]/10 rounded-2xl flex items-center justify-center">
                                             <Ruler className="w-6 h-6 text-[#7C8C5C]" />

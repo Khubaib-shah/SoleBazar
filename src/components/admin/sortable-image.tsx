@@ -48,7 +48,7 @@ export default function SortableImage({ id, url, index, onRemove }: SortableImag
             <div
                 {...attributes}
                 {...listeners}
-                className="absolute top-4 left-4 p-2 bg-white/90 backdrop-blur-md rounded-2xl cursor-grab active:cursor-grabbing text-[#2B2B2B] opacity-0 group-hover:opacity-100 transition-all border border-[#E8DCC8] shadow-sm z-30"
+                className="absolute top-4 left-4 p-2 bg-white/90 backdrop-blur-md rounded-2xl cursor-grab text-[#2B2B2B] opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all border border-[#E8DCC8] shadow-sm z-30"
             >
                 <GripVertical className="w-4 h-4" />
             </div>
@@ -57,7 +57,7 @@ export default function SortableImage({ id, url, index, onRemove }: SortableImag
             <button
                 type="button"
                 onClick={() => onRemove(index)}
-                className="absolute top-4 right-4 p-2 bg-red-500 text-white rounded-2xl opacity-0 group-hover:opacity-100 transition-all shadow-lg active:scale-95 z-30 flex items-center justify-center"
+                className="absolute top-4 right-4 p-2 bg-red-500 text-white rounded-2xl opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all shadow-lg active:scale-95 z-30 flex items-center justify-center"
             >
                 <Trash2 className="w-4 h-4" />
             </button>

@@ -52,8 +52,8 @@ export default function SizeGuide() {
                                             <Ruler className="w-6 h-6 text-[#7C8C5C]" />
                                         </div>
                                         <div>
-                                            <h2 className="text-2xl font-black text-[#2B2B2B] leading-none">Size <span className="text-[#7C8C5C]">Guide</span></h2>
-                                            <p className="text-[10px] font-bold text-[#555] uppercase tracking-widest mt-1">International Conversion Chart</p>
+                                            <h2 className="text-lg md:text-2xl font-black text-[#2B2B2B] leading-none">Size <span className="text-[#7C8C5C]">Guide</span></h2>
+                                            <p className="text-[10px] font-bold md:font-bold text-[#555] uppercase tracking-widest mt-1">International Conversion Chart</p>
                                         </div>
                                     </div>
                                     <button
@@ -65,11 +65,11 @@ export default function SizeGuide() {
                                 </div>
 
                                 {/* Table Container */}
-                                <div className="flex-1 overflow-auto p-8 no-scrollbar">
+                                <div className="flex-1 overflow-auto md:p-8 no-scrollbar">
                                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                         {/* Size Table */}
                                         <div className="lg:col-span-2">
-                                            <div className="overflow-x-auto rounded-3xl border border-[#E8DCC8] bg-white shadow-sm overflow-hidden">
+                                            <div className="overflow-x-auto md:rounded-3xl border border-[#E8DCC8] bg-white shadow-sm overflow-hidden">
                                                 <table className="w-full text-left border-collapse">
                                                     <thead>
                                                         <tr className="bg-[#7C8C5C] text-white">
@@ -99,14 +99,14 @@ export default function SizeGuide() {
 
                                         {/* Measuring Tips */}
                                         <div className="space-y-6">
-                                            <div className="bg-white p-6 rounded-[32px] border border-[#E8DCC8] shadow-sm">
+                                            <div className="bg-[#FAFAF7] mx-2 md:mx-0 p-3 md:p-6 rounded-[16px] md:rounded-[32px] border border-[#E8DCC8] shadow-sm">
                                                 <div className="flex items-center gap-3 mb-4">
                                                     <div className="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center">
                                                         <Info className="w-4 h-4 text-blue-600" />
                                                     </div>
                                                     <h4 className="text-xs font-black uppercase tracking-widest text-[#2B2B2B]">How to measure</h4>
                                                 </div>
-                                                <ul className="space-y-4">
+                                                <ul className="space-y-2 md:space-y-4">
                                                     {[
                                                         { step: "1", text: "Place a piece of paper on the floor against a wall." },
                                                         { step: "2", text: "Stand on the paper with your heel touching the wall." },
@@ -123,7 +123,7 @@ export default function SizeGuide() {
                                                 </ul>
                                             </div>
 
-                                            <div className="bg-[#7C8C5C] p-6 rounded-[32px] text-white overflow-hidden relative group">
+                                            <div className="bg-[#7C8C5C] mx-2 p-3 md:p-6 rounded-[16px] md:rounded-[32px] text-white overflow-hidden relative group">
                                                 <Footprints className="absolute -bottom-4 -right-4 w-24 h-24 opacity-10 group-hover:scale-110 transition-transform duration-500" />
                                                 <h4 className="text-xs font-black uppercase tracking-[0.2em] mb-2">Pro Tip</h4>
                                                 <p className="text-[11px] font-medium leading-relaxed opacity-90">
@@ -135,7 +135,7 @@ export default function SizeGuide() {
                                 </div>
 
                                 {/* Footer/Close Button for Mobile */}
-                                <div className="p-8 border-t border-[#E8DCC8] bg-white flex justify-center">
+                                <div className="hidden md:flex p-8 border-t border-[#E8DCC8] bg-white justify-center">
                                     <button
                                         onClick={() => setIsOpen(false)}
                                         className="px-10 py-4 bg-[#2B2B2B] text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full hover:bg-[#7C8C5C] transition-all shadow-xl active:scale-95"

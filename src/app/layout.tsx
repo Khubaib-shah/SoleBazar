@@ -22,19 +22,19 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: {
-        default: `${siteName} | Original Branded Thrift Shoes in Pakistan`,
-        template: `%s | ${siteName} Pakistan`
+      default: `${siteName} | Original Branded Thrift Shoes in Pakistan`,
+      template: `%s | ${siteName} Pakistan`
     },
     description: siteDescription,
     keywords: [
-        "shoes", "sneakers", "thrift store pakistan", "branded shoes pakistan", 
-        "nike pakistan", "adidas pakistan", "thrift shoes karachi", 
-        "pre-loved sneakers lahore", "original branded shoes price in pakistan",
-        "second hand original shoes", "solebazar", "online shoe store pakistan"
+      "shoes", "sneakers", "thrift store pakistan", "branded shoes pakistan",
+      "nike pakistan", "adidas pakistan", "thrift shoes karachi",
+      "pre-loved sneakers lahore", "original branded shoes price in pakistan",
+      "second hand original shoes", "solebazar", "online shoe store pakistan"
     ],
     metadataBase: new URL("https://sole-bazar.vercel.app"),
     alternates: {
-        canonical: "/",
+      canonical: "/",
     },
     openGraph: {
       title: `${siteName} | Premium Branded Thrift Shoes Pakistan`,
@@ -63,8 +63,8 @@ export async function generateMetadata(): Promise<Metadata> {
       apple: "/apple-icon.png",
     },
     verification: {
-        google: "google-site-verification-placeholder",
-        yandex: "yandex-verification-placeholder",
+      google: "google-site-verification-placeholder",
+      yandex: "yandex-verification-placeholder",
     }
   };
 }
@@ -81,7 +81,7 @@ export default function RootLayout({
         cz-shortcut-listen="true"
       >
         <Providers>
-          <Preloader />
+          {/* <Preloader /> */}
           <Suspense fallback={null}>
             <AnalyticsTracker />
           </Suspense>

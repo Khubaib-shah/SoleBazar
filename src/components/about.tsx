@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ShieldCheck, History, Heart, Globe, Award } from "lucide-react";
 import { useSettings } from "@/hooks/use-settings";
+import Image from "next/image";
 
 const DecorativeTrace = () => (
   <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -86,7 +87,7 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="py-32 bg-[#FAFAF7] overflow-hidden relative">
+    <section id="about" className="py-12 md:py-32 bg-[#FAFAF7] overflow-hidden relative">
       <DecorativeTrace />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -97,11 +98,13 @@ export default function About() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative"
+            className="relative hidden md:block"
           >
             {/* Main Image with decorative frame */}
             <div className="relative z-10 rounded-[60px] overflow-hidden shadow-2xl border-[12px] border-white aspect-[4/5]">
-              <img
+              <Image
+                width={600}
+                height={800}
                 src="/our_story_sneakers.png"
                 alt={`${siteName} Curated Collection`}
                 className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110"
@@ -150,17 +153,17 @@ export default function About() {
           >
             <div className="mb-10">
               <p className="text-[#7C8C5C] font-black text-[10px] uppercase tracking-[0.4em] mb-4">Behind the Brand</p>
-              <h2 className="text-5xl lg:text-6xl font-black text-[#2B2B2B] leading-[1.1] mb-8">
+              <h2 className="text-4xl md:text-text-5xl lg:text-6xl font-black text-[#2B2B2B] leading-[1.1] mb-8">
                 Our Story <span className="text-[#7C8C5C]">& Mission</span>
               </h2>
 
               <div className="space-y-4">
-                <p className="text-lg text-[#555] font-medium leading-relaxed">
+                <p className="text-base md:text-lg text-[#555] font-medium leading-snug">
                   {siteName} was born from a passion for finding hidden gems in the
                   world of thrifted sneakers. Founded by <span className="text-[#2B2B2B] font-black">Khubaib Shah</span> in Karachi, we combine streetwear culture with the thrill of discovery.
                 </p>
                 <div className="h-px w-20 bg-[#E8DCC8]"></div>
-                <p className="text-base text-[#555] leading-relaxed">
+                <p className="text-base md:text-lg text-[#555] leading-snug">
                   We believe that everyone deserves access to premium branded
                   footwear without breaking the bank. Each shoe is carefully
                   authenticated, ensuring you get the best quality at prices that actually make sense.
@@ -169,26 +172,28 @@ export default function About() {
             </div>
 
             {/* Premium Stat Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1  sm:grid-cols-3 gap-4">
               {stats.map((stat, idx) => (
                 <motion.div
                   key={idx}
                   whileHover={{ y: -5, scale: 1.02 }}
-                  className="bg-white p-6 rounded-[32px] border border-[#E8DCC8]/50 shadow-sm hover:shadow-xl transition-all duration-300"
+                  className="bg-white p-3 md:p-6 rounded-[16px] md:rounded-[32px] border border-[#E8DCC8]/50 shadow-sm hover:shadow-xl transition-all duration-300"
                 >
-                  <div className={`w-10 h-10 ${stat.color} rounded-2xl flex items-center justify-center mb-4 shadow-sm`}>
-                    {stat.icon}
+                  <div className="flex justify-between items-center">
+                    <div className={`w-10 h-10 ${stat.color} rounded-2xl flex items-center justify-center mb-4 shadow-sm`}>
+                      {stat.icon}
+                    </div>
+                    <p className="text-xl font-black text-[#2B2B2B] leading-none mb-1">{stat.value}</p>
                   </div>
-                  <p className="text-xl font-black text-[#2B2B2B] leading-none mb-1">{stat.value}</p>
                   <p className="text-[9px] font-bold text-[#999] uppercase tracking-widest">{stat.label}</p>
                 </motion.div>
               ))}
             </div>
 
             {/* Authenticity Badge */}
-            <div className="mt-6 flex items-center gap-4 p-4 bg-white/50 rounded-2xl border border-dashed border-[#7C8C5C]/30 w-full">
+            <div className="mt-6 flex items-center gap-2 md:gap-4 p-4 bg-white/50 rounded-2xl border border-dashed border-[#7C8C5C]/30 w-full">
               <ShieldCheck className="size-8 text-[#7C8C5C]" />
-              <p className="text-[14px] font-black uppercase tracking-widest text-[#2B2B2B]">
+              <p className="text-[14px] font-bold md:font-black uppercase tracking-wider text-[#7C8C5C]">
                 100% Authenticity Guaranteed on every sale
               </p>
             </div>

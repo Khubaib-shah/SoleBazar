@@ -34,7 +34,7 @@ export default function Featured() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-white overflow-hidden">
+      <section className="py-12 md:py-24 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center h-64">
           <Loader2 className="w-10 h-10 animate-spin text-[#7C8C5C]" />
           <p className="mt-4 text-[10px] font-black uppercase tracking-widest text-[#999]">Curating Top Picks...</p>
@@ -46,12 +46,12 @@ export default function Featured() {
   if (products.length === 0) return null;
 
   return (
-    <section id="featured" className="py-24 bg-white overflow-hidden">
+    <section id="featured" className="py-12 md:py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-4 md:mb-16 gap-6">
           <div>
-            <p className="text-[#7C8C5C] font-black text-[10px] uppercase tracking-[0.3em] mb-4">Curated Collection</p>
-            <h2 className="text-5xl font-black text-[#2B2B2B] leading-tight">
+            <p className="text-[#7C8C5C] font-black text-[10px] uppercase tracking-[0.3em] mb-2 md:mb-4">Curated Collection</p>
+            <h2 className="text-4xl md:text-5xl font-black text-[#2B2B2B] leading-tight">
               Top Picks <span className="text-[#7C8C5C]">of the Week</span>
             </h2>
           </div>
@@ -59,7 +59,7 @@ export default function Featured() {
             <button
               onClick={() => scroll("left")}
               disabled={!canScrollLeft}
-              className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${canScrollLeft ? "bg-[#2B2B2B] text-white shadow-xl hover:-translate-x-1" : "bg-gray-100 text-gray-400 cursor-not-allowed"
+              className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center transition-all ${canScrollLeft ? "bg-[#2B2B2B] text-white shadow-xl hover:-translate-x-1" : "bg-gray-100 text-gray-400 cursor-not-allowed"
                 }`}
             >
               <ChevronLeft className="w-6 h-6" />
@@ -67,7 +67,7 @@ export default function Featured() {
             <button
               onClick={() => scroll("right")}
               disabled={!canScrollRight}
-              className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${canScrollRight ? "bg-[#2B2B2B] text-white shadow-xl hover:translate-x-1" : "bg-gray-100 text-gray-400 cursor-not-allowed"
+              className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center transition-all ${canScrollRight ? "bg-[#2B2B2B] text-white shadow-xl hover:translate-x-1" : "bg-gray-100 text-gray-400 cursor-not-allowed"
                 }`}
             >
               <ChevronRight className="w-6 h-6" />

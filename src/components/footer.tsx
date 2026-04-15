@@ -26,12 +26,12 @@ export default function Footer() {
   ].filter(link => link.href && link.href !== "#" && link.href !== "mailto:");
 
   return (
-    <footer className="bg-[#2B2B2B] text-white pt-24 pb-12 overflow-hidden border-t border-white/5">
+    <footer className="bg-[#2B2B2B] text-white pt-12 md:pt-24 pb-6 md:pb-12 overflow-hidden border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-16 mb-10 md:mb-20">
 
           {/* Brand & Mission */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-4 md:space-y-8">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 bg-[#7C8C5C] rounded-xl flex items-center justify-center transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110">
                 <span className="text-white font-black text-lg">{initials}</span>
@@ -48,7 +48,7 @@ export default function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-[#7C8C5C] hover:bg-[#7C8C5C] transition-all duration-300"
+                  className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center md:text-white/40 hover:text-white bg-[#7C8C5C] md:hover:border-[#7C8C5C] md:hover:bg-[#7C8C5C] transition-all duration-300"
                   aria-label={social.label}
                 >
                   {social.icon}
@@ -58,14 +58,14 @@ export default function Footer() {
           </div>
 
           {/* Navigation Links */}
-          <div className="space-y-8">
+          <div className="space-y-4 md:space-y-8">
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#7C8C5C]">Navigation</h4>
-            <ul className="space-y-4">
+            <ul className="space-y-2 md:space-y-4">
               {navLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="group relative inline-block text-lg font-bold text-white/70 hover:text-white transition-colors duration-300"
+                    className="group relative inline-block text-sm md:text-lg font-bold md:text-white/70 hover:text-white transition-colors duration-300"
                   >
                     {link.label}
 
@@ -77,14 +77,14 @@ export default function Footer() {
           </div>
 
           {/* Call to Action / Info */}
-          <div className="space-y-8">
+          <div className="space-y-4 md:space-y-8">
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#7C8C5C]">Join the Movement</h4>
             <p className="text-white/50 text-sm leading-relaxed">
               Want to showcase your collection or looking for a specific drop? Our community is always open.
             </p>
             <Link
               href="/#contact"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-[#7C8C5C] text-white rounded-2xl border border-white/10 transition-all duration-300 group text-xs font-black uppercase tracking-widest"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#7C8C5C] md:bg-white/5  md:hover:bg-[#7C8C5C] hover:bg-[#2B2B2B] text-white rounded-2xl border border-white/10 transition-all duration-300 group text-xs font-black uppercase tracking-widest"
             >
               Get in Touch
               <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -93,7 +93,7 @@ export default function Footer() {
         </div>
 
         {/* Divider & Copyright */}
-        <div className="pt-12 border-t border-white/5">
+        <div className="pt-6 md:pt-12 border-t border-white/5">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">
               © {currentYear} {settings?.siteName || "SoleBazar"}. All rights reserved.

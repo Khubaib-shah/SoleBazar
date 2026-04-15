@@ -48,7 +48,7 @@ const FloatingPlus = ({ className, delay = 0 }: { className: string, delay?: num
   </motion.div>
 );
 
-export default function Shop({ 
+export default function Shop({
   featuredOnly = false,
   title = "Our Collection",
   subtitle = "Discover curated sneakers for your style. High-quality pieces at competitive prices."
@@ -81,11 +81,11 @@ export default function Shop({
 
   const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && !previousPageData.metadata.hasMore) return null;
-    
+
     const params = new URLSearchParams();
     params.set("page", (pageIndex + 1).toString());
     params.set("pageSize", "6");
-    
+
     if (featuredOnly) params.set("featured", "true");
     if (filters.brand !== "All") params.set("brand", filters.brand);
     if (filters.category !== "All") params.set("category", filters.category);
@@ -96,12 +96,12 @@ export default function Shop({
     return `/api/products?${params.toString()}`;
   };
 
-  const { 
-    data: infiniteData, 
-    error: productsError, 
-    size, 
-    setSize, 
-    isValidating: productsLoading 
+  const {
+    data: infiniteData,
+    error: productsError,
+    size,
+    setSize,
+    isValidating: productsLoading
   } = useSWRInfinite(getKey, fetcher, {
     revalidateFirstPage: false,
     persistSize: true
@@ -164,14 +164,14 @@ export default function Shop({
 
   if (loading) {
     return (
-      <div className="py-20 flex justify-center items-center min-h-[400px]">
+      <div className="py-12 md:py-24 flex justify-center items-center min-h-[400px]">
         <Loader2 className="w-10 h-10 animate-spin text-[#7C8C5C]" />
       </div>
     );
   }
 
   return (
-    <section id="shop" className="py-24 bg-[#FAFAF7] relative overflow-hidden">
+    <section id="shop" className="py-12 md:py-24 bg-[#FAFAF7] relative overflow-hidden">
       {/* Large Decorative SVGs */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <FloatingPlus className="absolute top-[10%] left-[5%] text-[#7C8C5C]" delay={0} />
@@ -212,7 +212,7 @@ export default function Shop({
 
           <button
             onClick={resetFilters}
-            className="flex items-center gap-2 text-sm font-bold text-[#7C8C5C] hover:text-[#5D6B44] transition-colors"
+            className="hidden md:flex items-center gap-2 text-sm font-bold text-[#7C8C5C] hover:text-[#5D6B44] transition-colors"
           >
             <RefreshCcw className="w-4 h-4" />
             Reset All Filters
@@ -220,9 +220,9 @@ export default function Shop({
         </div>
 
         {/* Premium Filter UI */}
-        <div className="flex flex-col gap-8 mb-16 relative z-50">
+        <div className="flex flex-col gap-4 md:gap-8 mb-8 md:mb-16 relative z-50">
           {/* Filters Bar */}
-          <div className="bg-white/50 backdrop-blur-md p-2 rounded-[2rem] border border-[#E8DCC8] flex flex-wrap items-center justify-center gap-2 relative">
+          <div className="bg-white/50 backdrop-blur-md p-2 rounded-[1rem] md:rounded-[2rem] border border-[#E8DCC8] flex flex-wrap items-center justify-center gap-2 relative">
             {[
               { id: 'category', label: 'Collection', icon: Box, value: filters.category, options: categories.map((c: any) => c.name) },
               { id: 'brand', label: 'Brand', icon: Tag, value: filters.brand, options: brands.map(b => b.name) },
@@ -233,7 +233,7 @@ export default function Shop({
               <div key={f.id} className="relative">
                 <button
                   onClick={() => setActiveFilterTab(activeFilterTab === f.id ? null : f.id)}
-                  className={`flex items-center gap-3 px-6 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${activeFilterTab === f.id || f.value !== "All"
+                  className={`flex items-center gap-3 px-6 py-3 rounded-2xl md:rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all duration-300  ${activeFilterTab === f.id || f.value !== "All"
                     ? "bg-[#7C8C5C] text-white shadow-lg"
                     : "hover:bg-[#E8DCC8]/30 text-[#555]"
                     }`}
@@ -282,7 +282,7 @@ export default function Shop({
         {/* Products Grid */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={`grid-${JSON.stringify(filters)}`} 
+            key={`grid-${JSON.stringify(filters)}`}
             variants={container}
             initial="hidden"
             animate="visible"

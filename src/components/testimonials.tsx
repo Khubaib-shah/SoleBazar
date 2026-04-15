@@ -94,12 +94,12 @@ export default function Testimonials() {
   }, [emblaApi, setScrollSnaps, onSelect]);
 
   return (
-    <section className="py-32 bg-[#FAFAF7] overflow-hidden">
-      <div className="text-center mb-20 px-4">
+    <section className="py-12 md:py-32 bg-[#FAFAF7] overflow-hidden">
+      <div className="text-center mb-4 md:mb-20 px-4">
         <p className="text-[#7C8C5C] font-black text-[10px] uppercase tracking-[0.3em] mb-4">
           The Sole Experience
         </p>
-        <h2 className="text-5xl font-black text-[#2B2B2B]">
+        <h2 className="text-4xl md:text-5xl font-black text-[#2B2B2B]">
           Words from the <span className="text-[#7C8C5C]">Community</span>
         </h2>
       </div>
@@ -113,20 +113,20 @@ export default function Testimonials() {
               return (
                 <div
                   key={testimonial.id}
-                  className="embla__slide flex-[0_0_85%] sm:flex-[0_0_60%] lg:flex-[0_0_50%] px-2 min-w-0 transition-all duration-500 ease-out"
+                  className="embla__slide flex-[0_0_85%] sm:flex-[0_0_60%] lg:flex-[0_0_50%] md:px-2 min-w-0 transition-all duration-500 ease-out"
                   style={{
                     opacity: isActive ? 1 : 0.4,
                     transform: isActive ? 'scale(1.05)' : 'scale(0.9)',
                   }}
                 >
-                  <div className={`bg-white p-6 md:p-10 rounded-[50px] transition-all duration-500 h-full border ${isActive ? 'border-[#7C8C5C]/30 shadow-xl' : 'border-[#E8DCC8]/30 shadow-sm'} flex flex-col group relative`}>
+                  <div className={`bg-white p-6 md:p-10 rounded-[20px] md:rounded-[50px] transition-all duration-500 h-full border ${isActive ? 'border-[#7C8C5C]/30 shadow-xl' : 'border-[#E8DCC8]/30 shadow-sm'} flex flex-col group relative`}>
                     {/* Quote Icon Overlay */}
                     <div className={`absolute top-10 right-10 transition-colors duration-500 ${isActive ? 'text-[#7C8C5C]/20' : 'text-[#F5EBDC]'}`}>
                       <Quote className="w-16 h-16 rotate-180" />
                     </div>
 
                     {/* Rating */}
-                    <div className="flex gap-1 mb-8">
+                    <div className="flex gap-1 mb-4 md:mb-8">
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star
                           key={i}
@@ -136,20 +136,20 @@ export default function Testimonials() {
                     </div>
 
                     {/* Quote */}
-                    <p className={`text-xl font-black text-[#2B2B2B] mb-12 leading-relaxed flex-1 transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-60'}`}>
+                    <p className={`text-base md:text-xl font-bold md:font-black text-[#2B2B2B] mb-6 md:mb-12 leading-relaxed flex-1 transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-60'}`}>
                       &quot;{testimonial.quote}&quot;
                     </p>
 
                     {/* Author Card */}
-                    <div className="flex items-center gap-5 mt-auto">
-                      <div className={`w-16 h-16 rounded-[24px] flex items-center justify-center font-black text-2xl shadow-inner transition-all duration-500 ${isActive ? 'bg-[#7C8C5C] text-white rotate-3 scale-110' : 'bg-[#F5EBDC] text-[#7C8C5C]'}`}>
+                    <div className="flex items-center gap-2 md:gap-5 mt-auto">
+                      <div className={`w-8 md:w-16 h-8 md:h-16 rounded-md md:rounded-[24px] flex items-center justify-center font-black text-sm md:text-2xl shadow-inner transition-all duration-500 ${isActive ? 'bg-[#7C8C5C] text-white md:rotate-3 md:scale-110' : 'bg-[#F5EBDC] text-[#7C8C5C]'}`}>
                         {testimonial.name[0]}
                       </div>
                       <div>
-                        <p className="font-black text-[#2B2B2B] text-base uppercase tracking-widest leading-none mb-2">
+                        <p className="text-xs md:text-base font-black text-[#2B2B2B]  uppercase tracking-widest leading-none mb-1 md:mb-2">
                           {testimonial.name}
                         </p>
-                        <p className={`text-[11px] font-bold uppercase tracking-[0.2em] transition-colors duration-500 ${isActive ? 'text-[#7C8C5C]' : 'text-gray-400'}`}>
+                        <p className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-colors duration-500 ${isActive ? 'text-[#7C8C5C]' : 'text-gray-400'}`}>
                           {testimonial.role}
                         </p>
                       </div>
@@ -162,17 +162,17 @@ export default function Testimonials() {
         </div>
 
         {/* Navigation Controls */}
-        <div className="flex items-center justify-between mt-12 px-4 max-w-4xl mx-auto">
-          <div className="flex gap-4">
+        <div className="flex items-center justify-between mt-6 md:mt-12 px-4 max-w-4xl mx-auto">
+          <div className="flex gap-2 md:gap-4">
             <button
               onClick={scrollPrev}
-              className="w-14 h-14 rounded-full border-2 border-[#2B2B2B] flex items-center justify-center hover:bg-[#2B2B2B] hover:text-white transition-all duration-300 group"
+              className="w-10 h-10 md:w-14 md:h-14 rounded-full border-2 border-[#2B2B2B] flex items-center justify-center hover:bg-[#2B2B2B] hover:text-white transition-all duration-300 group"
             >
               <ChevronLeft className="w-6 h-6 group-hover:-translate-x-1 transition-transform" />
             </button>
             <button
               onClick={scrollNext}
-              className="w-14 h-14 rounded-full border-2 border-[#2B2B2B] flex items-center justify-center hover:bg-[#2B2B2B] hover:text-white transition-all duration-300 group"
+              className="w-10 h-10 md:w-14 md:h-14 rounded-full border-2 border-[#2B2B2B] flex items-center justify-center hover:bg-[#2B2B2B] hover:text-white transition-all duration-300 group"
             >
               <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
             </button>
@@ -184,7 +184,7 @@ export default function Testimonials() {
               <button
                 key={index}
                 onClick={() => scrollTo(index)}
-                className={`h-3 rounded-full transition-all duration-500 ${selectedIndex === index ? "w-10 bg-[#7C8C5C]" : "w-3 bg-[#E8DCC8]"
+                className={`h-3 rounded-full transition-all duration-500 ${selectedIndex === index ? "w-8 md:w-10 bg-[#7C8C5C]" : "w-3 bg-[#E8DCC8]"
                   }`}
               />
             ))}

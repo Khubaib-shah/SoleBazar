@@ -64,18 +64,18 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-32 bg-white overflow-hidden relative">
+    <section id="contact" className="py-12 md:py-32 bg-white overflow-hidden relative">
       {/* Decorative background elements */}
       <div className="absolute top-40 -left-20 w-80 h-80 bg-[#7C8C5C]/5 rounded-full blur-3xl -z-10"></div>
       <div className="absolute bottom-40 -right-20 w-80 h-80 bg-[#E8DCC8]/20 rounded-full blur-3xl -z-10"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-20">
+        <div className="text-center mb-10 md:mb-20">
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-[#7C8C5C] font-black text-[10px] uppercase tracking-[0.4em] mb-4"
+            className="text-[#7C8C5C] font-black text-[10px] uppercase tracking-[0.4em] mb-2 md:mb-4"
           >
             Connect With Us
           </motion.p>
@@ -84,7 +84,7 @@ export default function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-5xl md:text-6xl font-black text-[#2B2B2B] leading-tight"
+            className="text-4xl sm:text-5xl md:text-6xl font-black text-[#2B2B2B] leading-tight"
           >
             Let's Start a <span className="text-[#7C8C5C]">Conversation</span>
           </motion.h2>
@@ -101,11 +101,11 @@ export default function Contact() {
             >
               <div>
                 <h3 className="text-2xl font-black text-[#2B2B2B] mb-4">Direct Channels</h3>
-                <p className="text-sm text-[#555] font-medium leading-relaxed">Have a question about a specific pair or want to sell your collection? Reach out through our verified channels for quick assistance, expert guidance, and secure communication with our dedicated sneaker support team.
+                <p className="text-sm text-[#555] font-medium leading-wider">Have a question about a specific pair or want to sell your collection? Reach out through our verified channels for quick assistance, expert guidance, and secure communication with our dedicated sneaker support team.
                 </p>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-2 md:space-y-4">
                 {contactMethods.map((method, idx) => (
                   <motion.a
                     key={idx}
@@ -113,14 +113,14 @@ export default function Contact() {
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ x: 10, scale: 1.02 }}
-                    className="flex items-center gap-6 p-6 bg-[#FAFAF7] border border-[#E8DCC8]/50 rounded-[32px] hover:bg-white hover:shadow-xl transition-all duration-300 group"
+                    className="flex items-center gap-2 md:gap-Send a Message6 p-2 md:p-6 bg-[#FAFAF7] border border-[#E8DCC8]/50 rounded-[16px] md:rounded-[32px] hover:bg-white hover:shadow-xl transition-all duration-300 group"
                   >
                     <div className={`w-14 h-14 ${method.color} rounded-2xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all`}>
                       {method.icon}
                     </div>
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-[#999] mb-1">{method.title}</p>
-                      <p className="text-sm font-black text-[#2B2B2B]">{method.value}</p>
+                      <p className="text-[10px] font-medium uppercase tracking-widest text-[#999] mb-1">{method.title}</p>
+                      <p className="text-sm font-bold text-[#2B2B2B]">{method.value}</p>
                       <p className="text-[10px] font-bold text-[#7C8C5C] mt-1">{method.description}</p>
                     </div>
                   </motion.a>
@@ -137,45 +137,45 @@ export default function Contact() {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="bg-white p-8 md:p-12 rounded-[48px] shadow-xl border border-[#E8DCC8]/30 relative"
+              className="bg-white p-4 md:p-12 rounded-[24px] md:rounded-[48px] md:shadow-xl border border-[#E8DCC8]/30 relative"
             >
               <div className="mb-4">
-                <h3 className="text-3xl font-black text-[#2B2B2B] mb-2">Send a Message</h3>
+                <h3 className="text-2xl md:text-3xl font-black text-[#2B2B2B] mb-2">Send a Message</h3>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#7C8C5C]">Responses within 24 hours</p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Full Name</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-2 md:ml-4">Full Name</label>
                     <input
                       type="text"
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all shadow-inner"
+                      className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-[16px] md:rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all shadow-inner"
                       placeholder="e.g. Ali Ahmed"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Email Address</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-2 md:ml-4">Email Address</label>
                     <input
                       type="email"
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all shadow-inner"
+                      className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-[16px] md:rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all shadow-inner"
                       placeholder="ali@example.com"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Subject</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-2 md:ml-4">Subject</label>
                   <select
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
+                    className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-[16px] md:rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all appearance-none"
                   >
                     <option value="Buying Inquiries">Buying Inquiries</option>
                     <option value="Selling Collection">Selling Collection</option>
@@ -185,13 +185,13 @@ export default function Contact() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-4">Your Message</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#555] ml-2 md:ml-4">Your Message</label>
                   <textarea
                     required
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    rows={6}
-                    className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all resize-none shadow-inner"
+                    rows={4}
+                    className="w-full px-2 md:px-6 py-4 bg-[#FAFAF7] border-2 border-[#E8DCC8] rounded-[16px] md:rounded-3xl focus:outline-none focus:border-[#7C8C5C] font-bold text-sm transition-all resize-none shadow-inner"
                     placeholder="Tell us what's on your mind..."
                   />
                 </div>
@@ -199,7 +199,7 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={isSubmitting || submitted}
-                  className={`w-full py-6 rounded-[32px] font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-xl flex items-center justify-center gap-3 active:scale-95 ${submitted
+                  className={`w-full py-4 md:py-6 rounded-2xl md:rounded-[32px] font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-xl flex items-center justify-center gap-3 active:scale-95 ${submitted
                     ? "bg-green-500 text-white"
                     : "bg-[#7C8C5C] hover:bg-[#6B7A4F] text-white"
                     }`}
@@ -231,13 +231,13 @@ export default function Contact() {
 
         {/* Physical Location Pin (Optional aesthetic touch) */}
         <div className="mt-6 p-4 bg-[#2B2B2B] rounded-[20px] text-white space-y-2 shadow-xl">
-          <div className="flex items-center gap-4">
+          <div className="flex items-start md:items-center gap-2 md:gap-4">
             <div className=" bg-[#7C8C5C] rounded-xl flex items-center justify-center p-2">
               <MapPin className="size-5 text-white" />
             </div>
             <div>
               <h4 className="font-black uppercase tracking-widest text-xs">Origin</h4>
-              <p className="text-sm font-medium text-white/70 leading-relaxed">Based in Karachi, Pakistan, we proudly serve sneaker enthusiasts across the country with a carefully curated selection of authentic footwear. Our mission is to bring together style, comfort, and originality by offering sneakers that are handpicked for their quality, design, and cultural relevance.</p>
+              <p className="text-sm font-normal text-white/70 leading-snug">Based in Karachi, Pakistan, we proudly serve sneaker enthusiasts across the country with a carefully curated selection of authentic footwear. Our mission is to bring together style, comfort, and originality by offering sneakers that are handpicked for their quality, design, and cultural relevance.</p>
             </div>
           </div>
 
